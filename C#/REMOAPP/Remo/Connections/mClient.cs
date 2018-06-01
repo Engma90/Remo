@@ -40,7 +40,7 @@ namespace Remo.Connections
 
         public m1Client getMainConnection()
         {
-            //foreach (mClient c in mTCPH.Clients.ToList())
+            //foreach (mClient c in mTCPH.MainClients.ToList())
             //{
             //    if ((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals((this.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()) && c.isMainConn)
             //    {

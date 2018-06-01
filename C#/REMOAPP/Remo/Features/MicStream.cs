@@ -21,7 +21,7 @@ namespace Remo.Features
         UDPReceiver dgt;
         mTCPHandler mTCPH;
 
-        public IClient c{get;set;}
+        public IMainClient c{get;set;}
 
         public MicStream()
         {

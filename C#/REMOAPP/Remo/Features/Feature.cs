@@ -10,7 +10,7 @@ namespace Remo.Features
 {
     public interface Feature
     {
-        IClient c { get; set; }
+        IMainClient c { get; set; }
         void updateData(byte[] data);
         void onError(String error);
         void Show();

@@ -18,7 +18,7 @@ namespace Remo.Features
             InitializeComponent();
         }
 
-        public IClient c
+        public IMainClient c
         {
             get;
             set;

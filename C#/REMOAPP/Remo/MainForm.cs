@@ -94,7 +94,7 @@ namespace Remo
                 }
                 catch { }
                 dgv1.Rows.Clear();
-                foreach (IClient c in mTCPH.Clients.ToList())
+                foreach (IMainClient c in mTCPH.MainClients.ToList())
                 {
                     if (c.isMainConn)
                     {
@@ -108,10 +108,10 @@ namespace Remo
 
         }
 
-        private IClient getSelectedClient()
+        private IMainClient getSelectedClient()
         {
 
-            foreach (IClient c in mTCPH.Clients.ToList())
+            foreach (IMainClient c in mTCPH.MainClients.ToList())
             {
                 if( dgv1.CurrentCell.OwningRow.Cells[0].Value.ToString().Equals(
                     c.tcpClient.Client.RemoteEndPoint.ToString()) && c.isMainConn)
@@ -121,7 +121,7 @@ namespace Remo
                 }
 
             }
-            return mTCPH.Clients[0];
+            return mTCPH.MainClients[0];
         }
 
         private void btnStop_Click(object sender, EventArgs e)

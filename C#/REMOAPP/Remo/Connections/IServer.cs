@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Remo.Connections
 {
-    interface Connection
+    interface IServer
     {
         void StartServer(int Port);
         void StopServer();
         //void send();
         //void Server_DataReceived();
     }
-    interface TCP : Connection
+    interface TCP : IServer
     {
         //mTCPHandler GetInstance();
         void Server_ClientConnected(object sender, TcpClient e);
@@ -24,7 +24,7 @@ namespace Remo.Connections
         void send(String Message, TcpClient c);
     }
 
-    interface UDP : Connection
+    interface UDP : IServer
     {
         //mUDPHandler GetInstance();
         void Server_DataReceived(object sender, Message e);

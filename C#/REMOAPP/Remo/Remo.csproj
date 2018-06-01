@@ -66,7 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connections\Connection.cs" />
+    <Compile Include="Connections\IServer.cs" />
     <Compile Include="Connections\DataHandler.cs" />
     <Compile Include="Connections\IClient.cs" />
     <Compile Include="Connections\mClient.cs" />

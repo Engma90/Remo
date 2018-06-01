@@ -22,7 +22,7 @@ namespace Remo.Features
             InitializeComponent();
             this.mTCPH = mTCPHandler.GetInstance();
         }
-        public IClient c
+        public IMainClient c
         {
             get;
             set;

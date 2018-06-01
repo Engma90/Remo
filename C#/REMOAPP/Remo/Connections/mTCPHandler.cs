@@ -14,7 +14,9 @@ namespace Remo.Connections
 
     public class mTCPHandler : SimpleTcpServer, TCP
     {
+        public List<TcpClient> HandledClientsList { get; }
         public List<IClient> Clients { get; }
+        public List<IMainClient> MainClients { get; }
         public int CheckIsConnectedInterval_ms { get; set; } = 5000;
         int Port;
         private Thread RefreshThread;
@@ -32,7 +34,9 @@ namespace Remo.Connections
             DataReceived += Server_DataReceived;
             //AutoTrimStrings = true;
             //dh = new DataHandler();
+            MainClients = new List<IMainClient>();
             Clients = new List<IClient>();
+            HandledClientsList = new List<TcpClient>();
             StartServer(this.Port);
             Console.WriteLine("TCP Server Started!");
         }
@@ -47,20 +51,20 @@ namespace Remo.Connections
                     try
                     {
                         //Broadcast(Encoding.UTF8.GetBytes("Info\n"));
-                        foreach (IClient c in Clients.ToList())
+                        foreach (IMainClient c in MainClients.ToList())
                         {
-                            if (c.isMainConn)
-                            {
+                            //if (c.isMainConn)
+                            //{
                                 send(((int)DataHandler.eDataType.DATA_TYPE_INFO).ToString(), c.tcpClient);
                                 Thread.Sleep(CheckIsConnectedInterval_ms);
                                 if ((DateTime.Now - c.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms))
                                 {
-                                    //Clients.Remove(c);
+                                    //MainClients.Remove(c);
                                     Console.WriteLine(c.LastChecked);
                                     Console.WriteLine(DateTime.Now);
                                     c.tcpClient.Client.Disconnect(false);
                                 }
-                            }
+                           // }
                         }
                     }
                     catch { Console.WriteLine("Broadcast Ex"); }
@@ -132,25 +136,27 @@ namespace Remo.Connections
 
         public void Server_ClientConnected(object sender, TcpClient e)
         {
-            //throw new NotImplementedException();
-            //foreach (mClient c1 in Clients.ToList())
-            //{
-            //    if ((c1.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals((e.Client.RemoteEndPoint as IPEndPoint).Address.ToString())  &&  c1.isMainConn)
-            //    {
-            //        Clients.Remove(c1);
-            //        Console.WriteLine("Duplicates removed");
-            //    }
-            //}
-            Console.WriteLine("Client Connected: " + e.Client.RemoteEndPoint);
+            ////throw new NotImplementedException();
+            ////foreach (mClient c1 in MainClients.ToList())
+            ////{
+            ////    if ((c1.tcpClient.MainClient.RemoteEndPoint as IPEndPoint).Address.ToString().Equals((e.MainClient.RemoteEndPoint as IPEndPoint).Address.ToString())  &&  c1.isMainConn)
+            ////    {
+            ////        MainClients.Remove(c1);
+            ////        Console.WriteLine("Duplicates removed");
+            ////    }
+            ////}
+
+
+            //Console.WriteLine("MainClient Connected: " + e.Client.RemoteEndPoint);
             IClient c = (IClient)Activator.CreateInstance(ClientClass.GetType());
             c.tcpClient = e;
-            c.isMainConn = false;
-            c.LastChecked = DateTime.Now;
+            //c.isMainConn = false;
+            //c.LastChecked = DateTime.Now;
             Clients.Add(c);
 
-            
+
         }
-        
+
 
 
         public void Server_DataReceived(object sender, Message e)
@@ -171,7 +177,7 @@ namespace Remo.Connections
                 //Console.WriteLine("MessageLength Without Header: " + (finalData.Length));
                 //Console.WriteLine("Message: " + Encoding.UTF8.GetString(finalData));
 
-                foreach (IClient c in Clients.ToList())
+                foreach (IMainClient c in MainClients.ToList())
                 {
                     if ((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).ToString().Equals((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).ToString()))
                     {
@@ -190,12 +196,12 @@ namespace Remo.Connections
 
         private void Server_ClientDisconnected(object sender, TcpClient e)
         {
-            Console.WriteLine("Client Disconnected: " + e.Client.RemoteEndPoint);
-            foreach (IClient c in Clients.ToList())
+            Console.WriteLine("MainClient Disconnected: " + e.Client.RemoteEndPoint);
+            foreach (IMainClient c in MainClients.ToList())
             {
                 if(c.tcpClient == e)
                 {
-                    Clients.Remove(c);
+                    MainClients.Remove(c);
                     
                 }
             }

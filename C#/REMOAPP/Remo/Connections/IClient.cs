@@ -8,25 +8,27 @@ using System.Threading.Tasks;
 
 namespace Remo.Connections
 {
-    public interface IClient
-    {
 
+    public interface IClient{
+        TcpClient tcpClient { get; set; }
+    }
+    public interface IMainClient:IClient
+    {
         string MANUFACTURER { get; set; }
         string BATTERY_LEVEL { get; set; }
-        bool isMainConn { get; set; }
-
-        mTCPHandler mTCPH { get; set; }
-        TcpClient tcpClient { get; set; }
+        //bool isMainConn { get; set; }
         DateTime LastChecked { get; set; }
-        Feature cam { get; set; }
-        Feature Mic { get; set; }
-        Feature FM { get; set; }
-        IClient MainConnection { get; set; }
-        
-
+        IFeatureClient[] FC { get; set; }
+        //Feature cam { get; set; }
+        //Feature Mic { get; set; }
+        //Feature FM { get; set; }
+        //IMainClient MainConnection { get; set; }
         string[] getInfo();
-        
+    }
 
-
+    public interface IFeatureClient: IClient
+    {
+        IMainClient getMainConnection();
+        Feature F { get; set; }
     }
 }

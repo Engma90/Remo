@@ -1,0 +1,1977 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MediaWiki.NET</name>
+    </assembly>
+    <members>
+        <member name="T:MediaWikiNET.MediaWiki">
+            <summary>
+            MediaWiki.NET
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.MediaWiki.UseHTTPS">
+            <summary>
+            Set true if you want to use https
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.MediaWiki.Language">
+            <summary>
+            Current language
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.MediaWiki.RequestPath">
+            <summary>
+            Api path with scheme and language
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.MediaWiki.Path">
+            <summary>
+            The wiki site's api path
+            If your api path is https://en.wikipedia.org/w/api.php
+            This field will be /w/api.php
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.MediaWiki.Host">
+            <summary>
+            The wiki site's host without language
+            If your api path is https://en.wikipedia.org/w/api.php
+            This field will be wikipedia.org
+            </summary>
+        </member>
+        <member name="M:MediaWikiNET.MediaWiki.#ctor(System.String)">
+            <summary>
+            Constructor
+            Please ensure your apiPath can be open in browser.
+            </summary>
+            <param name="apiPath">will use wikipedia default api path</param>
+        </member>
+        <member name="M:MediaWikiNET.MediaWiki.Search(MediaWikiNET.Models.Request)">
+            <summary>
+            Make a search
+            </summary>
+            <param name="request">a search request</param>
+            <returns></returns>
+        </member>
+        <member name="M:MediaWikiNET.MediaWiki.Search(System.String)">
+            <summary>
+            Make a search
+            </summary>
+            <param name="keyword">keyword</param>
+            <returns></returns>
+        </member>
+        <member name="M:MediaWikiNET.MediaWiki.SearchAsync(MediaWikiNET.Models.Request)">
+            <summary>
+            Make a search
+            </summary>
+            <param name="request">a search request</param>
+            <returns></returns>
+        </member>
+        <member name="M:MediaWikiNET.MediaWiki.SearchAsync(System.String)">
+            <summary>
+            Make a search
+            </summary>
+            <param name="keyword">keyword</param>
+            <returns></returns>
+        </member>
+        <member name="T:MediaWikiNET.Models.Continue">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Continue.sroffset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Continue.continues">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.Error">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Error.code">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Error.info">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.MainModuleRequest">
+            <summary>
+            see at https://en.wikipedia.org/w/api.php?action=help
+            </summary>
+        </member>
+        <member name="M:MediaWikiNET.Models.MainModuleRequest.ToDictionary">
+            <inheritdoc />
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.action">
+            <summary>
+            Which action to perform.
+            One of the following values: abusefiltercheckmatch, abusefilterchecksyntax, abusefilterevalexpression, abusefilterunblockautopromote, addstudents, antispoof, block, bouncehandler, categorytree, centralauthtoken, centralnoticechoicedata, centralnoticequerycampaign, changeauthenticationdata, checktoken, cirrus-config-dump, cirrus-mapping-dump, cirrus-settings-dump, clearhasmsg, clientlogin, compare, createaccount, cspreport, cxconfiguration, cxdelete, cxpublish, cxsave, cxsuggestionlist, cxtoken, delete, deleteeducation, deleteglobalaccount, echomarkread, echomarkseen, edit, editmassmessagelist, emailuser, enlist, expandtemplates, fancycaptchareload, featuredfeed, feedcontributions, feedrecentchanges, feedwatchlist, filerevert, flagconfig, flow, flow-parsoid-utils, flowthank, globalblock, globaluserrights, graph, help, imagerotate, import, jsonconfig, languagesearch, linkaccount, liststudents, login, logout, managetags, massmessage, mergehistory, mobileview, move, opensearch, options, pagetriageaction, pagetriagelist, pagetriagestats, pagetriagetagging, pagetriagetemplate, paraminfo, parse, parsoid-batch, patrol, protect, purge, query, refresheducation, removeauthenticationdata, resetpassword, review, reviewactivity, revisiondelete, rollback, rsd, sanitize-mapdata, scribunto-console, setglobalaccountstatus, setnotificationtimestamp, shortenurl, sitematrix, spamblacklist, stabilize, stashedit, strikevote, tag, templatedata, thank, titleblacklist, tokens, transcodereset, ulslocalization, unblock, undelete, unlinkaccount, upload, userrights, visualeditor, visualeditoredit, watch, wikilove, zeroconfig
+            Default: help
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.format">
+            <summary>
+            The format of the output.
+            One of the following values: json, jsonfm, none, php, phpfm, rawfm, xml, xmlfm
+            Default: json
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.maxlag">
+            <summary>
+            Maximum lag can be used when MediaWiki is installed on a database replicated cluster. To save actions causing any more site replication lag, this parameter can make the client wait until the replication lag is less than the specified value. In case of excessive lag, error code maxlag is returned with a message like Waiting for $host: $lag seconds lagged.
+            See https://www.mediawiki.org/wiki/Manual:Maxlag_parameter for more information.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.smaxage">
+            <summary>
+            Set the s-maxage HTTP cache control header to this many seconds. Errors are never cached.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.maxage">
+            <summary>
+            Set the max-age HTTP cache control header to this many seconds. Errors are never cached.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.assert">
+            <summary>
+            Verify the user is logged in if set to user, or has the bot user right if bot.
+            One of the following values: user, bot
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.assertuser">
+            <summary>
+            Verify the current user is the named user.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.requestid">
+            <summary>
+            Any value given here will be included in the response. May be used to distinguish requests.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.servedby">
+            <summary>
+            Include the hostname that served the request in the results.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.curtimestamp">
+            <summary>
+            Include the current timestamp in the result.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.origin">
+            <summary>
+            When accessing the API using a cross-domain AJAX request (CORS), set this to the originating domain. This must be included in any pre-flight request, and therefore must be part of the request URI (not the POST body).
+            For authenticated requests, this must match one of the origins in the Origin header exactly, so it has to be set to something like https://en.wikipedia.org or https://meta.wikimedia.org. If this parameter does not match the Origin header, a 403 response will be returned. If this parameter matches the Origin header and the origin is whitelisted, the Access-Control-Allow-Origin and Access-Control-Allow-Credentials headers will be set.
+            For non-authenticated requests, specify the value *. This will cause the Access-Control-Allow-Origin header to be set, but Access-Control-Allow-Credentials will be false and all user-specific data will be restricted.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.uselang">
+            <summary>
+            Language to use for message translations. action=query&amp;meta=siteinfo with siprop=languages returns a list of language codes, or specify user to use the current user's language preference, or specify content to use this wiki's content language.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.MainModuleRequest.centralauthtoken">
+            <summary>
+            When accessing the API using a cross-domain AJAX request (CORS), use this to authenticate as the current SUL user. Use action=centralauthtoken on this wiki to retrieve the token, before making the CORS request. Each token may only be used once, and expires after 10 seconds. This should be included in any pre-flight request, and therefore should be included in the request URI (not the POST body).
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.Query">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Query.searchinfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Query.search">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.Request">
+            <summary>
+            see at https://en.wikipedia.org/w/api.php
+            </summary>
+        </member>
+        <member name="M:MediaWikiNET.Models.Request.ToDictionary">
+            <summary>
+            Output as a dict
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.Search">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.ns">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.title">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.snippet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.titlesnippet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.redirecttitle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.redirectsnippet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.sectiontitle">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.sectionsnippet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.size">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.wordcount">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.Search.timestamp">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.SearchInfo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchInfo.totalhits">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchInfo.suggestion">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchInfo.suggestionsnippet">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.SearchRequest">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MediaWikiNET.Models.SearchRequest.#ctor(System.String)">
+            <summary>
+            A search request
+            </summary>
+            <param name="query">keyWords</param>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.action">
+            <inheritdoc />
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.format">
+            <inheritdoc />
+        </member>
+        <member name="M:MediaWikiNET.Models.SearchRequest.ToDictionary">
+            <inheritdoc />
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.list">
+            <summary>
+            Which lists to get.
+            Values(separate with | or alternative): abusefilters, abuselog, allcategories, alldeletedrevisions, allfileusages, allimages, alllinks, allpages, allredirects, allrevisions, alltransclusions, allusers, backlinks, betafeatures, blocks, categorymembers, centralnoticelogs, checkuser, checkuserlog, contenttranslation, contenttranslationcorpora, contenttranslationlangtrend, contenttranslationstats, contenttranslationsuggestions, cxpublishedtranslations, cxtranslatorstats, deletedrevs, embeddedin, exturlusage, filearchive, gadgetcategories, gadgets, geosearch, gettingstartedgetpages, globalallusers, globalblocks, globalgroups, imageusage, iwbacklinks, langbacklinks, logevents, mmsites, mystashedfiles, oldreviewedpages, pagepropnames, pageswithprop, prefixsearch, projectpages, protectedtitles, querypage, random, recentchanges, search, tags, usercontribs, users, watchlist, watchlistraw, wblistentityusage, wikisets
+            Maximum number of values is 50 (500 for bots).
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.srsearch">
+            <summary>
+            Search for page titles or content matching this value. You can use the search string to invoke special search features, depending on what the wiki's search backend implements.
+            This parameter is required.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.srinfo">
+            <summary>
+            Which metadata to return.
+            Values(separate with | or alternative): totalhits, suggestion, rewrittenquery
+            Default: totalhits|suggestion|rewrittenquery
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.srlimit">
+            <summary>
+            How many total pages to return.
+            Default: 10
+            Max: 50
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.sroffset">
+            <summary>
+            Use this value to continue paging (return by query).
+            Default: 0
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.srnamespace">
+            <summary>
+            The namespace(s) to enumerate.
+            When the list is empty, it implicitly contains 0, the default namespace to search.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.srprop">
+            <summary>
+            What propery to include in the results.
+            Defaults to a combination of snippet, size, wordcount and timestamp
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.srredirects">
+            <summary>
+            Include redirect pages in the search.
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchRequest.srwhat">
+            <summary>
+            Gets or sets the place to search.
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.Info">
+            <summary>
+            Which metadata to return.
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Info.TotalHits">
+            <summary>
+            The number of search results
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Info.Suggestion">
+            <summary>
+            A suggestion that might fit better than what you searched for.
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Info.Rewrittenquery">
+            <summary>
+            rewrittenquery
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.What">
+            <summary>
+            What
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.What.Title">
+            <summary>
+            Search in page titles (default) (if search engine doesn't support title searches, such as Lucene which is used by Wikipedia, then it falls back to text)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.What.Text">
+            <summary>
+            Search in page text
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.What.NearMatch">
+            <summary>
+            Search for titles that match excatly.
+            Example:
+            'Microsoft' results in 'Microsoft'
+            'Microsof' results in 'no results'
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.Property">
+            <summary>
+            Property
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.Size">
+            <summary>
+            Adds the size of the page in bytes
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.Wordcount">
+            <summary>
+            Adds the word count of the page
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.Timestamp">
+            <summary>
+             Adds the timestamp of when the page was last edited
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.Score">
+            <summary>
+            Adds the score (if any) from the search engine
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.Snippet">
+            <summary>
+            Adds a parsed snippet of the page
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.TitleSnippet">
+            <summary>
+            Adds a parsed snippet of the page title
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.RedirectSnippet">
+            <summary>
+            Adds a parsed snippet of the redirect
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.RedirectTitle">
+            <summary>
+             Adds a parsed snippet of the redirect title
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.SectionSnippet">
+            <summary>
+            Adds a parsed snippet of the matching section
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.SectionTitle">
+            <summary>
+            Adds a parsed snippet of the matching section title
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Models.Property.HasRelated">
+            <summary>
+            Indicates whether a related search is available
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Models.SearchResult">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchResult.batchcomplete">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchResult.continues">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchResult.query">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:MediaWikiNET.Models.SearchResult.error">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:MediaWikiNET.Languages">
+            <summary>
+            https://meta.wikimedia.org/wiki/List_of_Wikipedias
+            since 10/19/2016
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.English">
+            <summary>
+            English
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Swedish">
+            <summary>
+            Svenska
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Cebuano">
+            <summary>
+            Sinugboanong Binisaya
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.German">
+            <summary>
+            Deutsch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Dutch">
+            <summary>
+            Nederlands
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.French">
+            <summary>
+            Français
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Russian">
+            <summary>
+            Русский
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Italian">
+            <summary>
+            Italiano
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Spanish">
+            <summary>
+            Español
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.WarayWaray">
+            <summary>
+            Winaray
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Polish">
+            <summary>
+            Polski
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Vietnamese">
+            <summary>
+            Tiếng Việt
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Japanese">
+            <summary>
+            日本語
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Portuguese">
+            <summary>
+            Português
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Chinese">
+            <summary>
+            中文
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ukrainian">
+            <summary>
+            Українська
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Catalan">
+            <summary>
+            Català
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Persian">
+            <summary>
+            فارسی
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.NorwegianBokmal">
+            <summary>
+            Norsk (Bokmål)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Arabic">
+            <summary>
+            العربية
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.SerboCroatian">
+            <summary>
+            Srpskohrvatski / Српскохрватски
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Finnish">
+            <summary>
+            Suomi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Hungarian">
+            <summary>
+            Magyar
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Indonesian">
+            <summary>
+            Bahasa Indonesia
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Romanian">
+            <summary>
+            Română
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Czech">
+            <summary>
+            Čeština
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Korean">
+            <summary>
+            한국어
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Serbian">
+            <summary>
+            Српски / Srpski
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Malay">
+            <summary>
+            Bahasa Melayu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Turkish">
+            <summary>
+            Türkçe
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Basque">
+            <summary>
+            Euskara
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Esperanto">
+            <summary>
+            Esperanto
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Minangkabau">
+            <summary>
+            Minangkabau
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Bulgarian">
+            <summary>
+            Български
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Danish">
+            <summary>
+            Dansk
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kazakh">
+            <summary>
+            Қазақша
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Slovak">
+            <summary>
+            Slovenčina
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Armenian">
+            <summary>
+            Հայերեն
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.MinNan">
+            <summary>
+            Bân-lâm-gú
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Hebrew">
+            <summary>
+            עברית
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Lithuanian">
+            <summary>
+            Lietuvių
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Croatian">
+            <summary>
+            Hrvatski
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Chechen">
+            <summary>
+            Нохчийн
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Slovenian">
+            <summary>
+            Slovenščina
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Estonian">
+            <summary>
+            Eesti
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Galician">
+            <summary>
+            Galego
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.NorwegianNynorsk">
+            <summary>
+            Nynorsk
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Uzbek">
+            <summary>
+            O‘zbek
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Latin">
+            <summary>
+            Latina
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Greek">
+            <summary>
+            Ελληνικά
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Belarusian">
+            <summary>
+            Беларуская
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.SimpleEnglish">
+            <summary>
+            Simple English
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Volapük">
+            <summary>
+            Volapük
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Thai">
+            <summary>
+            ไทย
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Hindi">
+            <summary>
+            हिन्दी
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Azerbaijani">
+            <summary>
+            Azərbaycanca
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Urdu">
+            <summary>
+            اردو
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Georgian">
+            <summary>
+            ქართული
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tamil">
+            <summary>
+            தமிழ்
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Occitan">
+            <summary>
+            Occitan
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Macedonian">
+            <summary>
+            Македонски
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Malagasy">
+            <summary>
+            Malagasy
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Welsh">
+            <summary>
+            Cymraeg
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Latvian">
+            <summary>
+            Latviešu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Newar">
+            <summary>
+            नेपाल भाषा
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Bosnian">
+            <summary>
+            Bosanski
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tatar">
+            <summary>
+            Tatarça / Татарча
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tajik">
+            <summary>
+            Тоҷикӣ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Telugu">
+            <summary>
+            తెలుగు
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tagalog">
+            <summary>
+            Tagalog
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Piedmontese">
+            <summary>
+            Piemontèis
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Albanian">
+            <summary>
+            Shqip
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Breton">
+            <summary>
+            Brezhoneg
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.BelarusianTaraskievica">
+            <summary>
+            Беларуская (тарашкевіца)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kirghiz">
+            <summary>
+            Кыргызча
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Haitian">
+            <summary>
+            Krèyol ayisyen
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Javanese">
+            <summary>
+            Basa Jawa
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Cantonese">
+            <summary>
+            粵語
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Asturian">
+            <summary>
+            Asturianu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Luxembourgish">
+            <summary>
+            Lëtzebuergesch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Malayalam">
+            <summary>
+            മലയാളം
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Bengali">
+            <summary>
+            বাংলা
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Marathi">
+            <summary>
+            मराठी
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.WesternPunjabi">
+            <summary>
+            شاہ مکھی پنجابی (Shāhmukhī Pañjābī)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Afrikaans">
+            <summary>
+            Afrikaans
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Scots">
+            <summary>
+            Scots
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Icelandic">
+            <summary>
+            Íslenska
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Irish">
+            <summary>
+            Gaeilge
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Bashkir">
+            <summary>
+            Башҡорт
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.WestFrisian">
+            <summary>
+            Frysk
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Chuvash">
+            <summary>
+            Чăваш
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Swahili">
+            <summary>
+            Kiswahili
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Lombard">
+            <summary>
+            Lumbaart
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Burmese">
+            <summary>
+            မြန်မာဘာသာ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Aragonese">
+            <summary>
+            Aragonés
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Yoruba">
+            <summary>
+            Yorùbá
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Nepali">
+            <summary>
+            नेपाली
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ido">
+            <summary>
+            Ido
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Gujarati">
+            <summary>
+            ગુજરાતી
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.LowSaxon">
+            <summary>
+            Plattdüütsch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sicilian">
+            <summary>
+            Sicilianu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.BishnupriyaManipuri">
+            <summary>
+            ইমার ঠার/বিষ্ণুপ্রিয়া মণিপুরী
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Punjabi">
+            <summary>
+            ਪੰਜਾਬੀ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kurdish">
+            <summary>
+            Kurdî / كوردی
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Alemannic">
+            <summary>
+            Alemannisch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Bavarian">
+            <summary>
+            Boarisch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kannada">
+            <summary>
+            ಕನ್ನಡ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Interlingua">
+            <summary>
+            Interlingua
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Quechua">
+            <summary>
+            Runa Simi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sundanese">
+            <summary>
+            Basa Sunda
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sorani">
+            <summary>
+            Soranî / کوردی
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Samogitian">
+            <summary>
+            Žemaitėška
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Mongolian">
+            <summary>
+            Монгол
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.EgyptianArabic">
+            <summary>
+            مصرى (Maṣri)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Neapolitan">
+            <summary>
+            Nnapulitano
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Walloon">
+            <summary>
+            Walon
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.ScottishGaelic">
+            <summary>
+            Gàidhlig
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Buginese">
+            <summary>
+            Basa Ugi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Yiddish">
+            <summary>
+            ייִדיש
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Banyumasan">
+            <summary>
+            Basa Banyumasan
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Amharic">
+            <summary>
+            አማርኛ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sinhalese">
+            <summary>
+            සිංහල
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Mazandarani">
+            <summary>
+            مَزِروني
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Faroese">
+            <summary>
+            Føroyskt
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Limburgish">
+            <summary>
+            Limburgs
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Nahuatl">
+            <summary>
+            Nāhuatl
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Oriya">
+            <summary>
+            ଓଡ଼ିଆ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sakha">
+            <summary>
+            Саха тыла (Saxa Tyla)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Venetian">
+            <summary>
+            Vèneto
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.UpperSorbian">
+            <summary>
+            Hornjoserbsce
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.SouthAzerbaijani">
+            <summary>
+            تۆرکجه
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ossetian">
+            <summary>
+            Иронау
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sanskrit">
+            <summary>
+            संस्कृतम्
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.HillMari">
+            <summary>
+            Кырык Мары (Kyryk Mary)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.FijiHindi">
+            <summary>
+            Fiji Hindi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.MeadowMari">
+            <summary>
+            Олык Марий (Olyk Marij)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tarantino">
+            <summary>
+            Tarandíne
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ilokano">
+            <summary>
+            Ilokano
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kapampangan">
+            <summary>
+            Kapampangan
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.EmilianRomagnol">
+            <summary>
+            Emiliàn e rumagnòl
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Mingrelian">
+            <summary>
+            მარგალური (Margaluri)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sindhi">
+            <summary>
+            سنڌي، سندھی ، सिन्ध
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Bihari">
+            <summary>
+            भोजपुरी
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Pashto">
+            <summary>
+            پښتو
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.NorthernSami">
+            <summary>
+            Sámegiella
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Zazaki">
+            <summary>
+            Zazaki
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Maori">
+            <summary>
+            Māori
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Hakka">
+            <summary>
+            Hak-kâ-fa / 客家話
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.CentralBicolano">
+            <summary>
+            Bikol
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Gan">
+            <summary>
+            贛語
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.DutchLowSaxon">
+            <summary>
+            Nedersaksisch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Gilaki">
+            <summary>
+            گیلکی
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.WestFlemish">
+            <summary>
+            West-Vlams
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Rusyn">
+            <summary>
+            Русиньскый
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tibetan">
+            <summary>
+            བོད་སྐད
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Wu">
+            <summary>
+            吴语
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Võro">
+            <summary>
+            Võro
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Maithili">
+            <summary>
+            मैथिली
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Corsican">
+            <summary>
+            Corsu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Turkmen">
+            <summary>
+            تركمن / Туркмен
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sardinian">
+            <summary>
+            Sardu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kashubian">
+            <summary>
+            Kaszëbsczi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Silesian">
+            <summary>
+            Ślůnski
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Vepsian">
+            <summary>
+            Vepsän
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.NorthernLuri">
+            <summary>
+            لۊری شومالی
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Khmer">
+            <summary>
+            ភាសាខ្មែរ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.CrimeanTatar">
+            <summary>
+            Qırımtatarca
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Manx">
+            <summary>
+            Gaelg
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Komi">
+            <summary>
+            Коми
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.NorthFrisian">
+            <summary>
+            Nordfriisk
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.ClassicalChinese">
+            <summary>
+            古文 / 文言文
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Zeelandic">
+            <summary>
+            Zeêuws
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Assamese">
+            <summary>
+            অসমীয়া
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Somali">
+            <summary>
+            Soomaali
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.MinDong">
+            <summary>
+            Mìng-dĕ̤ng-ngṳ̄
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.NorthernSotho">
+            <summary>
+            Sepedi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Aymara">
+            <summary>
+            Aymar
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.SaterlandFrisian">
+            <summary>
+            Seeltersk
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Udmurt">
+            <summary>
+            Удмурт кыл
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Cornish">
+            <summary>
+            Kernewek/Karnuack
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ladino">
+            <summary>
+            Dzhudezmo
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Norman">
+            <summary>
+            Nouormand/Normaund
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Interlingue">
+            <summary>
+            Interlingue
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.KomiPermyak">
+            <summary>
+            Перем Коми (Perem Komi)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Acehnese">
+            <summary>
+            Bahsa Acèh
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Romansh">
+            <summary>
+            Rumantsch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Erzya">
+            <summary>
+            Эрзянь (Erzjanj Kelj)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Picard">
+            <summary>
+            Picard
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Livvinkarjala">
+            <summary>
+            Livvi-Karelian
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ligurian">
+            <summary>
+            Líguru
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Maltese">
+            <summary>
+            Malti
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Friulian">
+            <summary>
+            Furlan
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Guarani">
+            <summary>
+            Avañe'ẽ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.LowerSorbian">
+            <summary>
+            Dolnoserbski
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Divehi">
+            <summary>
+            ދިވެހިބަސް
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.ZamboangaChavacano">
+            <summary>
+            Chavacano de Zamboanga
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Extremaduran">
+            <summary>
+            Estremeñu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.AngloSaxon">
+            <summary>
+            Englisc
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kabyle">
+            <summary>
+            Taqbaylit
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ripuarian">
+            <summary>
+            Ripoarisch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Lezgian">
+            <summary>
+            Лезги чІал (Lezgi č’al)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Mirandese">
+            <summary>
+            Mirandés
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Lingala">
+            <summary>
+            Lingala
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Uyghur">
+            <summary>
+            ئۇيغۇر تىلى
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Gagauz">
+            <summary>
+            Gagauz
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Shona">
+            <summary>
+            chiShona
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.FrancoProvençal">
+            <summary>
+            Arpitan
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Pangasinan">
+            <summary>
+            Pangasinan
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Pali">
+            <summary>
+            पाऴि
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.GoanKonkani">
+            <summary>
+            गोवा कोंकणी / Gova Konknni
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Navajo">
+            <summary>
+            Diné bizaad
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Avar">
+            <summary>
+            Авар
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.PalatinateGerman">
+            <summary>
+            Pälzisch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kalmyk">
+            <summary>
+            Хальмг
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.KarachayBalkar">
+            <summary>
+            Къарачай-Малкъар (Qarachay-Malqar)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Hawaiian">
+            <summary>
+            Hawai`i
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Karakalpak">
+            <summary>
+            Qaraqalpaqsha
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Buryat">
+            <summary>
+            Буряад
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kinyarwanda">
+            <summary>
+            Ikinyarwanda
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.PennsylvaniaGerman">
+            <summary>
+            Deitsch
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tongan">
+            <summary>
+            faka Tonga
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Novial">
+            <summary>
+            Novial
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Greenlandic">
+            <summary>
+            Kalaallisut
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Aramaic">
+            <summary>
+            ܐܪܡܝܐ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Papiamentu">
+            <summary>
+            Papiamentu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.KabardianCircassian">
+            <summary>
+            Адыгэбзэ (Adighabze)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Lao">
+            <summary>
+            ລາວ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Banjar">
+            <summary>
+            Bahasa Banjar
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Patois">
+            <summary>
+            Jamaican Creole English
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Hausa">
+            <summary>
+            هَوُسَ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tetum">
+            <summary>
+            Tetun
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kikuyu">
+            <summary>
+            Gĩkũyũ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tuvan">
+            <summary>
+            Тыва
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.TokPisin">
+            <summary>
+            Tok Pisin
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Igbo">
+            <summary>
+            Igbo
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Nauruan">
+            <summary>
+            dorerin Naoero
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Lak">
+            <summary>
+            Лакку
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Lojban">
+            <summary>
+            Lojban
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Aromanian">
+            <summary>
+            Armãneashce
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tahitian">
+            <summary>
+            Reo Mā`ohi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kongo">
+            <summary>
+            KiKongo
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Zhuang">
+            <summary>
+            Cuengh
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Moksha">
+            <summary>
+            Мокшень (Mokshanj Kälj)
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Luganda">
+            <summary>
+            Luganda
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Wolof">
+            <summary>
+            Wolof
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sranan">
+            <summary>
+            Sranantongo
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Abkhazian">
+            <summary>
+            Аҧсуа
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Latgalian">
+            <summary>
+            Latgaļu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Zulu">
+            <summary>
+            isiZulu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Cherokee">
+            <summary>
+            ᏣᎳᎩ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Samoan">
+            <summary>
+            Gagana Samoa
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Oromo">
+            <summary>
+            Oromoo
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.ತುಳು">
+            <summary>
+            Tulu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tswana">
+            <summary>
+            Setswana
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Cheyenne">
+            <summary>
+            Tsetsêhestâhese
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Romani">
+            <summary>
+            romani - रोमानी
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Twi">
+            <summary>
+            Twi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.OldChurchSlavonic">
+            <summary>
+            Словѣньскъ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Xhosa">
+            <summary>
+            isiXhosa
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tumbuka">
+            <summary>
+            chiTumbuka
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Bislama">
+            <summary>
+            Bislama
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kirundi">
+            <summary>
+            Kirundi
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Norfolk">
+            <summary>
+            Norfuk
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Gothic">
+            <summary>
+            𐌲𐌿𐍄𐌹𐍃𐌺
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Chamorro">
+            <summary>
+            Chamoru
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Swati">
+            <summary>
+            SiSwati
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Pontic">
+            <summary>
+            Ποντιακά
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Bambara">
+            <summary>
+            Bamanankan
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Adyghe">
+            <summary>
+            Адыгэбзэ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Moldovan">
+            <summary>
+            Молдовеняскэ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tsonga">
+            <summary>
+            Xitsonga
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Inuktitut">
+            <summary>
+            ᐃᓄᒃᑎᑐᑦ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Chichewa">
+            <summary>
+            Chichewa
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sesotho">
+            <summary>
+            Sesotho
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Fijian">
+            <summary>
+            Na Vosa Vakaviti
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ewe">
+            <summary>
+            Eʋegbe
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Akan">
+            <summary>
+            Akana
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kashmiri">
+            <summary>
+            कश्मीरी / كشميري
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Inupiak">
+            <summary>
+            Iñupiak
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Sango">
+            <summary>
+            Sängö
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Venda">
+            <summary>
+            Tshivenda
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Dzongkha">
+            <summary>
+            ཇོང་ཁ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Fula">
+            <summary>
+            Fulfulde
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Tigrinya">
+            <summary>
+            ትግርኛ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Cree">
+            <summary>
+            Nehiyaw
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Ndonga">
+            <summary>
+            Oshiwambo
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Choctaw">
+            <summary>
+            Choctaw
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kuanyama">
+            <summary>
+            Kuanyama
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Marshallese">
+            <summary>
+            Ebon
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.HiriMotu">
+            <summary>
+            Hiri Motu
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.SichuanYi">
+            <summary>
+            ꆇꉙ
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Afar">
+            <summary>
+            Afar
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Muscogee">
+            <summary>
+            Muskogee
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Herero">
+            <summary>
+            Otsiherero
+            </summary>
+        </member>
+        <member name="F:MediaWikiNET.Languages.Kanuri">
+            <summary>
+            Kanuri
+            </summary>
+        </member>
+    </members>
+</doc>

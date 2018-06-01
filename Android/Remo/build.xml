@@ -1,0 +1,47 @@
+<project name="MyProject" default="compile" basedir=".">
+
+    <property name="version" value="0" />
+    <property name="src.dir" value="src" />
+    <property name="build.dir" value="obj" />
+    <property name="libs.dir" value="libs" />
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+    </target>
+
+    <target name="compile">
+        <echo>Compiling Java source</echo>
+
+        <path id="build.dir">
+            <fileset dir="${libs.dir}">
+                <include name="*.jar" />
+            </fileset>
+        </path>
+
+        <javac
+                target="1.8"
+                bootclasspath="${platform}"
+               includeantruntime="true"
+                srcdir="${src.dir}"
+                destdir="${build.dir}" >
+
+            <classpath refid="build.dir" />
+
+
+            <!--<classpath>-->
+                <!--<pathelement path="${classpath}"/>-->
+                <!--<fileset dir="libs">-->
+                    <!--<include name="**/*.jar"/>-->
+                <!--</fileset>-->
+                <!--<pathelement location="classes"/>-->
+                <!--<dirset dir="${build.dir}">-->
+                    <!--<include name="apps/**/classes"/>-->
+                    <!--<exclude name="apps/**/*Test*"/>-->
+                <!--</dirset>-->
+                <!--&lt;!&ndash;<filelist refid="third-party_jars"/>&ndash;&gt;-->
+            <!--</classpath>-->
+			</javac>
+    </target>
+
+</project>

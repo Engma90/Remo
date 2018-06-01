@@ -1,0 +1,8 @@
+//save the file
+NPP_SAVE
+//redirect console output to $(OUTPUT) & silent mode
+npe_console v+ --
+//convert winpath to cygpath
+C:\Program Files\Git\bin\bash.exe -lc "cygpath \"$(FULL_CURRENT_PATH)\"
+//execute the file
+C:\Program Files\Git\bin\bash.exe -lc "$(OUTPUT)  build-run"

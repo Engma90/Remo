@@ -298,7 +298,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="false" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="false" clearCache="false" clearProvisionedDevices="false" myTimestamp="1527918758704" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="false" clearCache="false" clearProvisionedDevices="false" myTimestamp="1527918819314" />
         <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_ShellBuild" />
       </method>
     </configuration>

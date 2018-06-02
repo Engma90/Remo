@@ -18,6 +18,7 @@ namespace Remo.Features
     {
         public MainClient()
         {
+            IFeatureClients = new Dictionary<int, IFeatureClient>();
             //var types = Assembly
             //        .GetExecutingAssembly()
             //        .GetTypes()
@@ -25,25 +26,30 @@ namespace Remo.Features
             //int i = 0;
             //foreach (var t in types)
             //{
-            //    FC[(int)DataHandler.eDataType(i)] = new FeatureClient();
-            //    FC[(int)DataHandler.eDataType.DATA_TYPE_CAM_START].F = (Feature)Activator.CreateInstance(t);
+            //    IFeatureClient FC = new FeatureClient();
+            //    FC.F = (IFeature)Activator.CreateInstance(t);
+            //    FC.
+            //    IFeatureClients.Add(((IFeature)t).DATA_TYPE, FC);
+            //    //FC[(int)DataHandler.eDataType.DATA_TYPE_CAM_START].F = (IFeature)Activator.CreateInstance(t);
             //    FC[(int)DataHandler.eDataType.DATA_TYPE_CAM_START].MainConnection = this;
             //    Console.WriteLine(t.Name);
             //    i++;
             //}
             //FC = new FeatureClient[4];
-            
+
             //FC[(int)DataHandler.eDataType.DATA_TYPE_CAM_START].F = new CamStream();
-            
+
         }
 
         public string BATTERY_LEVEL { get; set; }
 
-        //public Feature cam { get; set; }
+        //public IFeature cam { get; set; }
 
         public IFeatureClient[] FC { get; set; }
 
-        //public Feature FM { get; set; }
+        public Dictionary<int, IFeatureClient> IFeatureClients { get; set; }
+
+        //public IFeature FM { get; set; }
 
         //public bool isMainConn { get; set; }
 
@@ -53,11 +59,13 @@ namespace Remo.Features
 
         public string MANUFACTURER { get; set; }
 
-        //public Feature Mic { get; set; }
+        //public IFeature Mic { get; set; }
 
         //public mTCPHandler mTCPH { get; set; }
 
         public TcpClient tcpClient { get; set; }
+
+        //Dictionary<int, IFeature> IMainClient.Features { get; set; }
 
         public string[] getInfo()
         {
@@ -68,15 +76,33 @@ namespace Remo.Features
 
     class FeatureClient : IFeatureClient
     {
-        public Feature F { get; set; }
+        public IFeature F { get; set; }
 
 
 
         public TcpClient tcpClient { get; set; }
 
-        public IMainClient getMainConnection()
+        public IMainClient MainConnection { get; set; }
+
+        public void initFeature(int dataType)
         {
-            throw new NotImplementedException();
+            var types = Assembly
+                    .GetExecutingAssembly()
+                    .GetTypes()
+                    .Where(t => t.Namespace.StartsWith("Remo.Features") && (t.GetInterface("IFeature"))!=null);
+            //int i = 0;
+            foreach (var t in types)
+            {
+                IFeature TempFeature = (IFeature)Activator.CreateInstance(t);
+
+                if (TempFeature.DATA_TYPE == dataType)
+                {
+                    this.F = TempFeature;
+                    F.Show();
+                    //break;
+                }
+                Console.WriteLine(t.Name);
+            }
         }
     }
 }

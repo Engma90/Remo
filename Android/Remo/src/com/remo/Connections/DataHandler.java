@@ -6,6 +6,8 @@ import android.util.Log;
 import com.remo.Features.CamStream;
 import com.remo.Features.MobileInfo;
 
+import java.io.UnsupportedEncodingException;
+
 public class DataHandler {
 
     public static void distribute(int order, Context context) {
@@ -17,7 +19,7 @@ public class DataHandler {
             mi.sendInfo(context);
 
 
-        } else if (order == eDataType.DATA_TYPE_CAM_START.ordinal()) {
+        }else if (order == eDataType.DATA_TYPE_CAM_START.ordinal()) {
             Intent intent = new Intent(context, CamStream.class);
             //intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
             context.startService(intent);
@@ -40,17 +42,23 @@ public class DataHandler {
     }
 
 
-    public enum eDataType {
+    public enum eConnectionType
+    {
+        connection_type_Main,
+        connection_type_Feature
+
+    }
+    public enum eDataType
+    {
         DATA_TYPE_CAM_START,
         DATA_TYPE_MIC_START,
         DATA_TYPE_FM_LIST,
         DATA_TYPE_FM_DOWN_START,
         DATA_TYPE_INFO,
+        DATA_TYPE_INIT_CONNECTION,
         DATA_TYPE_ERROR,
         DATA_TYPE_CAM_STOP,
         DATA_TYPE_MIC_STOP,
         DATA_TYPE_FM_DOWN_STOP
-
-
     }
 }

@@ -32,6 +32,9 @@ namespace Remo
         private void Form1_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+
+            //IFeatureClient fc = new FeatureClient();
+            //fc.initFeature(0);
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -61,25 +64,25 @@ namespace Remo
 
         private void btnMic_Click(object sender, EventArgs e)
         {
-            getSelectedClient().Mic.c = getSelectedClient();
-            getSelectedClient().Mic.Show();
+            //getSelectedClient().Mic.c = getSelectedClient();
+            //getSelectedClient().Mic.Show();
         }
 
         private void btnCam_Click(object sender, EventArgs e)
         {
-            //getSelectedClient().cam = new CamStream();
-            getSelectedClient().cam.c = getSelectedClient();
-            getSelectedClient().cam.Show();
-            //CamStream cam = new CamStream(mTCPH);
-            //cam.updateData(new byte[10]);
-            //cam.Show();
+            ////getSelectedClient().cam = new CamStream();
+            //getSelectedClient().cam.c = getSelectedClient();
+            //getSelectedClient().cam.Show();
+            ////CamStream cam = new CamStream(mTCPH);
+            ////cam.updateData(new byte[10]);
+            ////cam.Show();
 
         }
 
         private void btnFM_Click(object sender, EventArgs e)
         {
-            getSelectedClient().FM.c = getSelectedClient();
-            getSelectedClient().FM.Show();
+            //getSelectedClient().FM.c = getSelectedClient();
+            //getSelectedClient().FM.Show();
         }
 
 
@@ -96,10 +99,10 @@ namespace Remo
                 dgv1.Rows.Clear();
                 foreach (IMainClient c in mTCPH.MainClients.ToList())
                 {
-                    if (c.isMainConn)
-                    {
+                    //if (c.isMainConn)
+                    //{
                         dgv1.Rows.Add(c.getInfo());
-                    }
+                    //}
 
                 }
                 dgv1.Rows[Selected].Selected = true;
@@ -114,7 +117,7 @@ namespace Remo
             foreach (IMainClient c in mTCPH.MainClients.ToList())
             {
                 if( dgv1.CurrentCell.OwningRow.Cells[0].Value.ToString().Equals(
-                    c.tcpClient.Client.RemoteEndPoint.ToString()) && c.isMainConn)
+                    c.tcpClient.Client.RemoteEndPoint.ToString()) )//&& c.isMainConn
                 {
                     Console.WriteLine("getSelectedClient : Found");
                     return c;

@@ -101,7 +101,10 @@ public class TCP_Transceiver {
 //                socket.setSoTimeout(10);
 //                System.out.println(socket.getSoTimeout());
                 if (this == MainConn) {
-                    DataHandler.distribute(DataHandler.eDataType.DATA_TYPE_INFO.ordinal(), App.get().getApplicationContext());
+                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.connection_type_Main).ordinal()+"").getBytes("UTF-8"));
+                }
+                else {
+                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.connection_type_Feature).ordinal()+"").getBytes("UTF-8"));
                 }
 
                 isConnected = true;

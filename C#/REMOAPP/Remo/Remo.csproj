@@ -79,7 +79,7 @@
     </Compile>
     <Compile Include="Connections\UDPReceiver.cs" />
     <Compile Include="Features\Client.cs" />
-    <Compile Include="Features\Feature.cs" />
+    <Compile Include="Connections\IFeature.cs" />
     <Compile Include="Features\FileDownloader.cs">
       <SubType>Form</SubType>
     </Compile>

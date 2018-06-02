@@ -14,8 +14,8 @@ namespace Remo.Connections
 
     public class mTCPHandler : SimpleTcpServer, TCP
     {
-        public List<TcpClient> HandledClientsList { get; }
-        public List<IClient> Clients { get; }
+        //public List<TcpClient> HandledClientsList { get; }
+        //public List<IClient> Clients { get; }
         public List<IMainClient> MainClients { get; }
         public int CheckIsConnectedInterval_ms { get; set; } = 5000;
         int Port;
@@ -35,8 +35,8 @@ namespace Remo.Connections
             //AutoTrimStrings = true;
             //dh = new DataHandler();
             MainClients = new List<IMainClient>();
-            Clients = new List<IClient>();
-            HandledClientsList = new List<TcpClient>();
+            //Clients = new List<IClient>();
+            //HandledClientsList = new List<TcpClient>();
             StartServer(this.Port);
             Console.WriteLine("TCP Server Started!");
         }
@@ -56,19 +56,20 @@ namespace Remo.Connections
                             //if (c.isMainConn)
                             //{
                                 send(((int)DataHandler.eDataType.DATA_TYPE_INFO).ToString(), c.tcpClient);
-                                Thread.Sleep(CheckIsConnectedInterval_ms);
+                                
                                 if ((DateTime.Now - c.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms))
                                 {
                                     //MainClients.Remove(c);
-                                    Console.WriteLine(c.LastChecked);
-                                    Console.WriteLine(DateTime.Now);
+                                    //Console.WriteLine(c.LastChecked);
+                                    //Console.WriteLine(DateTime.Now);
+                                
                                     c.tcpClient.Client.Disconnect(false);
                                 }
                            // }
                         }
                     }
-                    catch { Console.WriteLine("Broadcast Ex"); }
-
+                    catch(Exception ex) { Console.WriteLine("Broadcast Exception: "+ ex.Message); }
+                    Thread.Sleep(CheckIsConnectedInterval_ms);
                 }
             });
 
@@ -148,11 +149,11 @@ namespace Remo.Connections
 
 
             //Console.WriteLine("MainClient Connected: " + e.Client.RemoteEndPoint);
-            IClient c = (IClient)Activator.CreateInstance(ClientClass.GetType());
-            c.tcpClient = e;
+            //IClient c = (IClient)Activator.CreateInstance(ClientClass.GetType());///////////////////////
+            //c.tcpClient = e;
             //c.isMainConn = false;
             //c.LastChecked = DateTime.Now;
-            Clients.Add(c);
+            //Clients.Add(c);
 
 
         }
@@ -177,14 +178,16 @@ namespace Remo.Connections
                 //Console.WriteLine("MessageLength Without Header: " + (finalData.Length));
                 //Console.WriteLine("Message: " + Encoding.UTF8.GetString(finalData));
 
-                foreach (IMainClient c in MainClients.ToList())
-                {
-                    if ((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).ToString().Equals((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).ToString()))
-                    {
-                        Console.WriteLine("Distributing");
-                        DataHandler.distribute(DataType, finalData, c);
-                    }
-                }
+                //foreach (IMainClient c in MainClients.ToList())
+                //{
+                //if ((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
+                //{
+                IClient c = (IClient)Activator.CreateInstance(ClientClass.GetType());
+                c.tcpClient = e.TcpClient;
+                Console.WriteLine("Distributing");
+                DataHandler.distribute(DataType, finalData, c);
+                //    }
+                //}
 
 
                 Console.WriteLine();

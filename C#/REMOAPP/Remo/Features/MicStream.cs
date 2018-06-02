@@ -13,20 +13,23 @@ using Remo.Connections;
 
 namespace Remo.Features
 {
-    public partial class MicStream : Form, Feature
+    public partial class MicStream : Form, IFeature
     {
         
         static WaveOut waveOut;
         static BufferedWaveProvider bufferedWaveProvider = null;
         UDPReceiver dgt;
-        mTCPHandler mTCPH;
+        //mTCPHandler mTCPH;
 
         public IMainClient c{get;set;}
+
+        public int DATA_TYPE { get; set; }
 
         public MicStream()
         {
             InitializeComponent();
-            this.mTCPH = mTCPHandler.GetInstance();
+            //this.mTCPH = mTCPHandler.GetInstance();
+            DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_MIC_START;
         }
 
         private void MicStream_Load(object sender, EventArgs e)
@@ -42,7 +45,7 @@ namespace Remo.Features
         private void start()
         {
             Console.WriteLine("Mic UDPServer!");
-            mTCPH.send("Start-Mic", c.tcpClient);
+            mTCPHandler.GetInstance().send("Start-Mic", c.tcpClient);
             waveOut = new WaveOut();
             bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(8000, 16, 1));
             bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(20);

@@ -19,7 +19,7 @@ namespace Remo.Features
             DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_FM_LIST;
         }
 
-        public IMainClient c { get; set; }
+        public IClient mc { get; set; }
 
         public int DATA_TYPE { get; set; }
 

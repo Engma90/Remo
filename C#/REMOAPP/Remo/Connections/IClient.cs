@@ -11,27 +11,25 @@ namespace Remo.Connections
 
     public interface IClient{
         TcpClient tcpClient { get; set; }
-    }
-    public interface IMainClient:IClient
-    {
         string MANUFACTURER { get; set; }
         string BATTERY_LEVEL { get; set; }
-        //Dictionary< int , IFeature> Features { get; set; }
-        Dictionary<int, IFeatureClient> IFeatureClients { get; set; }
-        //bool isMainConn { get; set; }
+
+        Dictionary<int, IClient> FeatureClients { get; set; }
+        IFeature F { get; set; }
+
         DateTime LastChecked { get; set; }
-        IFeatureClient[] FC { get; set; }
+
+        IClient MainConnection { get; set; }
+        void initFeature(int dataType);
+        string[] getInfo();
+
+        //IFeatureClient[] FC { get; set; }
+        //bool isMainConn { get; set; }
+        //Dictionary< int , IFeature> Features { get; set; }
         //IFeature cam { get; set; }
         //IFeature Mic { get; set; }
         //IFeature FM { get; set; }
         //IMainClient MainConnection { get; set; }
-        string[] getInfo();
-    }
 
-    public interface IFeatureClient: IClient
-    {
-        IMainClient MainConnection { get; set; }
-        IFeature F { get; set; }
-        void initFeature(int dataType);
     }
 }

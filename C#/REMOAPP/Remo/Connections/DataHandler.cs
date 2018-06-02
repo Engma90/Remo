@@ -33,23 +33,23 @@ namespace Remo.Connections
                 {
                     //IMainClient c1 = (MainClient)Convert.ChangeType(c, typeof(MainClient));
 
-                    IMainClient c1 = new MainClient();
+                    //IMainClient c1 = new MainClient();
                     //Console.WriteLine(c1.GetType().ToString());
-                    c1.tcpClient = c.tcpClient;
-                    foreach (IMainClient mc in mTCPHandler.GetInstance().MainClients.ToList())
-                    {
+                    //c1.tcpClient = c.tcpClient;
+                    //foreach (IMainClient mc in mTCPHandler.GetInstance().MainClientsDict.Values.ToList())
+                    //{
                         
-                        if ((mc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals(
-                            (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()
-                            ))
-                        {
-                            mTCPHandler.GetInstance().MainClients.Remove(mc);
-                            //mc.tcpClient.Client.Disconnect(false);
-                            break;
-                        }
-                    }
+                    //    if ((mc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals(
+                    //        (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()
+                    //        ))
+                    //    {
+                            mTCPHandler.GetInstance().MainClientsDict.Remove(c.tcpClient);
+                    //        //mc.tcpClient.Client.Disconnect(false);
+                    //        break;
+                    //    }
+                    //}
                     
-                    mTCPHandler.GetInstance().MainClients.Add(c1);
+                    mTCPHandler.GetInstance().MainClientsDict.Add(c.tcpClient,c);
                     
 
 
@@ -57,21 +57,22 @@ namespace Remo.Connections
                 }
                 else if(type == (int)eConnectionType.connection_type_Feature)
                 {
-                    IFeatureClient c1 = new FeatureClient();
-                    c1.tcpClient = c.tcpClient;
+                    //IFeatureClient c1 = new FeatureClient();
+                    //c1.tcpClient = c.tcpClient;
 
-                    foreach (IMainClient mc in mTCPHandler.GetInstance().MainClients.ToList())
+                    foreach (IClient mc in mTCPHandler.GetInstance().MainClientsDict.Values.ToList())
                     {
                         if ((mc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals(
-                            (c1.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()
+                            (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()
                             ))
                         {
-                            c1.MainConnection = mc;
+                            c.MainConnection = mc;
+                            
                             break;
                         }
                     }
-                    c1.MainConnection.IFeatureClients.Add(dataType, c1);
-                    c1.initFeature(dataType);
+                    c.MainConnection.FeatureClients.Add(dataType, c);
+                    c.initFeature(dataType);
 
                 }
 
@@ -81,21 +82,21 @@ namespace Remo.Connections
 
             else if (dataType == (int)eDataType.DATA_TYPE_INFO)
             {
-                Console.WriteLine("MainClientsCount:" + mTCPHandler.GetInstance().MainClients.Count);
+                Console.WriteLine("MainClientsCount:" + mTCPHandler.GetInstance().MainClientsDict.Values.Count);
                 Console.WriteLine("insideInfo:");
                 
                 Console.WriteLine(Encoding.UTF8.GetString(data));
-                IMainClient c1 = (IMainClient)c;
-                c1.MANUFACTURER = Encoding.UTF8.GetString(data).Split('/')[0];
-                c1.BATTERY_LEVEL = Encoding.UTF8.GetString(data).Split('/')[1];
-                c1.LastChecked = DateTime.Now;
+                //IMainClient c1 = (IMainClient)c;
+                c.MANUFACTURER = Encoding.UTF8.GetString(data).Split('/')[0];
+                c.BATTERY_LEVEL = Encoding.UTF8.GetString(data).Split('/')[1];
+                c.LastChecked = DateTime.Now;
                 //c.isMainConn = true;
                 //c.MainConnection = c;
                 Console.WriteLine("Last Cheked Updated: " + DateTime.Now);
             }
 
             else {
-                IFeatureClient c1 = (IFeatureClient)c;
+                //IFeatureClient c1 = (IFeatureClient)c;
 
                 //if (mTCPHandler.GetInstance().MainClients.Exists(x => c == x))
                 //{
@@ -107,7 +108,8 @@ namespace Remo.Connections
 
                 //else if (dataType == (int)eDataType.DATA_TYPE_CAM_START)
                 //{
-                    c1.F.updateData(data);
+                c.MainConnection.FeatureClients.Add(dataType, c);
+                    c.MainConnection.F.updateData(data);
 
                 //}
 

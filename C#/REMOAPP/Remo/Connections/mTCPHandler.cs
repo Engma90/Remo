@@ -16,7 +16,8 @@ namespace Remo.Connections
     {
         //public List<TcpClient> HandledClientsList { get; }
         //public List<IClient> Clients { get; }
-        public List<IMainClient> MainClients { get; }
+        //public List<IMainClient> MainClients { get; }
+        public Dictionary<TcpClient,IClient> MainClientsDict { get; }
         public int CheckIsConnectedInterval_ms { get; set; } = 5000;
         int Port;
         private Thread RefreshThread;
@@ -34,7 +35,8 @@ namespace Remo.Connections
             DataReceived += Server_DataReceived;
             //AutoTrimStrings = true;
             //dh = new DataHandler();
-            MainClients = new List<IMainClient>();
+            //MainClients = new List<IMainClient>();
+            MainClientsDict = new Dictionary<TcpClient, IClient>();
             //Clients = new List<IClient>();
             //HandledClientsList = new List<TcpClient>();
             StartServer(this.Port);
@@ -51,13 +53,13 @@ namespace Remo.Connections
                     try
                     {
                         //Broadcast(Encoding.UTF8.GetBytes("Info\n"));
-                        foreach (IMainClient c in MainClients.ToList())
+                        foreach (IClient c in MainClientsDict.Values.ToList())
                         {
                             //if (c.isMainConn)
                             //{
                                 send(((int)DataHandler.eDataType.DATA_TYPE_INFO).ToString(), c.tcpClient);
-                                
-                                if ((DateTime.Now - c.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms))
+                            Thread.Sleep(CheckIsConnectedInterval_ms);
+                            if ((DateTime.Now - c.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms))
                                 {
                                     //MainClients.Remove(c);
                                     //Console.WriteLine(c.LastChecked);
@@ -69,7 +71,7 @@ namespace Remo.Connections
                         }
                     }
                     catch(Exception ex) { Console.WriteLine("Broadcast Exception: "+ ex.Message); }
-                    Thread.Sleep(CheckIsConnectedInterval_ms);
+                    //Thread.Sleep(CheckIsConnectedInterval_ms);
                 }
             });
 
@@ -182,10 +184,39 @@ namespace Remo.Connections
                 //{
                 //if ((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
                 //{
-                IClient c = (IClient)Activator.CreateInstance(ClientClass.GetType());
-                c.tcpClient = e.TcpClient;
-                Console.WriteLine("Distributing");
-                DataHandler.distribute(DataType, finalData, c);
+                
+                try
+                {
+
+
+
+                    IClient c;
+                    //if (MainClientsDict.TryGetValue(e.TcpClient, out c))
+                    //{
+                    //    Console.WriteLine("Succed");
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("Failed");
+                    //}
+                    if (!MainClientsDict.ContainsKey(e.TcpClient))
+                    {
+                        c = (IClient)Activator.CreateInstance(ClientClass.GetType());
+                        c.tcpClient = e.TcpClient;
+                    }
+                    else
+                    {
+                        c = MainClientsDict[e.TcpClient];
+                    }
+                    Console.WriteLine("Distributing");
+                    DataHandler.distribute(DataType, finalData, c);
+                }
+                catch(Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+
+                
+                
                 //    }
                 //}
 
@@ -200,14 +231,15 @@ namespace Remo.Connections
         private void Server_ClientDisconnected(object sender, TcpClient e)
         {
             Console.WriteLine("MainClient Disconnected: " + e.Client.RemoteEndPoint);
-            foreach (IMainClient c in MainClients.ToList())
-            {
-                if(c.tcpClient == e)
-                {
-                    MainClients.Remove(c);
+            MainClientsDict.Remove(e);
+            //foreach (IMainClient c in MainClientsDict.Values.ToList())
+            //{
+            //    if(c.tcpClient == e)
+            //    {
+            //        MainClients.Remove(c);
                     
-                }
-            }
+            //    }
+            //}
             
         }
 

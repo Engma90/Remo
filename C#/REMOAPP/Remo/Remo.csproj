@@ -92,6 +92,7 @@
     <Compile Include="Features\FileMan.Designer.cs">
       <DependentUpon>FileMan.cs</DependentUpon>
     </Compile>
+    <Compile Include="Features\MobInfo.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

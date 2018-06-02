@@ -71,8 +71,13 @@ namespace Remo
         private void btnCam_Click(object sender, EventArgs e)
         {
             ////getSelectedClient().cam = new CamStream();
-            //getSelectedClient().cam.c = getSelectedClient();
-            //getSelectedClient().cam.Show();
+            //getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START].F.c = getSelectedClient();
+            IClient c = new Client();
+            c.initFeature((int)DataHandler.eDataType.DATA_TYPE_CAM_START);
+            c.F.mc = getSelectedClient();
+            getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_CAM_START, c);
+            //IClient c = getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START];
+            c.F.Show();
             ////CamStream cam = new CamStream(mTCPH);
             ////cam.updateData(new byte[10]);
             ////cam.Show();
@@ -97,7 +102,7 @@ namespace Remo
                 }
                 catch { }
                 dgv1.Rows.Clear();
-                foreach (IMainClient c in mTCPH.MainClients.ToList())
+                foreach (IClient c in mTCPH.MainClientsDict.Values.ToList())
                 {
                     //if (c.isMainConn)
                     //{
@@ -111,10 +116,10 @@ namespace Remo
 
         }
 
-        private IMainClient getSelectedClient()
+        private IClient getSelectedClient()
         {
 
-            foreach (IMainClient c in mTCPH.MainClients.ToList())
+            foreach (IClient c in mTCPH.MainClientsDict.Values.ToList())
             {
                 if( dgv1.CurrentCell.OwningRow.Cells[0].Value.ToString().Equals(
                     c.tcpClient.Client.RemoteEndPoint.ToString()) )//&& c.isMainConn
@@ -124,7 +129,7 @@ namespace Remo
                 }
 
             }
-            return mTCPH.MainClients[0];
+            return mTCPH.MainClientsDict.Values.ToList()[0];
         }
 
         private void btnStop_Click(object sender, EventArgs e)

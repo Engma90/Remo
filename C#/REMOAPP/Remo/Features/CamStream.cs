@@ -20,7 +20,7 @@ namespace Remo.Features
 
             DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_CAM_START;
         }
-        public IMainClient c { get; set; }
+        public IClient mc { get; set; }
 
         public int DATA_TYPE { get; set; }
 
@@ -38,13 +38,13 @@ namespace Remo.Features
         private void start()
         {
             Console.WriteLine("Cam Start");
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_START).ToString(), c.tcpClient);
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_START).ToString(), mc.tcpClient);
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
 
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), c.tcpClient);
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), mc.tcpClient);
             Console.WriteLine();
             Console.WriteLine("The Cam server was stopped!");
         }
@@ -63,7 +63,7 @@ namespace Remo.Features
         {
             try
             {
-                mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), c.tcpClient);
+                mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), mc.tcpClient);
             }
             catch { }
             Console.WriteLine();

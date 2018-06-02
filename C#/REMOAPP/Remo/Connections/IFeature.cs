@@ -9,7 +9,7 @@ namespace Remo.Connections
 {
     public interface IFeature
     {
-        IMainClient c { get; set; }
+        IClient mc { get; set; }
         int DATA_TYPE { get; set; }
         void updateData(byte[] data);
         void onError(String error);

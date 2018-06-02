@@ -21,7 +21,7 @@ namespace Remo.Features
         UDPReceiver dgt;
         //mTCPHandler mTCPH;
 
-        public IMainClient c{get;set;}
+        public IClient mc{get;set;}
 
         public int DATA_TYPE { get; set; }
 
@@ -45,7 +45,7 @@ namespace Remo.Features
         private void start()
         {
             Console.WriteLine("Mic UDPServer!");
-            mTCPHandler.GetInstance().send("Start-Mic", c.tcpClient);
+            mTCPHandler.GetInstance().send("Start-Mic", mc.tcpClient);
             waveOut = new WaveOut();
             bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(8000, 16, 1));
             bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(20);

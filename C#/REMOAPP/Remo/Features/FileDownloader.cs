@@ -19,7 +19,7 @@ namespace Remo.Features
             DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_FM_DOWN_START;
         }
 
-        public IMainClient c
+        public IClient mc
         {
             get;
 

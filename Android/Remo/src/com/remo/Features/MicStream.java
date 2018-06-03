@@ -1,76 +1,52 @@
 package com.remo.Features;
 
-import android.app.Service;
-import android.content.Intent;
+import android.annotation.TargetApi;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
-import android.os.IBinder;
+import android.os.Build;
 import android.util.Log;
-import com.remo.Connections.UDPSender;
+import com.remo.Connections.DataHandler;
+import com.remo.Connections.TCP_Transceiver;
 
-/**
- * Created by Mohamed on 3/3/2018.
- */
+public class MicStream extends Feature {
 
-public class MicStream extends Service implements Feature {
-    //private TCP_Transceiver tcp;
     private AudioRecord audiorecord;
+    private static boolean stopMicFlag = false;
     private static int SAMPLER = 8000;//44100; //Sample Audio Rate
     private int channelConfig = AudioFormat.CHANNEL_IN_MONO;
     private int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
-    private int minBufSize = AudioRecord.getMinBufferSize(SAMPLER, channelConfig, audioFormat);
+    //private int minBufSize = AudioRecord.getMinBufferSize(SAMPLER, channelConfig, audioFormat);
+    private int minBufSize = 8192;
+    TCP_Transceiver tcp;
 
-    private UDPSender udpSender;
-
-    public MicStream() {
-        //tcp = TCP_Transceiver.GetInstance();
+    public MicStream(){
         audiorecord = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLER, channelConfig, audioFormat, minBufSize);
-    }
-
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    public int onStartCommand(Intent intent, int i, int i2) {
-        startStream();
-        return START_NOT_STICKY;
-    }
-
-    public void startStream() {
+        tcp = new TCP_Transceiver(isMaainConn);
+        tcp.tcpStopFlag = false;
+        stopMicFlag = false;
         AudioTask task = new AudioTask();
-        udpSender = new UDPSender();
-        task.execute();
+        connect();
+        //task.execute();
+        executeAsyncTask(task);
     }
 
-    public void stopStream() {
-        audiorecord.stop();
-        udpSender.stopStream();
-        audiorecord.release();
-        Log.e("Audio Socket Closed", "");
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11
+    public static <T> void executeAsyncTask(AsyncTask<T, ?, ?> asyncTask, T... params) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+        else
+            asyncTask.execute(params);
     }
 
-    @Override
-    public void connect() {
+    public static void stopStream() {
 
-    }
-
-    @Override
-    public void sendPacket(byte[] data) {
-
-    }
-
-    @Override
-    public void reportError(String error) {
-
-    }
-
-    @Override
-    public void disconnect() {
-
+        //audiorecord.stop();
+        //tcp.tcpStopFlag = true;
+        stopMicFlag = true;
+        //audiorecord.release();
+        Log.e("REMODROID", "Stopped");
     }
 
 
@@ -82,16 +58,13 @@ public class MicStream extends Service implements Feature {
                 //minBufSize = 640;
                 byte[] buffer = new byte[minBufSize];
                 audiorecord.startRecording();
-                udpSender.startStream();
 
-                while (!udpSender.Stop) {
+                while (!tcp.tcpStopFlag && !stopMicFlag) {
                     audiorecord.read(buffer, 0, minBufSize);
-                    udpSender.dataToSend = buffer;
-                    udpSender.isDataReady = true;
-                    //Log.e("SendingBytes: ", buffer.length + "");
+                    sendPacket(buffer);
                 }
-                udpSender.stopStream();
                 audiorecord.stop();
+                audiorecord.release();
                 Log.e("Socket Closed", "");
             } catch (Exception e) {
                 Log.e("Exception: ", e.toString());
@@ -99,5 +72,27 @@ public class MicStream extends Service implements Feature {
             }
             return null;
         }
+    }
+
+
+    @Override
+    public void connect() {
+        tcp.Feature_type = DataHandler.eDataType.DATA_TYPE_MIC_START.ordinal();
+        tcp.connect();
+    }
+
+    @Override
+    public void sendPacket(byte[] data) {
+        tcp.send(DataHandler.eDataType.DATA_TYPE_MIC_START.ordinal(), data);
+    }
+
+    @Override
+    public void reportError(String error) {
+
+    }
+
+    @Override
+    public void disconnect() {
+
     }
 }

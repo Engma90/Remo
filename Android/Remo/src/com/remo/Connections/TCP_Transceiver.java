@@ -2,7 +2,6 @@ package com.remo.Connections;
 
 import android.os.SystemClock;
 import android.util.Log;
-import com.remo.App;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,9 +22,10 @@ public class TCP_Transceiver {
     private InputStream in;
     private DataOutputStream bufferedWriter;
     public static TCP_Transceiver MainConn;
-    public boolean stop = false;
-    private boolean isMainConn;
+    public boolean tcpStopFlag = false;
+    //private boolean isMainConn;
     //private Context context;
+    public int Feature_type;
 
 //public static enum eDataType{
 //    DATA_TYPE_INFO ,
@@ -40,10 +40,12 @@ public class TCP_Transceiver {
         si.init();
         this.ip = si.getIp();
         this.port = si.getPort();
-        this.isMainConn = isMainConn;
+        //this.isMainConn = isMainConn;
         //this.context = App.get().getApplicationContext();
-        if (isMainConn)
+        if (isMainConn) {
             MainConn = this;
+            Feature_type = -1;
+        }
     }
 
 //    public static TCP_Transceiver GetInstance(boolean isMainConn){
@@ -59,32 +61,32 @@ public class TCP_Transceiver {
     //return GetInstance();
     //}
 
-    public boolean send(int DATA_TYPE, byte[] data) {
+    public void send(int DATA_TYPE, byte[] data) {
 
 //        try {
 
         try {
-            SystemClock.sleep(100);
+            Log.d("REMODROID", "Sending Data of type: " + DATA_TYPE);
+            //SystemClock.sleep(150);
             //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
             bufferedWriter.writeInt((int) (4 + data.length));//Max Size 2147483647 = 2 GiB
-            SystemClock.sleep(10);
+            SystemClock.sleep(50);
             bufferedWriter.writeInt(DATA_TYPE);
-            SystemClock.sleep(10);
+            SystemClock.sleep(50);
             bufferedWriter.write(data);
             SystemClock.sleep(10);
             bufferedWriter.flush();
+            SystemClock.sleep(100);
             //socket.close();
         } catch (Exception e) {
-            e.printStackTrace();
-            stop = true;
-            return false;
+            Log.d("REMODROID", "Sending Exception " + e.getMessage());
+            tcpStopFlag = true;
         }
 //    } catch (Exception e) {
 //        e.printStackTrace();
 //    }
 
 
-        return true;
     }
 
     public void connect() {
@@ -101,7 +103,10 @@ public class TCP_Transceiver {
 //                socket.setSoTimeout(10);
 //                System.out.println(socket.getSoTimeout());
                 if (this == MainConn) {
-                    DataHandler.distribute(DataHandler.eDataType.DATA_TYPE_INFO.ordinal(), App.get().getApplicationContext());
+                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.connection_type_Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                }
+                else {
+                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal() , ((DataHandler.eConnectionType.connection_type_Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
 
                 isConnected = true;

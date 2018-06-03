@@ -11,17 +11,21 @@ using Remo.Connections;
 
 namespace Remo.Features
 {
-    public partial class FileMan : Form
+    public partial class FileMan : Form,IFeature
     {
         public FileMan()
         {
             InitializeComponent();
+            DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_FM_LIST;
         }
 
-        public IClient c
+        public IMClient mc { get; set; }
+
+        public int DATA_TYPE { get; set; }
+
+        public void onError(string error)
         {
-            get;
-            set;
+            throw new NotImplementedException();
         }
 
         public void updateData(byte[] data)

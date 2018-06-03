@@ -1,49 +1,71 @@
 package com.remo.Features;
 
-import android.app.Service;
-import android.content.Intent;
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.hardware.Camera.CameraInfo;
-import android.hardware.Camera.Parameters;
-import android.hardware.Camera.PictureCallback;
 import android.os.AsyncTask;
-import android.os.IBinder;
+import android.os.Build;
 import android.util.Log;
 import com.remo.Connections.DataHandler;
+import com.remo.Connections.TCP_Transceiver;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class CamStream extends Service implements Feature {
-    //Thread a;
-    // UDPSender udpSender;
-    //private TCP_Transceiver tcp;
-    int d;
-    private volatile boolean doneWithPic = false;
-    private static boolean stopCamFlag = false;
+public class CamStream extends Feature {
 
-    public static void stopCam() {
-        stopCamFlag = true;
+    public static int CamIndex = 0;
+    public static int RotationAngle = 90;
+    private static volatile boolean doneWithPic = false;
+    private static boolean stopCamFlag = false;
+    TCP_Transceiver tcp;
+    public CamStream(){
+        stopCamFlag = false;
+        tcp = new TCP_Transceiver(isMaainConn);
+        tcp.tcpStopFlag = false;
+
+        CamTask task = new CamTask();
+        connect();
+//        Thread t = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+                //task.execute();
+                executeAsyncTask(task);
+//            }
+//        });
+//        t.start();
+
+
 
     }
 
-    public void StartCam(String str) {
+    //to allow parallel AsyncTask execution
+    //https://stackoverflow.com/questions/4068984/running-multiple-asynctasks-at-the-same-time-not-possible?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11
+    public static <T> void executeAsyncTask(AsyncTask<T, ?, ?> asyncTask, T... params) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+        else
+            asyncTask.execute(params);
+    }
+
+
+    private void StartCam() {
         Camera camera = null;
 
         //udpSender = new UDPSender();
 
-        Log.d("REMODROID", "Preparing to take photo on camera " + str);
-        CameraInfo cameraInfo = new CameraInfo();
-        if (Integer.parseInt(str) >= Camera.getNumberOfCameras()) {
-            str = 0 + "";
-            this.d = 0;
+        Log.d("REMODROID", "Preparing to take photo on camera " + CamIndex);
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        if (CamIndex >= Camera.getNumberOfCameras()) {
+            //str = 0 + "";
+            //this.d = 0;
         }
-        Camera.getCameraInfo(Integer.parseInt(str), cameraInfo);
+        Camera.getCameraInfo(CamIndex, cameraInfo);
         try {
-            camera = Camera.open(Integer.parseInt(str));
+            camera = Camera.open(CamIndex);
         } catch (RuntimeException e2) {
             Log.d("REMODROID", "Camera not available: " + e2.getMessage());
         }
@@ -53,18 +75,19 @@ public class CamStream extends Service implements Feature {
 
 
             Log.d("REMODROID", "Got the camera, creating the dummy surface texture");
-            Parameters parameters = camera.getParameters();
+            Camera.Parameters parameters = camera.getParameters();
             SurfaceTexture ST = new SurfaceTexture(0);
             try {
                 parameters = camera.getParameters();
                 parameters.setFlashMode("off");
                 parameters.set("orientation", "portrait");
                 //parameters.setPreviewFrameRate(16);
-                if (this.d == 0) {
-                    parameters.setRotation(90);
-                } else {
-                    parameters.setRotation(270);
-                }
+                parameters.setRotation(RotationAngle);
+//                if (CamIndex == 0) {
+//                    parameters.setRotation(90);
+//                } else {
+//                    parameters.setRotation(270);
+//                }
                 camera.setParameters(parameters);
             } catch (Exception e3) {
                 try {
@@ -86,7 +109,7 @@ public class CamStream extends Service implements Feature {
             }
 
 
-            while (!stopCamFlag && !tcp.stop) {
+            while (!stopCamFlag && !tcp.tcpStopFlag) {
 
                 try {
                     camera.setPreviewTexture(ST);
@@ -103,12 +126,21 @@ public class CamStream extends Service implements Feature {
                 try {
                     //camera.setParameters(parameters);
                     //Thread.sleep(10);
-
+                    //Log.d("REMODROID", "1");
                     camera.takePicture(null, null, pictureCallback);
-                    while (!doneWithPic) ;
+                    //Log.d("REMODROID", "2");
+                    while (!doneWithPic) {
+                        try {
+                            //Log.d("REMODROID", "!doneWithPic");
+                            Thread.sleep(10);
+                        } catch (Exception ex2) {
+                            Log.d("REMODROID", "sleep Exception");
+                        }
+                    }
+                    //Log.d("REMODROID", "3");
                     doneWithPic = false;
-                    //Thread.sleep(1400);
-                    Log.d("REMODROID", "Callback set");
+                    //Thread.sleep(100);
+                    //Log.d("REMODROID", "Callback set");
                 } catch (Exception ex) {
                     Log.d("REMODROID", "Callback Exception");
                     try {
@@ -126,40 +158,65 @@ public class CamStream extends Service implements Feature {
                 camera.release();
             }
             stopCamFlag = true;
-
         } catch (Exception e322) {
             Log.d("REMODROID", "Handler Ex " + e322.getMessage());
         }
     }
 
 
-    public IBinder onBind(Intent intent) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public static void stopCam() {
+        stopCamFlag = true;
+        doneWithPic = true;
     }
 
-    public void onCreate() {
+
+    private class CamTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            StartCam();
+            return null;
+        }
     }
 
-    public void onDestroy() {
-        //this.a = null;
-    }
+    private final Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            //Log.d("REMODROID", "Callback called");
+            Bitmap decodeByteArray = BitmapFactory.decodeByteArray(data, 0, data.length);
+            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(decodeByteArray, 200, 200, false);
+            decodeByteArray.recycle();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            createScaledBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            createScaledBitmap.recycle();
+            byte[] toByteArray = byteArrayOutputStream.toByteArray();
+            try {
+                byteArrayOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                /*Log.d("REMODROID", "sending... ");
+                udpSender.dataToSend = toByteArray;
+                Log.d("REMODROID", toByteArray.length+"");
+                udpSender.isDataReady = true;*/
 
-    public int onStartCommand(Intent intent, int i, int i2) {
+                //udpSender.sendStreamPacket(toByteArray);
+                doneWithPic = true;
+                sendPacket(toByteArray);
 
-        stopCamFlag = false;
-        CamTask task = new CamTask();
-        //udpSender = new UDPSender();
-        //udpSender.startStream();
-        connect();
-        task.execute();
-        return START_NOT_STICKY;
-    }
+
+            } catch (Exception e2) {
+                Log.d("REMODROID", "Sending error " + e2.getMessage());
+            }
+        }
+    };
+
 
     @Override
     public void connect() {
-        //tcp = TCP_Transceiver.GetInstance();
+        tcp.Feature_type = DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal();
         tcp.connect();
-        //tcp_transceiver = tcp_transceivers[DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal()];
     }
 
     @Override
@@ -176,47 +233,4 @@ public class CamStream extends Service implements Feature {
     public void disconnect() {
 
     }
-
-
-    private class CamTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            StartCam("0");
-            return null;
-        }
-    }
-
-    public final PictureCallback pictureCallback = new PictureCallback() {
-        @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
-            Log.d("REMODROID", "Callback called");
-            Bitmap decodeByteArray = BitmapFactory.decodeByteArray(data, 0, data.length);
-            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(decodeByteArray, 200, 200, false);
-            decodeByteArray.recycle();
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            createScaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
-            createScaledBitmap.recycle();
-            byte[] toByteArray = byteArrayOutputStream.toByteArray();
-            try {
-                byteArrayOutputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                /*Log.d("REMODROID", "sending... ");
-                udpSender.dataToSend = toByteArray;
-                Log.d("REMODROID", toByteArray.length+"");
-                udpSender.isDataReady = true;*/
-                doneWithPic = true;
-                //udpSender.sendStreamPacket(toByteArray);
-                sendPacket(toByteArray);
-
-            } catch (Exception e2) {
-                Log.d("REMODROID", "Sending error " + e2.getMessage());
-            }
-        }
-    };
-
-
 }

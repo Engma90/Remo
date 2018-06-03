@@ -3,6 +3,7 @@ package com.remo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 
 public class MainActivity extends Activity {
@@ -23,8 +24,8 @@ public class MainActivity extends Activity {
         startService(new Intent(getApplicationContext(), com.remo.Connections.MainConnectionService.class));
 
         //Log.d("REMODROID", (getApplicationContext() == App.get().getApplicationContext())+"");
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 //        try {
 //            Document doc = Jsoup.connect("http://www.wikia.com/fandom").get();
 //            String title = doc.title();

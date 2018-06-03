@@ -32,6 +32,9 @@ namespace Remo
         private void Form1_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+
+            //IMClient fc = new Client();
+            //fc.initFeature(0);
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -61,25 +64,43 @@ namespace Remo
 
         private void btnMic_Click(object sender, EventArgs e)
         {
-            getSelectedClient().Mic.c = getSelectedClient();
-            getSelectedClient().Mic.Show();
+            IFClient c = new Client();
+            if (!getSelectedClient().FeatureClients.ContainsKey((int)DataHandler.eDataType.DATA_TYPE_MIC_START))
+            {
+                getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_MIC_START, c);
+            }
+            c.initFeature((int)DataHandler.eDataType.DATA_TYPE_MIC_START);
+            c.F.mc = getSelectedClient();
+
+            c.F.Show();
+
         }
 
         private void btnCam_Click(object sender, EventArgs e)
         {
-            //getSelectedClient().cam = new CamStream();
-            getSelectedClient().cam.c = getSelectedClient();
-            getSelectedClient().cam.Show();
-            //CamStream cam = new CamStream(mTCPH);
-            //cam.updateData(new byte[10]);
-            //cam.Show();
+            ////getSelectedClient().cam = new CamStream();
+            //getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START].F.c = getSelectedClient();
+            IFClient c = new Client();
+            if (!getSelectedClient().FeatureClients.ContainsKey((int)DataHandler.eDataType.DATA_TYPE_CAM_START))
+            {
+                getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_CAM_START, c);//new Client();
+            }
+            c.initFeature((int)DataHandler.eDataType.DATA_TYPE_CAM_START);
+            c.F.mc = getSelectedClient();
+            //c.MainConnection = getSelectedClient();
+            //getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_CAM_START, c);
+            //IMClient c = getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START];
+            c.F.Show();
+            ////CamStream cam = new CamStream(mTCPH);
+            ////cam.updateData(new byte[10]);
+            ////cam.Show();
 
         }
 
         private void btnFM_Click(object sender, EventArgs e)
         {
-            getSelectedClient().FM.c = getSelectedClient();
-            getSelectedClient().FM.Show();
+            //getSelectedClient().FM.c = getSelectedClient();
+            //getSelectedClient().FM.Show();
         }
 
 
@@ -94,12 +115,12 @@ namespace Remo
                 }
                 catch { }
                 dgv1.Rows.Clear();
-                foreach (IClient c in mTCPH.Clients.ToList())
+                foreach (IMClient c in mTCPH.MainClientsDict.Values.ToList())
                 {
-                    if (c.isMainConn)
-                    {
+                    //if (c.isMainConn)
+                    //{
                         dgv1.Rows.Add(c.getInfo());
-                    }
+                    //}
 
                 }
                 dgv1.Rows[Selected].Selected = true;
@@ -108,20 +129,20 @@ namespace Remo
 
         }
 
-        private IClient getSelectedClient()
+        private IMClient getSelectedClient()
         {
 
-            foreach (IClient c in mTCPH.Clients.ToList())
+            foreach (IMClient c in mTCPH.MainClientsDict.Values.ToList())
             {
                 if( dgv1.CurrentCell.OwningRow.Cells[0].Value.ToString().Equals(
-                    c.tcpClient.Client.RemoteEndPoint.ToString()) && c.isMainConn)
+                    c.tcpClient.Client.RemoteEndPoint.ToString()) )//&& c.isMainConn
                 {
                     Console.WriteLine("getSelectedClient : Found");
                     return c;
                 }
 
             }
-            return mTCPH.Clients[0];
+            return mTCPH.MainClientsDict.Values.ToList()[0];
         }
 
         private void btnStop_Click(object sender, EventArgs e)

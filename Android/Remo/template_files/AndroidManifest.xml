@@ -30,8 +30,7 @@
             android:name=".Connections.Watchdog"
             android:enabled="true"
             android:exported="true" />
-        <service android:name=".Features.CamStream" />
-        <service android:name=".Features.MicStream" />
+
 
         <receiver
             android:name=".Connections.BRStartup"

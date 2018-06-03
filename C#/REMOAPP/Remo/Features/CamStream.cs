@@ -12,30 +12,22 @@ using System.Windows.Forms;
 
 namespace Remo.Features
 {
-    public partial class CamStream : Form,Feature
+    public partial class CamStream : Form,IFeature
     {
-        mTCPHandler mTCPH;
-        //DataHandler dh;
-        //UDPReceiver dgt;
         public CamStream()
         {
             InitializeComponent();
-            this.mTCPH = mTCPHandler.GetInstance();
+
+            DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_CAM_START;
         }
-        public IClient c
-        {
-            get;
-            set;
-        }
+        public IMClient mc { get; set; }
+
+        public int DATA_TYPE { get; set; }
 
         private void CamStream_Load(object sender, EventArgs e)
         {
             pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            //dgt = new UDPReceiver(4447);
-            //dgt.UDPDataReceived += Dgt_UDPDataReceived;
-            //dgt.ReceiveMessages();
-
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -45,35 +37,14 @@ namespace Remo.Features
 
         private void start()
         {
-            Console.WriteLine("Cam UDPServer!");
-            mTCPH.send(((int)DataHandler.eDataType.DATA_TYPE_CAM_START).ToString(), c.tcpClient);
+            Console.WriteLine("Cam Start");
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_START).ToString(), mc.tcpClient);
         }
-
-        //private void Dgt_UDPDataReceived(object sender, UDPReceiver.UDPDataEventArgs e)
-        //{
-        //    try
-        //    {
-        //        Console.WriteLine("received "+ e.data.Length);
-        //        MemoryStream mStream = new MemoryStream();
-        //        byte[] pData = e.data;
-        //        mStream.Write(pData, 0, Convert.ToInt32(pData.Length));
-        //        Bitmap bm = new Bitmap(mStream, false);
-        //        mStream.Dispose();
-
-        //        pictureBox1.Image = bm;
-
-        //    }
-        //    catch
-        //    {
-        //    }
-
-        //}
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            
-            mTCPH.send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), c.tcpClient);
-            //dgt.StopReceive();
+
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), mc.tcpClient);
             Console.WriteLine();
             Console.WriteLine("The Cam server was stopped!");
         }
@@ -90,10 +61,9 @@ namespace Remo.Features
 
         private void CamStream_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //dgt.StopReceive();
             try
             {
-                mTCPH.send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), c.tcpClient);
+                mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), mc.tcpClient);
             }
             catch { }
             Console.WriteLine();
@@ -104,7 +74,7 @@ namespace Remo.Features
         {
             try
             {
-                Console.WriteLine("received " + data.Length);
+                //Console.WriteLine("received " + data.Length);
                 MemoryStream mStream = new MemoryStream();
                 byte[] pData = data;
                 mStream.Write(pData, 0, Convert.ToInt32(pData.Length));

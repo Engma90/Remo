@@ -66,7 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connections\Connection.cs" />
+    <Compile Include="Connections\IServer.cs" />
     <Compile Include="Connections\DataHandler.cs" />
     <Compile Include="Connections\IClient.cs" />
     <Compile Include="Connections\mClient.cs" />
@@ -79,7 +79,7 @@
     </Compile>
     <Compile Include="Connections\UDPReceiver.cs" />
     <Compile Include="Features\Client.cs" />
-    <Compile Include="Features\Feature.cs" />
+    <Compile Include="Connections\IFeature.cs" />
     <Compile Include="Features\FileDownloader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +92,7 @@
     <Compile Include="Features\FileMan.Designer.cs">
       <DependentUpon>FileMan.cs</DependentUpon>
     </Compile>
+    <Compile Include="Features\MobInfo.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

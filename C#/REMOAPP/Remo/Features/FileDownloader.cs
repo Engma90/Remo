@@ -11,19 +11,22 @@ using Remo.Connections;
 
 namespace Remo.Features
 {
-    public partial class FileDownloader : Form, Feature
+    public partial class FileDownloader : Form, IFeature
     {
         public FileDownloader()
         {
             InitializeComponent();
+            DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_FM_DOWN_START;
         }
 
-        public IClient c
+        public IMClient mc
         {
             get;
 
             set;
         }
+
+        public int DATA_TYPE { get; set; }
 
         public void updateData(byte[] data)
         {

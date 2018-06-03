@@ -81,7 +81,7 @@ namespace Remo.Connections
 
                     // Start an asynchronous socket to listen for connections.
                     Console.WriteLine("Waiting for a connection...");
-                    mTCPHandler.GetInstance().send("Start-Cam", mTCPHandler.GetInstance().Clients[0].tcpClient);
+                    mTCPHandler.GetInstance().send("Start-Cam", mTCPHandler.GetInstance().MainClientsDict.Values.ToArray()[0].tcpClient);
 
                     StateObject state = new StateObject();
                     state.workSocket = listener;
@@ -118,7 +118,7 @@ namespace Remo.Connections
         //    Socket listener = (Socket)ar.AsyncState;
         //    Socket handler = listener.EndAccept(ar);
         //    //
-        //    Console.WriteLine("UDP Client Connected!");
+        //    Console.WriteLine("UDP MainClient Connected!");
         //    // Create the state object.
         //    StateObject state = new StateObject();
         //    state.workSocket = handler;
@@ -209,7 +209,7 @@ namespace Remo.Connections
     // State object for reading client data asynchronously
     public class StateObject
     {
-        // Client  socket.
+        // MainClient  socket.
         public Socket workSocket = null;
         // Size of receive buffer.
         public const int BufferSize = 8192;

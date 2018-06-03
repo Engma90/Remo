@@ -20,7 +20,7 @@ namespace Remo.Features
 
             DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_CAM_START;
         }
-        public IClient mc { get; set; }
+        public IMClient mc { get; set; }
 
         public int DATA_TYPE { get; set; }
 

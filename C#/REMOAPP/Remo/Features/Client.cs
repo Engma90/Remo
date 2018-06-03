@@ -10,21 +10,21 @@ using System.Reflection;
 namespace Remo.Features
 {
 
-    class Client : IClient
+    class Client : IClient,IMClient,IFClient
     {
         public Client()
         {
-            FeatureClients = new Dictionary<int, IClient>();
+            FeatureClients = new Dictionary<int, IFClient>();
         }
         public string BATTERY_LEVEL { get; set; }
 
         public IFeature F { get; set; }
 
-        public Dictionary<int, IClient> FeatureClients { get; set; }
+        public Dictionary<int, IFClient> FeatureClients { get; set; }
 
         public DateTime LastChecked { get; set; }
 
-        public IClient MainConnection { get; set; }
+        public IMClient MainConnection { get; set; }
 
         public string MANUFACTURER { get; set; }
 
@@ -40,7 +40,7 @@ namespace Remo.Features
             var types = Assembly
                     .GetExecutingAssembly()
                     .GetTypes()
-                    .Where(t => t.Namespace.StartsWith("Remo.Features") && (t.GetInterface("IFeature")) != null);
+                    .Where(t => (t.GetInterface("IFeature")) != null);//t.Namespace.StartsWith("Remo.Features") && 
             //int i = 0;
             foreach (var t in types)
             {
@@ -49,7 +49,7 @@ namespace Remo.Features
                 if (TempFeature.DATA_TYPE == dataType)
                 {
                     this.F = TempFeature;
-                    F.Show();
+                    //F.Show();
                     //break;
                 }
                 Console.WriteLine(t.Name);

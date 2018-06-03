@@ -3,6 +3,7 @@ package com.remo.Connections;
 import android.os.SystemClock;
 import android.util.Log;
 import com.remo.App;
+import com.remo.Features.Feature;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class TCP_Transceiver {
     public boolean stop = false;
     private boolean isMainConn;
     //private Context context;
+    public int Feature_type;
 
 //public static enum eDataType{
 //    DATA_TYPE_INFO ,
@@ -42,8 +44,10 @@ public class TCP_Transceiver {
         this.port = si.getPort();
         this.isMainConn = isMainConn;
         //this.context = App.get().getApplicationContext();
-        if (isMainConn)
+        if (isMainConn) {
             MainConn = this;
+            Feature_type = -1;
+        }
     }
 
 //    public static TCP_Transceiver GetInstance(boolean isMainConn){
@@ -75,7 +79,7 @@ public class TCP_Transceiver {
             bufferedWriter.flush();
             //socket.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("REMODROID", "Sending Exception " + e.getMessage());
             stop = true;
             return false;
         }
@@ -101,10 +105,10 @@ public class TCP_Transceiver {
 //                socket.setSoTimeout(10);
 //                System.out.println(socket.getSoTimeout());
                 if (this == MainConn) {
-                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.connection_type_Main).ordinal()+"").getBytes("UTF-8"));
+                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.connection_type_Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
                 else {
-                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.connection_type_Feature).ordinal()+"").getBytes("UTF-8"));
+                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal() , ((DataHandler.eConnectionType.connection_type_Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
 
                 isConnected = true;

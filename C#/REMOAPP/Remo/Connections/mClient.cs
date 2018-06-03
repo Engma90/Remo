@@ -38,9 +38,9 @@ namespace Remo.Connections
             return new string[] { tcpClient.Client.RemoteEndPoint.ToString(), MANUFACTURER, BATTERY_LEVEL };
         }
 
-        public IClient getMainConnection()
+        public IMClient getMainConnection()
         {
-            //foreach (IClient c in mTCPH.MainClients.ToList())
+            //foreach (IMClient c in mTCPH.MainClients.ToList())
             //{
             //    if ((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals((this.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()) && c.isMainConn)
             //    {

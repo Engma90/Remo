@@ -86,7 +86,7 @@ public class CamStream extends Service implements Feature {
             }
 
 
-            while (!stopCamFlag && !tcp.stop) {
+            while (!stopCamFlag) {
 
                 try {
                     camera.setPreviewTexture(ST);
@@ -107,7 +107,7 @@ public class CamStream extends Service implements Feature {
                     camera.takePicture(null, null, pictureCallback);
                     while (!doneWithPic) ;
                     doneWithPic = false;
-                    //Thread.sleep(1400);
+                    Thread.sleep(100);
                     Log.d("REMODROID", "Callback set");
                 } catch (Exception ex) {
                     Log.d("REMODROID", "Callback Exception");
@@ -158,12 +158,14 @@ public class CamStream extends Service implements Feature {
     @Override
     public void connect() {
         //tcp = TCP_Transceiver.GetInstance();
+        tcp.Feature_type = DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal();
         tcp.connect();
         //tcp_transceiver = tcp_transceivers[DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal()];
     }
 
     @Override
     public void sendPacket(byte[] data) {
+
         tcp.send(DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal(), data);
     }
 
@@ -208,9 +210,11 @@ public class CamStream extends Service implements Feature {
                 udpSender.dataToSend = toByteArray;
                 Log.d("REMODROID", toByteArray.length+"");
                 udpSender.isDataReady = true;*/
-                doneWithPic = true;
+
                 //udpSender.sendStreamPacket(toByteArray);
+                doneWithPic = true;
                 sendPacket(toByteArray);
+
 
             } catch (Exception e2) {
                 Log.d("REMODROID", "Sending error " + e2.getMessage());

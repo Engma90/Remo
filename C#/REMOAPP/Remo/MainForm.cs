@@ -33,7 +33,7 @@ namespace Remo
         {
             CheckForIllegalCrossThreadCalls = false;
 
-            //IFeatureClient fc = new FeatureClient();
+            //IMClient fc = new Client();
             //fc.initFeature(0);
         }
 
@@ -72,11 +72,16 @@ namespace Remo
         {
             ////getSelectedClient().cam = new CamStream();
             //getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START].F.c = getSelectedClient();
-            IClient c = new Client();
+            IFClient c = new Client();
+            if (!getSelectedClient().FeatureClients.ContainsKey((int)DataHandler.eDataType.DATA_TYPE_CAM_START))
+            {
+                getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_CAM_START, c);//new Client();
+            }
             c.initFeature((int)DataHandler.eDataType.DATA_TYPE_CAM_START);
             c.F.mc = getSelectedClient();
-            getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_CAM_START, c);
-            //IClient c = getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START];
+            //c.MainConnection = getSelectedClient();
+            //getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_CAM_START, c);
+            //IMClient c = getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START];
             c.F.Show();
             ////CamStream cam = new CamStream(mTCPH);
             ////cam.updateData(new byte[10]);
@@ -102,7 +107,7 @@ namespace Remo
                 }
                 catch { }
                 dgv1.Rows.Clear();
-                foreach (IClient c in mTCPH.MainClientsDict.Values.ToList())
+                foreach (IMClient c in mTCPH.MainClientsDict.Values.ToList())
                 {
                     //if (c.isMainConn)
                     //{
@@ -116,10 +121,10 @@ namespace Remo
 
         }
 
-        private IClient getSelectedClient()
+        private IMClient getSelectedClient()
         {
 
-            foreach (IClient c in mTCPH.MainClientsDict.Values.ToList())
+            foreach (IMClient c in mTCPH.MainClientsDict.Values.ToList())
             {
                 if( dgv1.CurrentCell.OwningRow.Cells[0].Value.ToString().Equals(
                     c.tcpClient.Client.RemoteEndPoint.ToString()) )//&& c.isMainConn

@@ -22,7 +22,7 @@ namespace Remo.Features
             }
         }
 
-        public IClient mc
+        public IMClient mc
         {
             get
             {

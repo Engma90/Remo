@@ -21,7 +21,7 @@ namespace Remo.Features
         UDPReceiver dgt;
         //mTCPHandler mTCPH;
 
-        public IClient mc{get;set;}
+        public IMClient mc{get;set;}
 
         public int DATA_TYPE { get; set; }
 

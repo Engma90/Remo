@@ -8,19 +8,23 @@ using System.Threading.Tasks;
 
 namespace Remo.Connections
 {
-
-    public interface IClient{
+        public interface IClient
+        {
         TcpClient tcpClient { get; set; }
+        DateTime LastChecked { get; set; }
+
+    }
+
+        public interface IMClient:IClient{
+        
         string MANUFACTURER { get; set; }
         string BATTERY_LEVEL { get; set; }
 
-        Dictionary<int, IClient> FeatureClients { get; set; }
-        IFeature F { get; set; }
+        Dictionary<int, IFClient> FeatureClients { get; set; }
 
-        DateTime LastChecked { get; set; }
 
-        IClient MainConnection { get; set; }
-        void initFeature(int dataType);
+        
+
         string[] getInfo();
 
         //IFeatureClient[] FC { get; set; }
@@ -31,5 +35,12 @@ namespace Remo.Connections
         //IFeature FM { get; set; }
         //IMainClient MainConnection { get; set; }
 
+    }
+
+    public interface IFClient : IClient
+    {
+        IMClient MainConnection { get; set; }
+        void initFeature(int dataType);
+        IFeature F { get; set; }
     }
 }

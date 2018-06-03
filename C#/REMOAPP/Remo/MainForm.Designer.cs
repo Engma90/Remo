@@ -83,6 +83,7 @@
             this.Column2,
             this.Column3});
             this.dgv1.Location = new System.Drawing.Point(12, 12);
+            this.dgv1.MultiSelect = false;
             this.dgv1.Name = "dgv1";
             this.dgv1.ReadOnly = true;
             this.dgv1.RowHeadersVisible = false;

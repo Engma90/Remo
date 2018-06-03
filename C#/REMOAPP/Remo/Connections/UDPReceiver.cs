@@ -78,7 +78,7 @@ namespace Remo.Connections
                     // mTCPHandler.GetInstance(port).MainClients[0].udpCamClient = (UdpState)(ar.AsyncState);
                     UdpClient u = (UdpClient)((UdpState)(ar.AsyncState)).u;
                     IPEndPoint e = (IPEndPoint)((UdpState)(ar.AsyncState)).e;
-                    foreach (IClient c in mTCPHandler.GetInstance().MainClientsDict.Values.ToList())
+                    foreach (IMClient c in mTCPHandler.GetInstance().MainClientsDict.Values.ToList())
                     {
                         //if (c.tcpClient.Client.RemoteEndPoint as IPEndPoint == ((IPEndPoint)((UdpState)(ar.AsyncState)).e))
                         //{

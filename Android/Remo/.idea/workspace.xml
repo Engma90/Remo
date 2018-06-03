@@ -75,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Feature.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Feature.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/remo/Features/Feature.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="136">
+              <caret line="8" column="15" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -110,7 +110,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CamStream.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CamStream.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/remo/Features/CamStream.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="63">
@@ -303,7 +303,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="false" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="false" clearCache="false" clearProvisionedDevices="false" myTimestamp="1528007688582" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="false" clearCache="false" clearProvisionedDevices="false" myTimestamp="1528008317542" />
         <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_ShellBuild" />
       </method>
     </configuration>
@@ -393,7 +393,7 @@
       <window_info id="Build Variants" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50226927" side_tool="true" weight="0.31518152" />
       <window_info anchor="right" id="Maven Projects" order="8" weight="0.32980332" />
-      <window_info anchor="bottom" id="Logcat" order="7" sideWeight="0.4977307" weight="0.32013202" />
+      <window_info active="true" anchor="bottom" id="Logcat" order="7" sideWeight="0.4977307" visible="true" weight="0.32013202" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -405,7 +405,7 @@
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="5" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.30363035" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.30363035" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Captures" order="2" />
@@ -749,8 +749,9 @@
         <state relative-caret-position="233">
           <caret line="147" selection-start-line="147" selection-end-line="149" selection-end-column="5" />
           <folding>
-            <element signature="e#5375#5376#0" expanded="true" />
-            <element signature="e#5453#5454#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#321#322#0" expanded="true" />
+            <element signature="e#404#405#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -767,8 +768,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/remo/Features/Feature.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="136">
+          <caret line="8" column="15" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="15" />
         </state>
       </provider>
     </entry>

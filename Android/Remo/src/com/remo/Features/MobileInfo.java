@@ -13,9 +13,9 @@ import com.remo.Connections.TCP_Transceiver;
  * Created by Mohamed on 3/3/2018.
  */
 
-public class MobileInfo implements Feature {
-    private String Manufacturer = "";
-    private String Battery = "";
+public class MobileInfo extends Feature {
+    //private String Manufacturer = "";
+    //private String Battery = "";
     private TCP_Transceiver tcp;
 
     public MobileInfo() {

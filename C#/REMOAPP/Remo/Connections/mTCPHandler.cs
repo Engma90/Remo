@@ -168,11 +168,21 @@ namespace Remo.Connections
             {
                 Console.WriteLine();
                 int MessageLengthInt = readInt(e.Data);
-                //Console.WriteLine("MessageLength With Header: " + MessageLengthInt);
+                Console.WriteLine("DataLength " + MessageLengthInt);
+                if(MessageLengthInt > 1048576)
+                {
+                    Console.WriteLine("Packet length > max");
+                    return;
+                }
                 byte[] data = readMessage(e.TcpClient, MessageLengthInt);
 
                 int DataType = readInt(data);
                 Console.WriteLine("DataType: " + DataType);
+                var myEnumMemberCount = Enum.GetNames(typeof(DataHandler.eDataType)).Length;
+                if(DataType > myEnumMemberCount || DataType < 0)
+                {
+                    return;
+                }
 
                 byte[] finalData = new byte[MessageLengthInt - 4];
 

@@ -18,7 +18,7 @@ namespace Remo.Features
         
         static WaveOut waveOut;
         static BufferedWaveProvider bufferedWaveProvider = null;
-        UDPReceiver dgt;
+        //UDPReceiver dgt;
         //mTCPHandler mTCPH;
 
         public IMClient mc{get;set;}
@@ -44,25 +44,55 @@ namespace Remo.Features
 
         private void start()
         {
-            Console.WriteLine("Mic UDPServer!");
-            mTCPHandler.GetInstance().send("Start-Mic", mc.tcpClient);
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_MIC_START).ToString(), mc.tcpClient);
             waveOut = new WaveOut();
             bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(8000, 16, 1));
-            bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(20);
+            bufferedWaveProvider.BufferDuration = TimeSpan.FromMinutes(10);
             waveOut.Init(bufferedWaveProvider);
 
-            dgt = UDPReceiver.GetInstance(4447);
-            dgt.UDPDataReceived += Dgt_UDPDataReceived;
-            dgt.ReceiveMessages();
+            //dgt = UDPReceiver.GetInstance(4447);
+            //dgt.UDPDataReceived += Dgt_UDPDataReceived;
+            //dgt.ReceiveMessages();
         }
 
-        private void Dgt_UDPDataReceived(object sender, UDPReceiver.UDPDataEventArgs e)
+        //private void Dgt_UDPDataReceived(object sender, UDPReceiver.UDPDataEventArgs e)
+        //{
+        //    try
+        //    {
+
+        //        bufferedWaveProvider.AddSamples(e.data, 0, e.data.Length);
+        //        if(bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(5))
+        //        {
+        //            waveOut.Play();
+        //        }
+        //        else
+        //        {
+        //            waveOut.Pause();
+        //        }
+                
+        //    }
+        //    catch {
+        //    }
+
+        //}
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_MIC_STOP).ToString(), mc.tcpClient);
+            waveOut.Stop();
+            waveOut.Dispose();
+            bufferedWaveProvider = null;
+            Console.WriteLine();
+            Console.WriteLine("The MIC was stopped!");
+        }
+
+        public void updateData(byte[] data)
         {
             try
             {
 
-                bufferedWaveProvider.AddSamples(e.data, 0, e.data.Length);
-                if(bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(5))
+                bufferedWaveProvider.AddSamples(data, 0, data.Length);
+                if (bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(1))
                 {
                     waveOut.Play();
                 }
@@ -70,27 +100,11 @@ namespace Remo.Features
                 {
                     waveOut.Pause();
                 }
-                
+
             }
-            catch {
+            catch
+            {
             }
-
-        }
-
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            dgt.StopReceive();
-            waveOut.Stop();
-            waveOut.Dispose();
-            bufferedWaveProvider = null;
-            Console.WriteLine();
-            Console.WriteLine("The server was stopped!");
-        }
-
-        public void updateData(byte[] data)
-        {
-            //throw new NotImplementedException();
-            Console.WriteLine("Mic updateData Called");
         }
 
         public void onError(String error)

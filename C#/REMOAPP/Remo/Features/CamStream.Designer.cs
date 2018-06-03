@@ -38,7 +38,8 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(27, 298);
+            this.btnStart.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnStart.Location = new System.Drawing.Point(27, 347);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
@@ -48,7 +49,8 @@
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(117, 298);
+            this.btnStop.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnStop.Location = new System.Drawing.Point(117, 347);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 1;
@@ -58,8 +60,9 @@
             // 
             // checkBox1
             // 
+            this.checkBox1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(330, 302);
+            this.checkBox1.Location = new System.Drawing.Point(330, 351);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(61, 17);
             this.checkBox1.TabIndex = 2;
@@ -69,20 +72,24 @@
             // 
             // pictureBox1
             // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.pictureBox1.Location = new System.Drawing.Point(27, 19);
+            this.pictureBox1.Location = new System.Drawing.Point(52, 21);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(364, 263);
+            this.pictureBox1.Size = new System.Drawing.Size(300, 300);
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
             // comboBox1
             // 
+            this.comboBox1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Front",
             "Back"});
-            this.comboBox1.Location = new System.Drawing.Point(198, 300);
+            this.comboBox1.Location = new System.Drawing.Point(198, 349);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 4;
@@ -93,7 +100,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(419, 342);
+            this.ClientSize = new System.Drawing.Size(414, 401);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.checkBox1);

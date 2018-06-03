@@ -64,8 +64,16 @@ namespace Remo
 
         private void btnMic_Click(object sender, EventArgs e)
         {
-            //getSelectedClient().Mic.c = getSelectedClient();
-            //getSelectedClient().Mic.Show();
+            IFClient c = new Client();
+            if (!getSelectedClient().FeatureClients.ContainsKey((int)DataHandler.eDataType.DATA_TYPE_MIC_START))
+            {
+                getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_MIC_START, c);
+            }
+            c.initFeature((int)DataHandler.eDataType.DATA_TYPE_MIC_START);
+            c.F.mc = getSelectedClient();
+
+            c.F.Show();
+
         }
 
         private void btnCam_Click(object sender, EventArgs e)

@@ -2,8 +2,6 @@ package com.remo.Connections;
 
 import android.os.SystemClock;
 import android.util.Log;
-import com.remo.App;
-import com.remo.Features.Feature;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,8 +22,8 @@ public class TCP_Transceiver {
     private InputStream in;
     private DataOutputStream bufferedWriter;
     public static TCP_Transceiver MainConn;
-    public boolean stop = false;
-    private boolean isMainConn;
+    public boolean tcpStopFlag = false;
+    //private boolean isMainConn;
     //private Context context;
     public int Feature_type;
 
@@ -42,7 +40,7 @@ public class TCP_Transceiver {
         si.init();
         this.ip = si.getIp();
         this.port = si.getPort();
-        this.isMainConn = isMainConn;
+        //this.isMainConn = isMainConn;
         //this.context = App.get().getApplicationContext();
         if (isMainConn) {
             MainConn = this;
@@ -63,32 +61,32 @@ public class TCP_Transceiver {
     //return GetInstance();
     //}
 
-    public boolean send(int DATA_TYPE, byte[] data) {
+    public void send(int DATA_TYPE, byte[] data) {
 
 //        try {
 
         try {
-            SystemClock.sleep(100);
+            Log.d("REMODROID", "Sending Data of type: " + DATA_TYPE);
+            //SystemClock.sleep(150);
             //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
             bufferedWriter.writeInt((int) (4 + data.length));//Max Size 2147483647 = 2 GiB
-            SystemClock.sleep(10);
+            SystemClock.sleep(50);
             bufferedWriter.writeInt(DATA_TYPE);
-            SystemClock.sleep(10);
+            SystemClock.sleep(50);
             bufferedWriter.write(data);
             SystemClock.sleep(10);
             bufferedWriter.flush();
+            SystemClock.sleep(100);
             //socket.close();
         } catch (Exception e) {
             Log.d("REMODROID", "Sending Exception " + e.getMessage());
-            stop = true;
-            return false;
+            tcpStopFlag = true;
         }
 //    } catch (Exception e) {
 //        e.printStackTrace();
 //    }
 
 
-        return true;
     }
 
     public void connect() {

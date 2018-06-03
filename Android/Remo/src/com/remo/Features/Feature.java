@@ -10,7 +10,8 @@ public interface Feature {
     boolean isRootRequired = false;
     int minSDK = 1;
     String Name = "";
-    TCP_Transceiver tcp = new TCP_Transceiver(false);
+    //TCP_Transceiver tcp = new TCP_Transceiver(false);
+    boolean isMaainConn = false;
 
     void connect();
 

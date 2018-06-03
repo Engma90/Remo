@@ -121,13 +121,13 @@ namespace Remo.Connections
                     //    c.MainConnection.FeatureClients.Add(dataType, c);
                     try
                     {
-                        Console.WriteLine("Start Try");
+                        //Console.WriteLine("Start Try");
                         IFClient fc = (IFClient)c;
 
                         //Console.WriteLine(fc.MainConnection.FeatureClients[dataType].F.GetType().ToString());
                         //fc.MainConnection.FeatureClients[dataType].F.updateData(data);
                         fc.F.updateData(data);
-                        Console.WriteLine("end Try");
+                        //Console.WriteLine("end Try");
 
                     }
                     catch (Exception ex)

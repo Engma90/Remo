@@ -70,7 +70,6 @@
     <Compile Include="Connections\DataHandler.cs" />
     <Compile Include="Connections\IClient.cs" />
     <Compile Include="Connections\mUDPHandler.cs" />
-    <Compile Include="Connections\MyDictionary.cs" />
     <Compile Include="Features\CamStream.cs">
       <SubType>Form</SubType>
     </Compile>

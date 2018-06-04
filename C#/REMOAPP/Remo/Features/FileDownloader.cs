@@ -16,7 +16,7 @@ namespace Remo.Features
         public FileDownloader()
         {
             InitializeComponent();
-            DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_FM_DOWN_START;
+            DATA_TYPE = (int)DataHandler.eDataType.FM_DOWN;
         }
 
         public IMClient mc

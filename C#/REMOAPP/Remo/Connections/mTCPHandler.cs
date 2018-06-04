@@ -21,7 +21,7 @@ namespace Remo.Connections
         public Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
         public int CheckIsConnectedInterval_ms { get; set; } = 5000;
         int Port;
-        private Thread RefreshThread;
+        private Thread AckClientsThread;
         private static volatile mTCPHandler instance = null;
         private static object syncRoot = new Object();
         bool StopFlag = false;
@@ -42,36 +42,41 @@ namespace Remo.Connections
         {
             Start(Port);
 
-            RefreshThread = new Thread(delegate ()
+            AckClientsThread = new Thread(delegate ()
             {
                 while (!StopFlag)
                 {
                     try
                     {
                         //Broadcast(Encoding.UTF8.GetBytes("Info\n"));
-                        foreach (IMClient c in MainClientsDict.Values.ToList())
+                        foreach (IMClient mc in MainClientsDict.Values.ToList())
                         {
-                            //if (c.isMainConn)
+                            //if (mc.isMainConn)
                             //{
-                                send(((int)DataHandler.eDataType.DATA_TYPE_INFO).ToString(), c.tcpClient);
-                            Thread.Sleep(CheckIsConnectedInterval_ms);
-                            if ((DateTime.Now - c.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms))
+                                send(((int)DataHandler.eDataType.INFO).ToString(), mc.tcpClient);
+                            //Thread.Sleep(10);
+                            if ((DateTime.Now - mc.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms * 2))
                                 {
-                                    //MainClients.Remove(c);
-                                    //Console.WriteLine(c.LastChecked);
+                                    MainClientsDict.Remove((mc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
+                                    //Console.WriteLine(mc.LastChecked);
                                     //Console.WriteLine(DateTime.Now);
-                                
-                                    c.tcpClient.Client.Disconnect(false);
+                                foreach(IFClient fc in mc.FeatureClients.Values.ToList())
+                                {
+                                    fc.F = null;
+                                    fc.tcpClient.Client.Disconnect(false);
+                                    FeatureClientsMapDict.Remove(fc.tcpClient.Client.RemoteEndPoint.ToString());
+                                }
+                                    mc.tcpClient.Client.Disconnect(false);
                                 }
                            // }
                         }
                     }
                     catch(Exception ex) { Console.WriteLine("Broadcast Exception: "+ ex.Message); }
-                    //Thread.Sleep(CheckIsConnectedInterval_ms);
+                    Thread.Sleep(CheckIsConnectedInterval_ms);
                 }
             });
 
-            //RefreshThread.Start();
+            AckClientsThread.Start();
         }
 
         public static mTCPHandler GetInstance()
@@ -102,34 +107,49 @@ namespace Remo.Connections
 
         private int readInt(byte[] data)
         {
-            int retInt = -1;
-            byte[] MessageLength = new byte[4];
-            for (int i = 0; i < 4; i++)
+            try
             {
-                MessageLength[i] = data[i];
+                int retInt = -1;
+                byte[] MessageLength = new byte[4];
+                for (int i = 0; i < 4; i++)
+                {
+                    MessageLength[i] = data[i];
+                }
+                retInt = SwapEndianness(BitConverter.ToInt32(MessageLength, 0));
+                return retInt;
+            }catch(Exception ex)
+            {
+                Console.WriteLine("ReadIntException");
+                return -1;
             }
-            retInt = SwapEndianness(BitConverter.ToInt32(MessageLength, 0));
-            return retInt;
 
         }
 
         public byte[] readMessage(TcpClient client, int length)
         {
-            int offset = 0;
-            int size = length;
-            byte[] numArray = new byte[length];
-            while (offset < length)
+            try
             {
-                int num2 = client.Client.Receive(numArray, offset, size, SocketFlags.None);
-                if (num2 != 0)
+                int offset = 0;
+                int size = length;
+                byte[] numArray = new byte[length];
+                while (offset < length)
                 {
-                    offset += num2;
-                    size -= num2;
+                    int num2 = client.Client.Receive(numArray, offset, size, SocketFlags.None);
+                    if (num2 != 0)
+                    {
+                        offset += num2;
+                        size -= num2;
+                    }
+                    else
+                        break;
                 }
-                else
-                    break;
+                return numArray;
             }
-            return numArray;
+            catch (Exception ex)
+            {
+                Console.WriteLine("readMessageException");
+                return null;
+            }
         }
 
 
@@ -147,11 +167,11 @@ namespace Remo.Connections
 
 
             //Console.WriteLine("MainClient Connected: " + e.Client.RemoteEndPoint);
-            //IMClient c = (IMClient)Activator.CreateInstance(ClientClass.GetType());///////////////////////
-            //c.tcpClient = e;
-            //c.isMainConn = false;
-            //c.LastChecked = DateTime.Now;
-            //Clients.Add(c);
+            //IMClient mc = (IMClient)Activator.CreateInstance(ClientClass.GetType());///////////////////////
+            //mc.tcpClient = e;
+            //mc.isMainConn = false;
+            //mc.LastChecked = DateTime.Now;
+            //Clients.Add(mc);
 
 
         }
@@ -165,7 +185,7 @@ namespace Remo.Connections
                 Console.WriteLine();
                 int MessageLengthInt = readInt(e.Data);
                 Console.WriteLine("DataLength " + MessageLengthInt);
-                if(MessageLengthInt > 1048576)
+                if(MessageLengthInt > 9000)
                 {
                     Console.WriteLine("Packet length > max");
                     return;
@@ -245,11 +265,11 @@ namespace Remo.Connections
         {
             Console.WriteLine("MainClient Disconnected: " + e.Client.RemoteEndPoint);
             MainClientsDict.Remove(e.Client.RemoteEndPoint.ToString());
-            //foreach (IMainClient c in MainClientsDict.Values.ToList())
+            //foreach (IMainClient mc in MainClientsDict.Values.ToList())
             //{
-            //    if(c.tcpClient == e)
+            //    if(mc.tcpClient == e)
             //    {
-            //        MainClients.Remove(c);
+            //        MainClients.Remove(mc);
                     
             //    }
             //}
@@ -293,10 +313,20 @@ namespace Remo.Connections
 
 
 
-        public void send(String Message,TcpClient c)
+        public void send(string Message,string OrderType,string Parameters,TcpClient c)
         {
-            c.Client.Send(Encoding.UTF8.GetBytes(Message+"\n"));
+            c.Client.Send(Encoding.UTF8.GetBytes(Message + ":" + OrderType + ":" + Parameters + "\n"));
             
+        }
+        public void send(string Message, string OrderType, TcpClient c)
+        {
+            c.Client.Send(Encoding.UTF8.GetBytes(Message + ":" + OrderType + "\n"));
+
+        }
+        public void send(string Message, TcpClient c)
+        {
+            c.Client.Send(Encoding.UTF8.GetBytes(Message + "\n"));
+
         }
 
 
@@ -307,7 +337,7 @@ namespace Remo.Connections
                 
                 Stop();
                 StopFlag = true;
-                RefreshThread.Abort();
+                AckClientsThread.Abort();
                 instance = null;
             }
             catch { }

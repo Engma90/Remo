@@ -11,7 +11,6 @@ public class MainConnectionService extends Service {
 
     public MainConnectionService() {
     }
-
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
@@ -37,7 +36,7 @@ public class MainConnectionService extends Service {
                         if (order.equals("")) {
                             tcp_transceiver.connect();
                         } else {
-                            DataHandler.distribute(Integer.parseInt(order), getApplicationContext());
+                            DataHandler.distribute(order, getApplicationContext());
                         }
 
                     } catch (Exception ex) {
@@ -65,6 +64,7 @@ public class MainConnectionService extends Service {
         try {
             Log.d("REMODROID","Main Service Destroy ");
             mainThread.interrupt();
+            super.onDestroy();
         }catch (Exception ex){
             Log.e("REMODROID","Main Service Destroy Exception: " + ex.getMessage());
         }

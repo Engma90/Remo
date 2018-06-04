@@ -17,8 +17,7 @@ namespace Remo.Features
         public CamStream()
         {
             InitializeComponent();
-
-            DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_CAM_START;
+            DATA_TYPE = (int)DataHandler.eDataType.CAM;
         }
         public IMClient mc { get; set; }
 
@@ -38,15 +37,14 @@ namespace Remo.Features
         private void start()
         {
             Console.WriteLine("Cam Start");
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_START).ToString(), mc.tcpClient);
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
+                ((int)DataHandler.eOrderType.START).ToString(),
+                mc.tcpClient);
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), mc.tcpClient);
-            Console.WriteLine();
-            Console.WriteLine("The Cam server was stopped!");
+            Stop();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -61,13 +59,14 @@ namespace Remo.Features
 
         private void CamStream_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_CAM_STOP).ToString(), mc.tcpClient);
-            }
-            catch { }
-            Console.WriteLine();
-            Console.WriteLine("The Cam server was stopped!");
+            Stop();
+        }
+        public void Stop()
+        {
+            Console.WriteLine("Cam Stop");
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
+                ((int)DataHandler.eOrderType.STOP).ToString(),
+                    mc.tcpClient);
         }
 
         public void updateData(byte[] data)

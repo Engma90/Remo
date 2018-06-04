@@ -2,7 +2,9 @@ package com.remo.Connections;
 
 import android.content.Context;
 import android.util.Log;
-import com.remo.Features.*;
+import com.remo.Features.CamStream;
+import com.remo.Features.MicStream;
+import com.remo.Features.MobileInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,69 +13,76 @@ public class DataHandler {
 
     static Map<Integer, Feature> FDict = new HashMap<>();
 
-    static void distribute(int order, Context context) {
+    static void distribute(String FullOrder, Context context) {
+        int order = -1, orderType = -1;
+        String Parameters = "";
+        try {
+            order = Integer.parseInt(FullOrder.split(":")[0]);
+            orderType = Integer.parseInt(FullOrder.split(":")[1]);
+            Parameters = FullOrder.split(":")[2];
+        } catch (Exception ex) {
+            Log.e("REMODROID","DH Parse Exception: " + ex.getMessage());
+        }
 
-        if (order == eDataType.DATA_TYPE_INFO.ordinal()) {
+        if (order == eDataType.INFO.ordinal()) {
 
-//            MobileInfo mi = new MobileInfo();
-//            Log.d("REMODROID", mi.getInfo(context));
-//            mi.sendInfo(context);
+            Feature c = new MobileInfo();
+            c.init(order);
+            FDict.put(order, c);
 
-//            MobileInfo mi = new MobileInfo();
-//            mi.init();
-            try {
-                Feature c = new MobileInfo();
-                c.isMaainConn = true;
+        } else if (order == eDataType.CAM.ordinal()) {
+            if (orderType == eOrderType.START.ordinal()) {
+                //Log.d("REMODROID", "Cam");
+                Feature c = new CamStream();
+                FDict.put(order, c);
                 c.init(order);
-                FDict.put(order,c);
-            }catch (Exception ex){
-                Log.e("REMODROID", ex.getMessage());
+            } else if (orderType == eOrderType.UPDATE.ordinal()) {
+
+            } else if (orderType == eOrderType.STOP.ordinal()) {
+                FDict.get(eDataType.CAM.ordinal()).stopStream();
+                FDict.remove(eDataType.CAM.ordinal());
             }
 
 
-
-        }else if (order == eDataType.DATA_TYPE_CAM_START.ordinal()) {
-            Log.d("REMODROID", "Cam");
-            Feature c = new CamStream();
-            FDict.put(order,c);
-            c.init(order);
-
-        } else if (order == eDataType.DATA_TYPE_MIC_START.ordinal()) {
-            Feature c = new MicStream();
-            FDict.put(order,c);
-            c.init(order);
-
-        } else if (order == eDataType.DATA_TYPE_MIC_STOP.ordinal()) {
-            FDict.get(eDataType.DATA_TYPE_MIC_START.ordinal()).stopStream();
-            FDict.remove(eDataType.DATA_TYPE_MIC_START.ordinal());
+        } else if (order == eDataType.MIC.ordinal()) {
 
 
-        } else if (order == eDataType.DATA_TYPE_CAM_STOP.ordinal()) {
-            FDict.get(eDataType.DATA_TYPE_CAM_START.ordinal()).stopStream();
-            FDict.remove(eDataType.DATA_TYPE_CAM_START.ordinal());
+            if (orderType == eOrderType.START.ordinal()) {
+                Feature c = new MicStream();
+                FDict.put(order, c);
+                c.init(order);
+            } else if (orderType == eOrderType.UPDATE.ordinal()) {
+
+            } else if (orderType == eOrderType.STOP.ordinal()) {
+                FDict.get(eDataType.MIC.ordinal()).stopStream();
+                FDict.remove(eDataType.MIC.ordinal());
+            }
 
         }
 
     }
 
 
-    public enum eConnectionType
-    {
-        connection_type_Main,
-        connection_type_Feature
+    public enum eConnectionType {
+        Main,
+        Feature
 
     }
-    public enum eDataType
-    {
-        DATA_TYPE_CAM_START,
-        DATA_TYPE_MIC_START,
-        DATA_TYPE_FM_LIST,
-        DATA_TYPE_FM_DOWN_START,
-        DATA_TYPE_INFO,
-        DATA_TYPE_INIT_CONNECTION,
-        DATA_TYPE_ERROR,
-        DATA_TYPE_CAM_STOP,
-        DATA_TYPE_MIC_STOP,
-        DATA_TYPE_FM_DOWN_STOP
+
+    public enum eOrderType {
+        START,
+        STOP,
+        UPDATE,
+        ONE_SHOT
+    }
+
+    public enum eDataType {
+        INIT_CONNECTION,
+        INFO,
+        CAM,
+        MIC,
+        FM_LIST,
+        FM_DOWN,
+        ERROR
     }
 }

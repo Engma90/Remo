@@ -14,25 +14,39 @@ public abstract class Feature {
     int minSDK = 1;
     String Name = "";
     //TCP_Transceiver tcp = new TCP_Transceiver(false);
-    public boolean isMaainConn = false;
+    public boolean UseMainConnection = false;
     public boolean stopFlag = false;
-    private int Feature_type;
+    public int Feature_type;
     public TCP_Transceiver tcp;
 
     public void init(int Feature_type){
         this.Feature_type = Feature_type;
-        if(isMaainConn)
+        if(UseMainConnection) {
             tcp = TCP_Transceiver.MainConn;
-        else
-            tcp = new TCP_Transceiver(isMaainConn);
+            Feature_type = 1;
+        }
+        else {
+            tcp = new TCP_Transceiver(UseMainConnection);
+            connect();
+        }
 
         tcp.tcpStopFlag = false;
-        boolean stopFlag = false;
+        stopFlag = false;
 
-        Task task = new Task();
-        connect();
-        executeAsyncTask(task);
+//        Task task = new Task();
+//
+//        executeAsyncTask(task);
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AsyncTaskFunc();
+            }
+        });
+        t.start();
     }
+
+
+
 
     public void stopStream() {
 

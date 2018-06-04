@@ -103,10 +103,10 @@ public class TCP_Transceiver {
 //                socket.setSoTimeout(10);
 //                System.out.println(socket.getSoTimeout());
                 if (this == MainConn) {
-                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.connection_type_Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
                 else {
-                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal() , ((DataHandler.eConnectionType.connection_type_Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal() , ((DataHandler.eConnectionType.Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
 
                 isConnected = true;

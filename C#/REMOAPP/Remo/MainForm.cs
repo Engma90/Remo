@@ -20,7 +20,7 @@ namespace Remo
         mTCPHandler mTCPH;
         //UDPReceiver udpr;
         //mUDPHandler mUDPH;
-        private Thread RefreshThread;
+        private Thread RefreshClientsListThread;
         bool Stop = false;
         public static int Port = 4447;
         private string SelectedClientIP = "";
@@ -49,16 +49,16 @@ namespace Remo
 
             //mUDPH = mUDPHandler.GetInstance();
 
-            RefreshThread = new Thread(delegate ()
+            RefreshClientsListThread = new Thread(delegate ()
             {
                 while (!Stop)
                 {
-                    refresView();
+                    RefreshClientsList();
                     Thread.Sleep(5000);
                 }
             });
 
-            RefreshThread.Start();
+            RefreshClientsListThread.Start();
         }
 
 
@@ -66,23 +66,23 @@ namespace Remo
         private void btnMic_Click(object sender, EventArgs e)
         {
 
-            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.DATA_TYPE_MIC_START).Show();
+            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.MIC).Show();
 
         }
 
         private void btnCam_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.DATA_TYPE_CAM_START).Show();
+            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.CAM).Show();
         }
         
 
         private void btnFM_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.DATA_TYPE_FM_LIST).Show();
+            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.FM_LIST).Show();
         }
 
 
-        private void refresView()
+        private void RefreshClientsList()
         {
             int Selected = 0;
             try
@@ -128,7 +128,7 @@ namespace Remo
                 mTCPH = null;
                 //udpr.StopReceive();
                 Stop = true;
-                RefreshThread.Abort();
+                RefreshClientsListThread.Abort();
             }
             catch (Exception ex)
             {

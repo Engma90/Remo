@@ -16,7 +16,7 @@ namespace Remo.Features
         public FileMan()
         {
             InitializeComponent();
-            DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_FM_LIST;
+            DATA_TYPE = (int)DataHandler.eDataType.FM_LIST;
         }
 
         public IMClient mc { get; set; }

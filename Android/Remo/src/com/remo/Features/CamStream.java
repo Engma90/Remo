@@ -6,12 +6,14 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.SystemClock;
 import android.util.Log;
+import com.remo.Connections.DataHandler;
 import com.remo.Connections.Feature;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class CamStream extends Feature {
+
 
     public static int CamIndex = 0;
     public static int RotationAngle = 90;
@@ -33,9 +35,8 @@ public class CamStream extends Feature {
 //            }
 //        });
 //        t.start();
-
-
-
+        UseMainConnection = false;
+        Feature_type = DataHandler.eDataType.CAM.ordinal();
     }
 
     //to allow parallel AsyncTask execution
@@ -134,7 +135,7 @@ public class CamStream extends Feature {
                     while (!doneWithPic) {
                         try {
                             //Log.d("REMODROID", "!doneWithPic");
-                            SystemClock.sleep(5);
+                            SystemClock.sleep(10);
                         } catch (Exception ex2) {
                             Log.d("REMODROID", "sleep Exception");
                         }
@@ -184,7 +185,7 @@ public class CamStream extends Feature {
     private final Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
-            doneWithPic = true;
+
             //Log.d("REMODROID", "Callback called");
             Bitmap decodeByteArray = BitmapFactory.decodeByteArray(data, 0, data.length);
             Bitmap createScaledBitmap = Bitmap.createScaledBitmap(decodeByteArray, 200, 200, false);
@@ -207,7 +208,7 @@ public class CamStream extends Feature {
                 //udpSender.sendStreamPacket(toByteArray);
 
                 sendPacket(toByteArray);
-
+                doneWithPic = true;
 
 
             } catch (Exception e2) {

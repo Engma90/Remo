@@ -4,8 +4,6 @@ import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.TCP_Transceiver;
 
 /**
  * Created by Mohamed on 2/1/2018.

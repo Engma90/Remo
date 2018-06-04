@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Net;
 
 namespace Remo.Features
 {
@@ -32,29 +33,30 @@ namespace Remo.Features
 
         public string[] getInfo()
         {
-            return new string[] { tcpClient.Client.RemoteEndPoint.ToString(), MANUFACTURER, BATTERY_LEVEL };
+            return new string[] { (tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString() , MANUFACTURER, BATTERY_LEVEL };
         }
 
-        public void initFeature(int dataType)
-        {
-            var types = Assembly
-                    .GetExecutingAssembly()
-                    .GetTypes()
-                    .Where(t => (t.GetInterface("IFeature")) != null);//t.Namespace.StartsWith("Remo.Features") && 
-            //int i = 0;
-            foreach (var t in types)
-            {
-                IFeature TempFeature = (IFeature)Activator.CreateInstance(t);
+        //public void initFeature(int dataType)
+        //{
+        //    var types = Assembly
+        //            .GetExecutingAssembly()
+        //            .GetTypes()
+        //            .Where(t => (t.GetInterface("IFeature")) != null);//t.Namespace.StartsWith("Remo.Features") && 
+        //    //int i = 0;
+        //    foreach (var t in types)
+        //    {
+        //        IFeature TempFeature = (IFeature)Activator.CreateInstance(t);
 
-                if (TempFeature.DATA_TYPE == dataType)
-                {
-                    this.F = TempFeature;
-                    //F.Show();
-                    //break;
-                }
-                Console.WriteLine(t.Name);
-            }
-        }
+        //        if (TempFeature.DATA_TYPE == dataType)
+        //        {
+        //            this.F = TempFeature;
+        //            Console.WriteLine(t.Name);
+        //            //F.Show();
+        //            //break;
+        //        }
+                
+        //    }
+        //}
     }
 
     //class MainClient : IMainClient

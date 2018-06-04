@@ -7,6 +7,7 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.Log;
 import com.remo.Connections.DataHandler;
 import com.remo.Connections.TCP_Transceiver;
@@ -116,7 +117,7 @@ public class CamStream extends Feature {
                     //         Thread.sleep(1500);
                     //         Thread.sleep(10);
                     camera.startPreview();
-                    Thread.sleep(100);
+                    //Thread.sleep(100);
                 } catch (Exception ex) {
                     Log.d("REMODROID", "setPreviewTexture Exception " + ex.getMessage());
                     //camera.release();
@@ -132,7 +133,7 @@ public class CamStream extends Feature {
                     while (!doneWithPic) {
                         try {
                             //Log.d("REMODROID", "!doneWithPic");
-                            Thread.sleep(10);
+                            SystemClock.sleep(5);
                         } catch (Exception ex2) {
                             Log.d("REMODROID", "sleep Exception");
                         }
@@ -144,7 +145,7 @@ public class CamStream extends Feature {
                 } catch (Exception ex) {
                     Log.d("REMODROID", "Callback Exception");
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(100);
                     } catch (Exception ex2) {
                         Log.d("REMODROID", "sleep Exception");
                     }
@@ -182,6 +183,7 @@ public class CamStream extends Feature {
     private final Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
+            doneWithPic = true;
             //Log.d("REMODROID", "Callback called");
             Bitmap decodeByteArray = BitmapFactory.decodeByteArray(data, 0, data.length);
             Bitmap createScaledBitmap = Bitmap.createScaledBitmap(decodeByteArray, 200, 200, false);
@@ -202,8 +204,9 @@ public class CamStream extends Feature {
                 udpSender.isDataReady = true;*/
 
                 //udpSender.sendStreamPacket(toByteArray);
-                doneWithPic = true;
+
                 sendPacket(toByteArray);
+
 
 
             } catch (Exception e2) {

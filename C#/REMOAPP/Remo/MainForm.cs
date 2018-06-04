@@ -78,8 +78,7 @@ namespace Remo
 
         private void btnFM_Click(object sender, EventArgs e)
         {
-            //getSelectedClient().FM.c = getSelectedClient();
-            //getSelectedClient().FM.Show();
+            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.DATA_TYPE_FM_LIST).Show();
         }
 
 

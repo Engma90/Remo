@@ -6,7 +6,9 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.util.Log;
+import com.remo.App;
 import com.remo.Connections.DataHandler;
+import com.remo.Connections.Feature;
 import com.remo.Connections.TCP_Transceiver;
 
 /**
@@ -16,10 +18,10 @@ import com.remo.Connections.TCP_Transceiver;
 public class MobileInfo extends Feature {
     //private String Manufacturer = "";
     //private String Battery = "";
-    private TCP_Transceiver tcp;
+//    private TCP_Transceiver tcp;
 
     public MobileInfo() {
-
+        isMaainConn = true;
     }
 
     public String getInfo(Context context) {
@@ -46,33 +48,30 @@ public class MobileInfo extends Feature {
             Log.d("REMODROID", "7");
         } catch (Exception e) {
             Log.e("REMODROID", e.getLocalizedMessage());
-            reportError("Error");
+            //reportError("Error");
         }
 
     }
 
     @Override
-    public void connect() {
-        try {
-            this.tcp = TCP_Transceiver.MainConn;
-        } catch (Exception ex) {
-            Log.e("REMODROID", ex.getMessage());
-        }
-
+    public void AsyncTaskFunc() {
+        sendInfo(App.get().getApplicationContext());
     }
 
-    @Override
-    public void sendPacket(byte[] data) {
-        tcp.send(DataHandler.eDataType.DATA_TYPE_INFO.ordinal(), data);
-    }
+//    @Override
+//    public void connect() {
+//        try {
+//            this.tcp = TCP_Transceiver.MainConn;
+//        } catch (Exception ex) {
+//            Log.e("REMODROID", ex.getMessage());
+//        }
+//
+//    }
+//
+//    @Override
+//    public void sendPacket(byte[] data) {
+//        tcp.send(DataHandler.eDataType.DATA_TYPE_INFO.ordinal(), data);
+//    }
 
-    @Override
-    public void reportError(String error) {
 
-    }
-
-    @Override
-    public void disconnect() {
-
-    }
 }

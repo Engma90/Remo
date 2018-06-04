@@ -19,10 +19,11 @@ namespace Remo
     {
         mTCPHandler mTCPH;
         //UDPReceiver udpr;
-        mUDPHandler mUDPH;
+        //mUDPHandler mUDPH;
         private Thread RefreshThread;
         bool Stop = false;
         public static int Port = 4447;
+        private string SelectedClientIP = "";
 
         public MainForm()
         {
@@ -64,43 +65,20 @@ namespace Remo
 
         private void btnMic_Click(object sender, EventArgs e)
         {
-            IFClient c = new Client();
-            if (!getSelectedClient().FeatureClients.ContainsKey((int)DataHandler.eDataType.DATA_TYPE_MIC_START))
-            {
-                getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_MIC_START, c);
-            }
-            c.initFeature((int)DataHandler.eDataType.DATA_TYPE_MIC_START);
-            c.F.mc = getSelectedClient();
 
-            c.F.Show();
+            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.DATA_TYPE_MIC_START).Show();
 
         }
 
         private void btnCam_Click(object sender, EventArgs e)
         {
-            ////getSelectedClient().cam = new CamStream();
-            //getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START].F.c = getSelectedClient();
-            IFClient c = new Client();
-            if (!getSelectedClient().FeatureClients.ContainsKey((int)DataHandler.eDataType.DATA_TYPE_CAM_START))
-            {
-                getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_CAM_START, c);//new Client();
-            }
-            c.initFeature((int)DataHandler.eDataType.DATA_TYPE_CAM_START);
-            c.F.mc = getSelectedClient();
-            //c.MainConnection = getSelectedClient();
-            //getSelectedClient().FeatureClients.Add((int)DataHandler.eDataType.DATA_TYPE_CAM_START, c);
-            //IMClient c = getSelectedClient().FeatureClients[(int)DataHandler.eDataType.DATA_TYPE_CAM_START];
-            c.F.Show();
-            ////CamStream cam = new CamStream(mTCPH);
-            ////cam.updateData(new byte[10]);
-            ////cam.Show();
-
+            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.DATA_TYPE_CAM_START).Show();
         }
+        
 
         private void btnFM_Click(object sender, EventArgs e)
         {
-            //getSelectedClient().FM.c = getSelectedClient();
-            //getSelectedClient().FM.Show();
+            mTCPH.addFClient(SelectedClientIP, (int)DataHandler.eDataType.DATA_TYPE_FM_LIST).Show();
         }
 
 
@@ -117,10 +95,8 @@ namespace Remo
                 dgv1.Rows.Clear();
                 foreach (IMClient c in mTCPH.MainClientsDict.Values.ToList())
                 {
-                    //if (c.isMainConn)
-                    //{
                         dgv1.Rows.Add(c.getInfo());
-                    //}
+
 
                 }
                 dgv1.Rows[Selected].Selected = true;
@@ -131,18 +107,7 @@ namespace Remo
 
         private IMClient getSelectedClient()
         {
-
-            foreach (IMClient c in mTCPH.MainClientsDict.Values.ToList())
-            {
-                if( dgv1.CurrentCell.OwningRow.Cells[0].Value.ToString().Equals(
-                    c.tcpClient.Client.RemoteEndPoint.ToString()) )//&& c.isMainConn
-                {
-                    Console.WriteLine("getSelectedClient : Found");
-                    return c;
-                }
-
-            }
-            return mTCPH.MainClientsDict.Values.ToList()[0];
+            return mTCPH.getClientByIP(SelectedClientIP);
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -171,6 +136,13 @@ namespace Remo
             }
         }
 
-        
+        private void dgv1_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SelectedClientIP = dgv1.CurrentCell.OwningRow.Cells[0].Value.ToString();
+            }
+            catch { }
+        }
     }
 }

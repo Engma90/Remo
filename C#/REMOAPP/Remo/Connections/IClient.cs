@@ -40,7 +40,7 @@ namespace Remo.Connections
     public interface IFClient : IClient
     {
         IMClient MainConnection { get; set; }
-        void initFeature(int dataType);
+        //void initFeature(int dataType);
         IFeature F { get; set; }
     }
 }

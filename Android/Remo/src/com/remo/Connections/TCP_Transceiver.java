@@ -70,13 +70,13 @@ public class TCP_Transceiver {
             //SystemClock.sleep(150);
             //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
             bufferedWriter.writeInt((int) (4 + data.length));//Max Size 2147483647 = 2 GiB
-            SystemClock.sleep(50);
+            SystemClock.sleep(100);
             bufferedWriter.writeInt(DATA_TYPE);
             SystemClock.sleep(50);
             bufferedWriter.write(data);
-            SystemClock.sleep(10);
+            SystemClock.sleep(50);
             bufferedWriter.flush();
-            SystemClock.sleep(100);
+            SystemClock.sleep(10);
             //socket.close();
         } catch (Exception e) {
             Log.d("REMODROID", "Sending Exception " + e.getMessage());

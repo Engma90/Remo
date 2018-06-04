@@ -38,10 +38,12 @@
             // 
             this.txtAddressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAddressBar.Enabled = false;
             this.txtAddressBar.Location = new System.Drawing.Point(63, 12);
             this.txtAddressBar.Name = "txtAddressBar";
             this.txtAddressBar.Size = new System.Drawing.Size(501, 20);
             this.txtAddressBar.TabIndex = 0;
+            this.txtAddressBar.Text = "/";
             // 
             // btnUP
             // 

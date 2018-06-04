@@ -8,16 +8,17 @@ using System.Net.Sockets;
 using Remo.Connections;
 using System.Net;
 using System.Threading;
+using System.Reflection;
 
 namespace Remo.Connections
 {
 
     public class mTCPHandler : SimpleTcpServer, TCP
     {
-        //public List<TcpClient> HandledClientsList { get; }
-        //public List<IMClient> Clients { get; }
-        //public List<IMainClient> MainClients { get; }
-        public Dictionary<TcpClient,IMClient> MainClientsDict { get; }
+
+        //public Dictionary<TcpClient,IMClient> MainClientsDict { get; }
+        public Dictionary<string, IMClient> MainClientsDict { get; }
+        public Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
         public int CheckIsConnectedInterval_ms { get; set; } = 5000;
         int Port;
         private Thread RefreshThread;
@@ -25,7 +26,6 @@ namespace Remo.Connections
         private static object syncRoot = new Object();
         bool StopFlag = false;
         public IMClient ClientClass { get; set; }
-        //DataHandler dh;
 
         private mTCPHandler()
         {
@@ -33,12 +33,8 @@ namespace Remo.Connections
             ClientConnected += Server_ClientConnected;
             ClientDisconnected += Server_ClientDisconnected;
             DataReceived += Server_DataReceived;
-            //AutoTrimStrings = true;
-            //dh = new DataHandler();
-            //MainClients = new List<IMainClient>();
-            MainClientsDict = new Dictionary<TcpClient, IMClient>();
-            //Clients = new List<IMClient>();
-            //HandledClientsList = new List<TcpClient>();
+            MainClientsDict = new Dictionary<string, IMClient>();
+            FeatureClientsMapDict = new Dictionary<string, IMClient>();
             StartServer(this.Port);
             Console.WriteLine("TCP Server Started!");
         }
@@ -187,80 +183,49 @@ namespace Remo.Connections
                 byte[] finalData = new byte[MessageLengthInt - 4];
 
                 Buffer.BlockCopy(data, 4, finalData, 0, finalData.Length);
-                //Console.WriteLine("MessageLength Without Header: " + (finalData.Length));
-                //Console.WriteLine("Message: " + Encoding.UTF8.GetString(finalData));
 
-                //foreach (IMainClient c in MainClients.ToList())
-                //{
-                //if ((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
-                //{
+
                 
                 try
                 {
                     
-                    bool isBoundedBefore = false;
-                    int BoundedInWhichDict = (int)DataHandler.eConnectionType.connection_type_Main;
-                    IMClient BoundedInWhichClient = null;
-
                     IMClient c;
-                    //if (MainClientsDict.TryGetValue(e.TcpClient, out c))
-                    //{
-                    //    Console.WriteLine("Succed");
-                    //}
-                    //else
-                    //{
-                    //    Console.WriteLine("Failed");
-                    //}
-                    if (MainClientsDict.ContainsKey(e.TcpClient))
+                    if (FeatureClientsMapDict.ContainsKey(e.TcpClient.Client.RemoteEndPoint.ToString()))
                     {
-                        Console.WriteLine(MainClientsDict.Count.ToString());
+                        Console.WriteLine("Found in FMap Dict");
+                        c = FeatureClientsMapDict[e.TcpClient.Client.RemoteEndPoint.ToString()];
+                        c.tcpClient = e.TcpClient;
+                    }
+
+
+                    else if (
+                        null != getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString())
+                        &&
+                        getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients.ContainsKey(DataType))
+                    {
+                        Console.WriteLine("Found initialized Before");
+                        c = (IMClient)getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[DataType];
+                        c.tcpClient = e.TcpClient;
+
+                    }
+
+                    else if (MainClientsDict.ContainsKey((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
+                    {
                         Console.WriteLine("Found in Main Dict");
-                        BoundedInWhichDict = (int)DataHandler.eConnectionType.connection_type_Main;
-                        isBoundedBefore = true;
+                        c = MainClientsDict[(e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()];
                     }
-                    foreach (IMClient ic in MainClientsDict.Values.ToList())
-                    {
-
-                        if (ic.FeatureClients.ContainsKey(DataType))
-                        {
-                            Console.WriteLine("Found in F Dict of " + ic.tcpClient.Client.RemoteEndPoint.ToString());
-                            BoundedInWhichDict = (int)DataHandler.eConnectionType.connection_type_Feature;
-                            isBoundedBefore = true;
-                            BoundedInWhichClient = ic;
-                            break;
-                        }
-                        
-                    }
-
-                    if (!isBoundedBefore)
+                    else
                     {
                         Console.WriteLine("NotBoundedBefore");
                         c = (IMClient)Activator.CreateInstance(ClientClass.GetType());
                         c.tcpClient = e.TcpClient;
                     }
-                    else
-                    {
-                        if (BoundedInWhichDict == (int)DataHandler.eConnectionType.connection_type_Main)
-                        {
-                            //Console.WriteLine("BoundedBefore");
-                            c = MainClientsDict[e.TcpClient];
-                        }
-                        else //if (BoundedInWhichDict == (int)DataHandler.eConnectionType.connection_type_Feature)
-                        {
-                           
-                            c = (IMClient)BoundedInWhichClient.FeatureClients[DataType];
-                            c.tcpClient = e.TcpClient;
-
-                        }
-                    }
-
                     Console.WriteLine("Distributing to Client : " + c.tcpClient.Client.RemoteEndPoint.ToString());
-
                     DataHandler.distribute(DataType, finalData, c);
                     
                 }
                 catch(Exception ex) {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("Bound Client Exception: " + ex.Message);
                 }
 
                 
@@ -279,7 +244,7 @@ namespace Remo.Connections
         private void Server_ClientDisconnected(object sender, TcpClient e)
         {
             Console.WriteLine("MainClient Disconnected: " + e.Client.RemoteEndPoint);
-            MainClientsDict.Remove(e);
+            MainClientsDict.Remove(e.Client.RemoteEndPoint.ToString());
             //foreach (IMainClient c in MainClientsDict.Values.ToList())
             //{
             //    if(c.tcpClient == e)
@@ -290,6 +255,43 @@ namespace Remo.Connections
             //}
             
         }
+
+
+        public IMClient getClientByIP(String ip)
+        {
+            IMClient ret;
+             MainClientsDict.TryGetValue(ip,out ret);
+            return ret;
+
+        }
+
+        public IFeature addFClient(string MainClientIP,int Feature_type)
+        {
+                IFClient fc = (IFClient)(IMClient)Activator.CreateInstance(ClientClass.GetType());                                                                // {
+                fc.MainConnection = getClientByIP(MainClientIP);
+                getClientByIP(MainClientIP).FeatureClients.Add(Feature_type, fc);
+                var types = Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => (t.GetInterface("IFeature")) != null);//t.Namespace.StartsWith("Remo.Features") && 
+                                                                  
+                foreach (var t in types)
+                {
+                    IFeature TempFeature = (IFeature)Activator.CreateInstance(t);
+
+                    if (TempFeature.DATA_TYPE == Feature_type)
+                    {
+                        fc.F = TempFeature;
+                        fc.F.mc = fc.MainConnection;
+                        Console.WriteLine(t.Name);
+                    return TempFeature;
+                    }
+
+                }
+            return null;
+        }
+
+
 
         public void send(String Message,TcpClient c)
         {

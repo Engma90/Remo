@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,44 +45,79 @@ namespace Remo.Connections
                         //        (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()
                         //        ))
                         //    {
-                        mTCPHandler.GetInstance().MainClientsDict.Remove(c.tcpClient);
-                        //        //mc.tcpClient.Client.Disconnect(false);
-                        //        break;
-                        //    }
-                        //}
+                        try
+                        {
+                            mTCPHandler.GetInstance().MainClientsDict.Remove((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
+                            //        //mc.tcpClient.Client.Disconnect(false);
+                            //        break;
+                            //    }
+                            //}
 
-                        mTCPHandler.GetInstance().MainClientsDict.Add(c.tcpClient, c);
+                            mTCPHandler.GetInstance().MainClientsDict.Add((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(), c);
 
-
+                        }catch(Exception ex)
+                        {
+                            Console.WriteLine("MainClientsDict Add Exception: "+ex.Message);
+                        }
 
 
                     }
                     else if (Connection_type == (int)eConnectionType.connection_type_Feature)
                     {
-                        IFClient fc = (IFClient)c;
-                        //c1.tcpClient = c.tcpClient;
+                        ////IFClient fc = mTCPHandler.GetInstance().getClientByIP(
+                        ////        (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[Feature_type];
+                        ////fc.tcpClient = c.tcpClient;
+                        ////try
+                        ////{
+                        IFClient fc = mTCPHandler.GetInstance().getClientByIP((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[Feature_type];
+                        fc.tcpClient = c.tcpClient;
+                        mTCPHandler.GetInstance().FeatureClientsMapDict.Add(
+                            c.tcpClient.Client.RemoteEndPoint.ToString(),
+                            mTCPHandler.GetInstance().getClientByIP(
+                                (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()));
+                        ////    //c = mTCPHandler.GetInstance().getClientByIP(
+                        ////    //    (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[Feature_type];
 
-                        foreach (IMClient mc in mTCPHandler.GetInstance().MainClientsDict.Values.ToList())
-                        {
-                            if ((mc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals(
-                                (fc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()
-                                ))
-                            {
+                        ////}
+                        ////catch (Exception ex)
+                        ////{
+                        ////    Console.WriteLine("FeatureClientsMapDict Add Exception: " + ex.Message);
+                        ////}
 
-                                fc.MainConnection = mc;
-                                //fc.initFeature(Feature_type);
-                                if (mc.FeatureClients.ContainsKey(Feature_type))
-                                {
-                                    //mc.FeatureClients.Remove(Feature_type);
-                                    fc.tcpClient = c.tcpClient;
-                                }
-                                //mc.FeatureClients.Add(Feature_type, fc);
 
-                                break;
-                            }
-                        }
-                        //c.FeatureClients[dataType].MainConnection.FeatureClients.Add(dataType, c);
-                        //c.initFeature(dataType);
+                        //          IFClient fc = (IFClient)c;
+                        //          //c1.tcpClient = c.tcpClient;
+
+
+                        //          if( mTCPHandler.GetInstance().getClientByIP((fc.tcpClient.Client.RemoteEndPoint as IPEndPoint)
+                        //              .ToString())
+                        //              .FeatureClients
+                        //              .ContainsKey(Feature_type)){
+                        //              fc.tcpClient = c.tcpClient;
+                        //          }
+
+
+                        //          foreach (IMClient mc in mTCPHandler.GetInstance().MainClientsDict.Values.ToList())
+                        //          {
+                        //              if ((mc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString().Equals(
+                        //                  (fc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()
+                        //                  ))
+                        //              {
+
+                        ////                  fc.MainConnection = mc;
+                        //                  //fc.initFeature(Feature_type);
+                        //                  if (mc.FeatureClients.ContainsKey(Feature_type))
+                        //                  {
+                        //                      //mc.FeatureClients.Remove(Feature_type);
+                        //                      fc.tcpClient = c.tcpClient;
+                        //                  }
+                        //                  //mc.FeatureClients.Add(Feature_type, fc);
+
+                        //                  break;
+                        //              }
+                        //          }
+                        //          //c.FeatureClients[dataType].MainConnection.FeatureClients.Add(dataType, c);
+                        //          //c.initFeature(dataType);
 
                     }
 
@@ -122,11 +158,38 @@ namespace Remo.Connections
                     try
                     {
                         //Console.WriteLine("Start Try");
-                        IFClient fc = (IFClient)c;
+                        
 
-                        //Console.WriteLine(fc.MainConnection.FeatureClients[dataType].F.GetType().ToString());
-                        //fc.MainConnection.FeatureClients[dataType].F.updateData(data);
-                        fc.F.updateData(data);
+
+
+                        IFClient fc = (IFClient)c;
+                        //if (!fc.MainConnection.FeatureClients.ContainsKey(dataType))
+                        //{
+                        //    fc.MainConnection.FeatureClients.Add(dataType, fc);
+                        //    var types = Assembly
+                        //    .GetExecutingAssembly()
+                        //    .GetTypes()
+                        //    .Where(t => (t.GetInterface("IFeature")) != null);//t.Namespace.StartsWith("Remo.Features") && 
+                        //                                                      //int i = 0;
+                        //    foreach (var t in types)
+                        //    {
+                        //        IFeature TempFeature = (IFeature)Activator.CreateInstance(t);
+
+                        //        if (TempFeature.DATA_TYPE == dataType)
+                        //        {
+                        //            fc.F = TempFeature;
+                        //            fc.F.mc = fc.MainConnection;
+                        //            Console.WriteLine(t.Name);
+                        //            //F.Show();
+                        //            //break;
+                        //        }
+
+                        //    }
+                        //}
+
+                            //Console.WriteLine(fc.MainConnection.FeatureClients[dataType].F.GetType().ToString());
+                            //fc.MainConnection.FeatureClients[dataType].F.updateData(data);
+                            fc.F.updateData(data);
                         //Console.WriteLine("end Try");
 
                     }
@@ -146,7 +209,7 @@ namespace Remo.Connections
                 }
             }catch(Exception ex)
             {
-                Console.WriteLine("distribute Exeption: " + ex.Message);
+                Console.WriteLine("Distribute Exeption: " + ex.Message);
             }
             
 

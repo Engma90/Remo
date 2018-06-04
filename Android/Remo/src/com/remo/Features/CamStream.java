@@ -1,16 +1,12 @@
 package com.remo.Features;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.TCP_Transceiver;
+import com.remo.Connections.Feature;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,20 +16,20 @@ public class CamStream extends Feature {
     public static int CamIndex = 0;
     public static int RotationAngle = 90;
     private static volatile boolean doneWithPic = false;
-    private static boolean stopCamFlag = false;
-    TCP_Transceiver tcp;
+   // private static boolean stopCamFlag = false;
+    //TCP_Transceiver tcp;
     public CamStream(){
-        stopCamFlag = false;
-        tcp = new TCP_Transceiver(isMaainConn);
-        tcp.tcpStopFlag = false;
+ //       stopCamFlag = false;
+//        tcp = new TCP_Transceiver(isMaainConn);
+//        tcp.tcpStopFlag = false;
 
-        CamTask task = new CamTask();
-        connect();
+//        CamTask task = new CamTask();
+//        connect();
 //        Thread t = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
                 //task.execute();
-                executeAsyncTask(task);
+    //            executeAsyncTask(task);
 //            }
 //        });
 //        t.start();
@@ -44,14 +40,19 @@ public class CamStream extends Feature {
 
     //to allow parallel AsyncTask execution
     //https://stackoverflow.com/questions/4068984/running-multiple-asynctasks-at-the-same-time-not-possible?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11
-    public static <T> void executeAsyncTask(AsyncTask<T, ?, ?> asyncTask, T... params) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
-        else
-            asyncTask.execute(params);
-    }
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11
+//    public static <T> void executeAsyncTask(AsyncTask<T, ?, ?> asyncTask, T... params) {
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+//            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+//        else
+//            asyncTask.execute(params);
+//    }
 
+    @Override
+    public void AsyncTaskFunc(){
+
+        StartCam();
+    }
 
     private void StartCam() {
         Camera camera = null;
@@ -110,7 +111,7 @@ public class CamStream extends Feature {
             }
 
 
-            while (!stopCamFlag && !tcp.tcpStopFlag) {
+            while (!stopFlag && !tcp.tcpStopFlag) {
 
                 try {
                     camera.setPreviewTexture(ST);
@@ -158,27 +159,27 @@ public class CamStream extends Feature {
             if (camera != null) {
                 camera.release();
             }
-            stopCamFlag = true;
+            stopFlag = true;
         } catch (Exception e322) {
             Log.d("REMODROID", "Handler Ex " + e322.getMessage());
         }
     }
 
+//
+//    public static void stopCam() {
+//        stopCamFlag = true;
+//        doneWithPic = true;
+//    }
 
-    public static void stopCam() {
-        stopCamFlag = true;
-        doneWithPic = true;
-    }
 
-
-    private class CamTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            StartCam();
-            return null;
-        }
-    }
+//    private class CamTask extends AsyncTask<String, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            StartCam();
+//            return null;
+//        }
+//    }
 
     private final Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
         @Override
@@ -216,24 +217,24 @@ public class CamStream extends Feature {
     };
 
 
-    @Override
-    public void connect() {
-        tcp.Feature_type = DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal();
-        tcp.connect();
-    }
-
-    @Override
-    public void sendPacket(byte[] data) {
-        tcp.send(DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal(), data);
-    }
-
-    @Override
-    public void reportError(String error) {
-
-    }
-
-    @Override
-    public void disconnect() {
-
-    }
+//    @Override
+//    public void connect() {
+//        tcp.Feature_type = DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal();
+//        tcp.connect();
+//    }
+//
+//    @Override
+//    public void sendPacket(byte[] data) {
+//        tcp.send(DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal(), data);
+//    }
+//
+//    @Override
+//    public void reportError(String error) {
+//
+//    }
+//
+//    @Override
+//    public void disconnect() {
+//
+//    }
 }

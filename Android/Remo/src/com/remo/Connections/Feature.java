@@ -1,9 +1,10 @@
-package com.remo.Features;
+package com.remo.Connections;
 
 import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import com.remo.Connections.DataHandler;
 import com.remo.Connections.TCP_Transceiver;
 
 /**
@@ -15,14 +16,18 @@ public abstract class Feature {
     int minSDK = 1;
     String Name = "";
     //TCP_Transceiver tcp = new TCP_Transceiver(false);
-    boolean isMaainConn = false;
-    static boolean stopFlag = false;
+    public boolean isMaainConn = false;
+    public boolean stopFlag = false;
     private int Feature_type;
-    TCP_Transceiver tcp;
+    public TCP_Transceiver tcp;
 
-    void init(int Feature_type){
+    public void init(int Feature_type){
         this.Feature_type = Feature_type;
-        tcp = new TCP_Transceiver(isMaainConn);
+        if(isMaainConn)
+            tcp = TCP_Transceiver.MainConn;
+        else
+            tcp = new TCP_Transceiver(isMaainConn);
+
         tcp.tcpStopFlag = false;
         boolean stopFlag = false;
 
@@ -31,7 +36,7 @@ public abstract class Feature {
         executeAsyncTask(task);
     }
 
-    public static void stopStream() {
+    public void stopStream() {
 
         //audiorecord.stop();
         //tcp.tcpStopFlag = true;
@@ -40,18 +45,18 @@ public abstract class Feature {
         Log.e("REMODROID", "Stopped");
     }
 
-    private void AsyncTaskFunc(){
-        connect();
+    public abstract void AsyncTaskFunc();
+
+    public void connect(){
+         tcp.Feature_type = Feature_type;
+         tcp.connect();
     }
 
-    abstract void connect();
+    public void sendPacket(byte[] data){
+        tcp.send(Feature_type, data);
+    }
 
-    abstract void sendPacket(byte[] data);
-
-    abstract void reportError(String error);
-
-    abstract void disconnect();
-
+//    abstract void reportError(String error);
 
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11

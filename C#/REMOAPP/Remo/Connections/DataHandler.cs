@@ -139,6 +139,7 @@ namespace Remo.Connections
                     //c.isMainConn = true;
                     //c.MainConnection = c;
                     Console.WriteLine("Last Cheked Updated: " + DateTime.Now);
+                    //mTCPHandler.GetInstance().send("OK", c.tcpClient);
                 }
 
                 else {
@@ -190,7 +191,8 @@ namespace Remo.Connections
 
                             //Console.WriteLine(fc.MainConnection.FeatureClients[dataType].F.GetType().ToString());
                             //fc.MainConnection.FeatureClients[dataType].F.updateData(data);
-                            fc.F.updateData(data);
+                        fc.F.updateData(data);
+                        mTCPHandler.GetInstance().send("OK", fc.tcpClient);
                         //Console.WriteLine("end Try");
 
                     }

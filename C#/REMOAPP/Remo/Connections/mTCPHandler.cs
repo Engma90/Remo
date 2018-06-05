@@ -15,7 +15,7 @@ namespace Remo.Connections
 
     public class mTCPHandler : SimpleTcpServer, TCP
     {
-
+        
         //public Dictionary<TcpClient,IMClient> MainClientsDict { get; }
         public Dictionary<string, IMClient> MainClientsDict { get; }
         public Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
@@ -176,14 +176,17 @@ namespace Remo.Connections
 
         }
 
-
-
+        //bool lockWasTaken = false;
+       // static int MessageLengthInt = 0;
         public void Server_DataReceived(object sender, Message e)
         {
+            
             try
             {
+               // Monitor.Enter(GetInstance(), ref lockWasTaken);
                 Console.WriteLine();
                 int MessageLengthInt = readInt(e.Data);
+                
                 Console.WriteLine("DataLength " + MessageLengthInt);
                 if(MessageLengthInt > 20000)
                 {
@@ -197,7 +200,7 @@ namespace Remo.Connections
                 var myEnumMemberCount = Enum.GetNames(typeof(DataHandler.eDataType)).Length;
                 if(DataType > myEnumMemberCount || DataType < 0)
                 {
-                    e.TcpClient.GetStream().Flush();
+                   // e.TcpClient.GetStream().Flush();
                     return;
                 }
 
@@ -249,17 +252,23 @@ namespace Remo.Connections
                     Console.WriteLine("Bound Client Exception: " + ex.Message);
                 }
 
-                
-                
+                // Monitor.Exit(this);
+
                 //    }
                 //}
 
-
+                //Monitor.Exit(GetInstance());
                 Console.WriteLine();
 
             }
             catch { }
-
+            finally
+            {
+                //if (lockWasTaken)
+                //{
+                  // Monitor.Exit(GetInstance());
+               // }
+            }
         }
 
         private void Server_ClientDisconnected(object sender, TcpClient e)

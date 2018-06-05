@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
+import java.io.IOException;
+
 /**
  * Created by Mohamed on 2/1/2018.
  */
@@ -66,6 +68,16 @@ public abstract class Feature {
 
     public void sendPacket(byte[] data){
         tcp.send(Feature_type, data);
+        Log.d("REMODROID", "Waiting For Ack");
+        String Ack = null;
+        try {
+            Ack = tcp.receive();
+        } catch (IOException e) {
+            Log.e("REMODROID", "Ack Ack Error");
+        }
+        if(Ack.equals("OK")){
+            Log.d("REMODROID", "Ack Ok");
+        }
     }
 
 //    abstract void reportError(String error);

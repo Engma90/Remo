@@ -3,6 +3,7 @@ package com.remo.Connections;
 import android.content.Context;
 import android.util.Log;
 import com.remo.Features.CamStream;
+import com.remo.Features.CamStream3;
 import com.remo.Features.MicStream;
 import com.remo.Features.MobileInfo;
 
@@ -33,7 +34,7 @@ public class DataHandler {
         } else if (order == eDataType.CAM.ordinal()) {
             if (orderType == eOrderType.START.ordinal()) {
                 //Log.d("REMODROID", "Cam");
-                Feature c = new CamStream();
+                Feature c = new CamStream3();
                 FDict.put(order, c);
                 c.init(order);
             } else if (orderType == eOrderType.UPDATE.ordinal()) {

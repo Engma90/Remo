@@ -76,7 +76,7 @@ namespace Remo.Connections
                 }
             });
 
-            AckClientsThread.Start();
+            //AckClientsThread.Start();
         }
 
         public static mTCPHandler GetInstance()
@@ -185,7 +185,7 @@ namespace Remo.Connections
                 Console.WriteLine();
                 int MessageLengthInt = readInt(e.Data);
                 Console.WriteLine("DataLength " + MessageLengthInt);
-                if(MessageLengthInt > 9000)
+                if(MessageLengthInt > 20000)
                 {
                     Console.WriteLine("Packet length > max");
                     return;
@@ -197,6 +197,7 @@ namespace Remo.Connections
                 var myEnumMemberCount = Enum.GetNames(typeof(DataHandler.eDataType)).Length;
                 if(DataType > myEnumMemberCount || DataType < 0)
                 {
+                    e.TcpClient.GetStream().Flush();
                     return;
                 }
 

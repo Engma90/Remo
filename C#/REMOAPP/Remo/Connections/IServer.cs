@@ -9,22 +9,41 @@ using System.Threading.Tasks;
 
 namespace Remo.Connections
 {
-    interface IServer
+    public interface IServer
     {
+        int Port { get; set; }
+
+        //IServer GetInstance(); // Singlton
         void StartServer(int Port);
         void StopServer();
+        void HandleClient(object obj);
+        byte[] readMessage(TcpClient client, int length);
+
         //void send();
         //void Server_DataReceived();
     }
-    interface TCP : IServer
+    public interface TCP : IServer
     {
+        Dictionary<string, IMClient> MainClientsDict { get; }
+        Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
+        int CheckIsConnectedInterval_ms { get; set; }
+        IFeature addFClient(string MainClientIP, int Feature_type);
+        IMClient getClientByIP(String ip);
+        IMClient ClientClass { get; set; }
+
+        void send(string Message, string OrderType, string Parameters, object c);
+        void send(string Message, string OrderType, object c);
+        void send(string Message, object c);
+
+
+
         //mTCPHandler GetInstance();
-        void Server_ClientConnected(object sender, TcpClient e);
-        void Server_DataReceived(object sender, Message e);
-        void send(String Message, TcpClient c);
+        //   void Server_ClientConnected(object sender, TcpClient e);
+        //  void Server_DataReceived(object sender, Message e);
+        //void send(String Message, TcpClient c);
     }
 
-    interface UDP : IServer
+    public interface UDP : IServer
     {
         //mUDPHandler GetInstance();
         void Server_DataReceived(object sender, Message e);

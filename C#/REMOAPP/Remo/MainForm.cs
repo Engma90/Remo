@@ -17,7 +17,7 @@ namespace Remo
 {
     public partial class MainForm : Form
     {
-        mTCPHandler mTCPH;
+        TCP mTCPH;
         //UDPReceiver udpr;
         //mUDPHandler mUDPH;
         private Thread RefreshClientsListThread;

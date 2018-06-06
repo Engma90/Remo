@@ -115,16 +115,16 @@ public class TCP_Transceiver {
             int totalLen = 4 + data.length;
             bufferedWriter.writeInt(totalLen);//Max Size 2147483647 = 2 GiB
      //       SystemClock.sleep(100);
-            Thread.sleep(50);
+  //          Thread.sleep(50);
             bufferedWriter.writeInt(DATA_TYPE);
-            Thread.sleep(50);
+ //           Thread.sleep(50);
    //         SystemClock.sleep(50);
             bufferedWriter.write(data);
-            Thread.sleep(50);
+ //           Thread.sleep(50);
     //        SystemClock.sleep(50);
             bufferedWriter.flush();
 
-            Thread.sleep(50);
+  //          Thread.sleep(50);
    //         SystemClock.sleep(10);
             //socket.close();
         } catch (Exception e) {

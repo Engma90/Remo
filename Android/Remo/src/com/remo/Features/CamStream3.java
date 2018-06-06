@@ -211,7 +211,7 @@ public class CamStream3 extends Feature {
     private final Camera.PreviewCallback PCB = new Camera.PreviewCallback() {
         @Override
         public void onPreviewFrame(byte[] data, Camera camera) {
-
+            doneWithPic = true;
 
             Camera.Parameters parameters = camera.getParameters();
             int width = parameters.getPreviewSize().width;
@@ -256,7 +256,7 @@ public class CamStream3 extends Feature {
 
                 Log.d("REMODROID", "PCB Finished");
                 sendPacket(toByteArray);
-                doneWithPic = true;
+
 
 
 

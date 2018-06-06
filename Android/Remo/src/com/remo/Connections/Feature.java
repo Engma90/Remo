@@ -68,16 +68,16 @@ public abstract class Feature {
 
     public void sendPacket(byte[] data){
         tcp.send(Feature_type, data);
-        Log.d("REMODROID", "Waiting For Ack");
-        String Ack = null;
-        try {
-            Ack = tcp.receive();
-        } catch (IOException e) {
-            Log.e("REMODROID", "Ack Ack Error");
-        }
-        if(Ack.equals("OK")){
-            Log.d("REMODROID", "Ack Ok");
-        }
+//        Log.d("REMODROID", "Waiting For Ack");
+//        String Ack = null;
+//        try {
+//            Ack = tcp.receive();
+//        } catch (IOException e) {
+//            Log.e("REMODROID", "Ack Ack Error");
+//        }
+//        if(Ack.equals("OK")){
+//            Log.d("REMODROID", "Ack Ok");
+//        }
     }
 
 //    abstract void reportError(String error);

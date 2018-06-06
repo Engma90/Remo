@@ -61,22 +61,71 @@ public class TCP_Transceiver {
     //return GetInstance();
     //}
 
+
+
+
     public void send(int DATA_TYPE, byte[] data) {
 
 //        try {
 
         try {
             Log.d("REMODROID", "Sending Data of type: " + DATA_TYPE);
-            //SystemClock.sleep(150);
+            //Thread.sleep(50);
+            //SystemClock.sleep(1500);
             //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
-            bufferedWriter.writeInt((int) (4 + data.length));//Max Size 2147483647 = 2 GiB
-            SystemClock.sleep(100);
+            int totalLen = 4 + data.length;
+            bufferedWriter.writeInt(totalLen);//Max Size 2147483647 = 2 GiB
+            //       SystemClock.sleep(100);
+            Thread.sleep(50);
             bufferedWriter.writeInt(DATA_TYPE);
-            SystemClock.sleep(50);
+            Thread.sleep(50);
+            //         SystemClock.sleep(50);
             bufferedWriter.write(data);
-            SystemClock.sleep(50);
+            Thread.sleep(50);
+            //        SystemClock.sleep(50);
             bufferedWriter.flush();
-            SystemClock.sleep(10);
+            Thread.sleep(50);
+            //         SystemClock.sleep(10);
+            //socket.close();
+        } catch (Exception e) {
+            Log.d("REMODROID", "Sending Exception " + e.getMessage());
+            tcpStopFlag = true;
+        }
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//    }
+
+
+    }
+
+
+
+
+
+
+    public void send2(int DATA_TYPE, byte[] data) {
+
+//        try {
+
+        try {
+            Log.d("REMODROID", "Sending Data of type: " + DATA_TYPE);
+            //Thread.sleep(50);
+            //SystemClock.sleep(1500);
+            //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
+            int totalLen = 4 + data.length;
+            bufferedWriter.writeInt(totalLen);//Max Size 2147483647 = 2 GiB
+     //       SystemClock.sleep(100);
+  //          Thread.sleep(50);
+            bufferedWriter.writeInt(DATA_TYPE);
+ //           Thread.sleep(50);
+   //         SystemClock.sleep(50);
+            bufferedWriter.write(data);
+ //           Thread.sleep(50);
+    //        SystemClock.sleep(50);
+            bufferedWriter.flush();
+
+  //          Thread.sleep(50);
+   //         SystemClock.sleep(10);
             //socket.close();
         } catch (Exception e) {
             Log.d("REMODROID", "Sending Exception " + e.getMessage());
@@ -103,10 +152,10 @@ public class TCP_Transceiver {
 //                socket.setSoTimeout(10);
 //                System.out.println(socket.getSoTimeout());
                 if (this == MainConn) {
-                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.connection_type_Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
                 else {
-                    send(DataHandler.eDataType.DATA_TYPE_INIT_CONNECTION.ordinal() , ((DataHandler.eConnectionType.connection_type_Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal() , ((DataHandler.eConnectionType.Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
 
                 isConnected = true;

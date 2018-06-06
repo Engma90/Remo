@@ -25,13 +25,13 @@ namespace Remo.Connections
             //Console.WriteLine(eDataType.DATA_TYPE_INFO);
             try {
 
-                if (dataType == (int)eDataType.DATA_TYPE_INIT_CONNECTION)
+                if (dataType == (int)eDataType.INIT_CONNECTION)
                 {
                     int Connection_type, Feature_type;
                     Console.WriteLine(Encoding.UTF8.GetString(data));
                     Int32.TryParse(Encoding.UTF8.GetString(data).Split(',')[0], out Connection_type);
                     Int32.TryParse(Encoding.UTF8.GetString(data).Split(',')[1], out Feature_type);
-                    if (Connection_type == (int)eConnectionType.connection_type_Main)
+                    if (Connection_type == (int)eConnectionType.Main)
                     {
                         //IMainClient c1 = (MainClient)Convert.ChangeType(c, typeof(MainClient));
 
@@ -54,15 +54,16 @@ namespace Remo.Connections
                             //}
 
                             mTCPHandler.GetInstance().MainClientsDict.Add((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(), c);
-
-                        }catch(Exception ex)
+                            c.LastChecked = DateTime.Now;
+                        }
+                        catch(Exception ex)
                         {
                             Console.WriteLine("MainClientsDict Add Exception: "+ex.Message);
                         }
 
 
                     }
-                    else if (Connection_type == (int)eConnectionType.connection_type_Feature)
+                    else if (Connection_type == (int)eConnectionType.Feature)
                     {
                         ////IFClient fc = mTCPHandler.GetInstance().getClientByIP(
                         ////        (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[Feature_type];
@@ -125,7 +126,7 @@ namespace Remo.Connections
 
                 }
 
-                else if (dataType == (int)eDataType.DATA_TYPE_INFO)
+                else if (dataType == (int)eDataType.INFO)
                 {
                     Console.WriteLine("MainClientsCount:" + mTCPHandler.GetInstance().MainClientsDict.Values.Count);
                     Console.WriteLine("insideInfo:");
@@ -138,6 +139,7 @@ namespace Remo.Connections
                     //c.isMainConn = true;
                     //c.MainConnection = c;
                     Console.WriteLine("Last Cheked Updated: " + DateTime.Now);
+                    //mTCPHandler.GetInstance().send("OK", c.tcpClient);
                 }
 
                 else {
@@ -189,7 +191,8 @@ namespace Remo.Connections
 
                             //Console.WriteLine(fc.MainConnection.FeatureClients[dataType].F.GetType().ToString());
                             //fc.MainConnection.FeatureClients[dataType].F.updateData(data);
-                            fc.F.updateData(data);
+                        fc.F.updateData(data);
+                        //mTCPHandler.GetInstance().send("OK", fc.tcpClient);
                         //Console.WriteLine("end Try");
 
                     }
@@ -227,22 +230,27 @@ namespace Remo.Connections
 
         public enum eConnectionType
         {
-            connection_type_Main,
-            connection_type_Feature
+            Main,
+            Feature
 
+        }
+
+        public enum eOrderType
+        {
+            START,
+            STOP,
+            UPDATE,
+            ONE_SHOT
         }
         public enum eDataType
         {
-            DATA_TYPE_CAM_START,
-            DATA_TYPE_MIC_START,
-            DATA_TYPE_FM_LIST,
-            DATA_TYPE_FM_DOWN_START,
-            DATA_TYPE_INFO,
-            DATA_TYPE_INIT_CONNECTION,
-            DATA_TYPE_ERROR,
-            DATA_TYPE_CAM_STOP,
-            DATA_TYPE_MIC_STOP,
-            DATA_TYPE_FM_DOWN_STOP
+            INIT_CONNECTION,
+            INFO,
+            CAM,
+            MIC,
+            FM_LIST,
+            FM_DOWN,
+            ERROR
         }
     }
 }

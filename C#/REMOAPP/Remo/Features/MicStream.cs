@@ -29,7 +29,7 @@ namespace Remo.Features
         {
             InitializeComponent();
             //this.mTCPH = mTCPHandler.GetInstance();
-            DATA_TYPE = (int)DataHandler.eDataType.DATA_TYPE_MIC_START;
+            DATA_TYPE = (int)DataHandler.eDataType.MIC;
         }
 
         private void MicStream_Load(object sender, EventArgs e)
@@ -44,7 +44,9 @@ namespace Remo.Features
 
         private void start()
         {
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_MIC_START).ToString(), mc.tcpClient);
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
+                ((int)DataHandler.eOrderType.START).ToString(),
+                    mc.tcpClient);
             waveOut = new WaveOut();
             bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(8000, 16, 1));
             bufferedWaveProvider.BufferDuration = TimeSpan.FromMinutes(10);
@@ -78,12 +80,8 @@ namespace Remo.Features
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.DATA_TYPE_MIC_STOP).ToString(), mc.tcpClient);
-            waveOut.Stop();
-            waveOut.Dispose();
-            bufferedWaveProvider = null;
-            Console.WriteLine();
-            Console.WriteLine("The MIC was stopped!");
+            Stop();
+
         }
 
         public void updateData(byte[] data)
@@ -92,7 +90,7 @@ namespace Remo.Features
             {
 
                 bufferedWaveProvider.AddSamples(data, 0, data.Length);
-                if (bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(5))
+                if (bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(2))
                 {
                     waveOut.Play();
                 }
@@ -110,6 +108,23 @@ namespace Remo.Features
         public void onError(String error)
         {
 
+        }
+
+        private void MicStream_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Stop();
+        }
+
+        public void Stop()
+        {
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
+                    ((int)DataHandler.eOrderType.STOP).ToString(),
+                        mc.tcpClient);
+            waveOut.Stop();
+            waveOut.Dispose();
+            bufferedWaveProvider = null;
+            Console.WriteLine();
+            Console.WriteLine("The MIC was stopped!");
         }
     }
 }

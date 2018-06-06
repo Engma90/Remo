@@ -9,31 +9,10 @@ namespace Remo.Features
 {
     class MobInfo 
     {
-        public int DATA_TYPE
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
+        public int DATA_TYPE {get; set;}
+        
 
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public IMClient mc
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IMClient mc { get; set; }
 
         public void onError(string error)
         {
@@ -47,7 +26,7 @@ namespace Remo.Features
 
         public void updateData(byte[] data)
         {
-            throw new NotImplementedException();
+            //MainForm.
         }
     }
 }

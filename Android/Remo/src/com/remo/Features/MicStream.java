@@ -4,6 +4,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
+import com.remo.Connections.DataHandler;
 import com.remo.Connections.Feature;
 
 public class MicStream extends Feature {
@@ -18,6 +19,9 @@ public class MicStream extends Feature {
     //TCP_Transceiver tcp;
 
     public MicStream(){
+
+        UseMainConnection = false;
+        Feature_type = DataHandler.eDataType.MIC.ordinal();
         audiorecord = new AudioRecord(MediaRecorder.AudioSource.MIC, SAMPLER, channelConfig, audioFormat, minBufSize);
 //        tcp = new TCP_Transceiver(isMaainConn);
 //        tcp.tcpStopFlag = false;

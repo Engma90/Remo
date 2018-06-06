@@ -9,7 +9,6 @@ import android.util.Log;
 import com.remo.App;
 import com.remo.Connections.DataHandler;
 import com.remo.Connections.Feature;
-import com.remo.Connections.TCP_Transceiver;
 
 /**
  * Created by Mohamed on 3/3/2018.
@@ -21,15 +20,16 @@ public class MobileInfo extends Feature {
 //    private TCP_Transceiver tcp;
 
     public MobileInfo() {
-        isMaainConn = true;
+        UseMainConnection = true;
+        Feature_type = DataHandler.eDataType.INFO.ordinal();
     }
 
     public String getInfo(Context context) {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = context.registerReceiver(null, ifilter);
 
-        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        int level = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) : 0;
+        int scale = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1) : 0;
 
         float batteryPct = (level / (float) scale) * 100;
 
@@ -38,16 +38,16 @@ public class MobileInfo extends Feature {
     }
 
     public void sendInfo(Context context) {
-        Log.d("REMODROID", "4");
-        connect();
+        //Log.d("REMODROID", "4");
+        //connect();
         Log.d("REMODROID", tcp.isConnected + "");
-        Log.d("REMODROID", "5");
+        //Log.d("REMODROID", "5");
         try {
-            Log.d("REMODROID", "6");
+            //Log.d("REMODROID", "6");
             sendPacket(((getInfo(context)).getBytes("UTF-8")));
-            Log.d("REMODROID", "7");
+            //Log.d("REMODROID", "7");
         } catch (Exception e) {
-            Log.e("REMODROID", e.getLocalizedMessage());
+            Log.e("REMODROID", e.getMessage());
             //reportError("Error");
         }
 

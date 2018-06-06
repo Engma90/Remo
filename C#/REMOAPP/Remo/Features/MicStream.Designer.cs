@@ -61,6 +61,7 @@
             this.Controls.Add(this.btnStart);
             this.Name = "MicStream";
             this.Text = "MicStream";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MicStream_FormClosing);
             this.Load += new System.EventHandler(this.MicStream_Load);
             this.ResumeLayout(false);
 

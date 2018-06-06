@@ -28,8 +28,17 @@ namespace Remo.Connections
         Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
         int CheckIsConnectedInterval_ms { get; set; }
         IFeature addFClient(string MainClientIP, int Feature_type);
+
+
+
+
+
+
+
         IMClient getClientByIP(String ip);
         IMClient ClientClass { get; set; }
+
+
 
         void send(string Message, string OrderType, string Parameters, object c);
         void send(string Message, string OrderType, object c);

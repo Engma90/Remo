@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
                     }
                 });
         startService(new Intent(getApplicationContext(), com.remo.Connections.MainConnectionService.class));
-
+      //  getApplicationContext().deleteFile(filename);
         //Log.d("REMODROID", (getApplicationContext() == App.get().getApplicationContext())+"");
 
         //For networking on main Thread

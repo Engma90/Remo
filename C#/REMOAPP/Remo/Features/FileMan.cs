@@ -30,12 +30,33 @@ namespace Remo.Features
 
         public void updateData(byte[] data)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(Encoding.UTF8.GetString(data));
+            
+            string[] dirs = Encoding.UTF8.GetString(data).Split('\\')[0].Split('/');
+            string[] files = Encoding.UTF8.GetString(data).Split('\\')[1].Split('/');
+
+            foreach(string s in dirs)
+            {
+                dataGridView1.Rows.Add(new String[] { s, "-" });
+            }
+            foreach (string s in files)
+            {
+                dataGridView1.Rows.Add(new String[] { s, "file" });
+            }
+
+
+            //Console.WriteLine("FileMan");
+            //mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
+            //    ((int)DataHandler.eOrderType.STOP).ToString(),
+            //        mc.tcpClient);
         }
 
         private void FileMan_Load(object sender, EventArgs e)
         {
-
+            Console.WriteLine("FileMan");
+            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
+                ((int)DataHandler.eOrderType.START).ToString(), "Internal",
+                    mc.tcpClient);
         }
     }
 }

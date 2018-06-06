@@ -105,28 +105,40 @@ namespace Remo.Connections
 
             Boolean bClientConnected = true;
             String sData = null;
-
+            IMClient c = null;
             while (bClientConnected)
             {
+                
                 // reads from stream
                 //            sData = sReader.ReadLine();
+                try
+                {
+                    byte[] bArray;
+                    int n, Length, DataType;
+                    //String Messsage = "";
+                    bArray = new byte[4];
+                    n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
+                    Length = readInt(bArray);
+                    /// Console.WriteLine("DataLen = " + Length);
 
-                byte[] bArray;
-                int n, Length, DataType;
-                //String Messsage = "";
-                bArray = new byte[4];
-                n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
-                Length = readInt(bArray);
-                /// Console.WriteLine("DataLen = " + Length);
+                    n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
+                    DataType = readInt(bArray);
+                    Console.WriteLine("DataType = " + DataType);
 
-                n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
-                DataType = readInt(bArray);
-                Console.WriteLine("DataType = " + DataType);
+                    byte[] data = readMessage(client, Length - 4);
+                    // Console.WriteLine(client.Client.RemoteEndPoint.ToString());
 
-                byte[] data = readMessage(client, Length - 4);
-                // Console.WriteLine(client.Client.RemoteEndPoint.ToString());
+                   c = CheckClientExistance(client, DataType);
 
-                CheckClientExistance(client, DataType, data);
+                    Console.WriteLine("Distributing to Client : " + c.tcpClient.Client.RemoteEndPoint.ToString());
+                    DataHandler.distribute(DataType, data, c);
+
+                }
+                catch
+                {
+                    bClientConnected = false;
+                    clientDisconnected(c,client);
+                }
 
 
 
@@ -139,12 +151,43 @@ namespace Remo.Connections
 
 
 
-        public void CheckClientExistance(TcpClient e ,int DataType , byte[] data)
+        public void clientDisconnected(IMClient mc,TcpClient c)
         {
             try
             {
+                if (MainClientsDict.ContainsKey((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
+                {
+                    MainClientsDict.Remove((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
+                    //Console.WriteLine(mc.LastChecked);
+                    //Console.WriteLine(DateTime.Now);
+                    foreach (IFClient fc in mc.FeatureClients.Values.ToList())
+                    {
+                        fc.F = null;
+                        fc.tcpClient.Client.Disconnect(false);
+                        FeatureClientsMapDict.Remove(fc.tcpClient.Client.RemoteEndPoint.ToString());
+                    }
+                    mc.tcpClient.Client.Disconnect(false);
+                }
+                else if (FeatureClientsMapDict.ContainsKey(c.Client.RemoteEndPoint.ToString()))
+                {
+                    IFClient fc = (IFClient)mc;
+                    fc.F = null;
+                    fc.tcpClient.Client.Disconnect(false);
+                    FeatureClientsMapDict.Remove(c.Client.RemoteEndPoint.ToString());
+                }
+            }
+            catch { Console.WriteLine("Disconnect Exception"); }
+        }
 
-                IMClient c;
+
+
+        public IMClient CheckClientExistance(TcpClient e ,int DataType )
+        {
+            IMClient c;
+            try
+            {
+
+                
                 if (FeatureClientsMapDict.ContainsKey(e.Client.RemoteEndPoint.ToString()))
                 {
                     Console.WriteLine("Found in FMap Dict");
@@ -175,13 +218,14 @@ namespace Remo.Connections
                     c = (IMClient)Activator.CreateInstance(ClientClass.GetType());
                     c.tcpClient = e;
                 }
-                Console.WriteLine("Distributing to Client : " + c.tcpClient.Client.RemoteEndPoint.ToString());
-                DataHandler.distribute(DataType, data, c);
+                
+                return c;
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Bound Client Exception: " + ex.Message);
+                throw new Exception("Bound Client Exception");
             }
 
             // Monitor.Exit(this);
@@ -222,7 +266,7 @@ namespace Remo.Connections
 
         public void StopServer()
         {
-            throw new NotImplementedException();
+            _isRunning = false;
         }
 
 
@@ -239,7 +283,11 @@ namespace Remo.Connections
         {
             IFClient fc = (IFClient)(IMClient)Activator.CreateInstance(ClientClass.GetType());                                                                // {
             fc.MainConnection = getClientByIP(MainClientIP);
-            getClientByIP(MainClientIP).FeatureClients.Add(Feature_type, fc);
+            try
+            {
+                getClientByIP(MainClientIP).FeatureClients.Add(Feature_type, fc);
+            }
+            catch { }
             var types = Assembly
             .GetExecutingAssembly()
             .GetTypes()
@@ -295,52 +343,39 @@ namespace Remo.Connections
             return num1 << num5 | num2 << 16 | num3 << 8 | num4;
         }
 
+
+
+
+
         private int readInt(byte[] data)
         {
-            try
+            int retInt = -1;
+            byte[] MessageLength = new byte[4];
+            for (int i = 0; i < 4; i++)
             {
-                int retInt = -1;
-                byte[] MessageLength = new byte[4];
-                for (int i = 0; i < 4; i++)
-                {
-                    MessageLength[i] = data[i];
-                }
-                retInt = SwapEndianness(BitConverter.ToInt32(MessageLength, 0));
-                return retInt;
+                MessageLength[i] = data[i];
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ReadIntException");
-                return -1;
-            }
-
+            retInt = SwapEndianness(BitConverter.ToInt32(MessageLength, 0));
+            return retInt;
         }
 
         public byte[] readMessage(TcpClient client, int length)
         {
-            try
+            int offset = 0;
+            int size = length;
+            byte[] numArray = new byte[length];
+            while (offset < length)
             {
-                int offset = 0;
-                int size = length;
-                byte[] numArray = new byte[length];
-                while (offset < length)
+                int num2 = client.Client.Receive(numArray, offset, size, SocketFlags.None);
+                if (num2 != 0)
                 {
-                    int num2 = client.Client.Receive(numArray, offset, size, SocketFlags.None);
-                    if (num2 != 0)
-                    {
-                        offset += num2;
-                        size -= num2;
-                    }
-                    else
-                        break;
+                    offset += num2;
+                    size -= num2;
                 }
-                return numArray;
+                else
+                    break;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("readMessageException");
-                return null;
-            }
+            return numArray;
         }
 
 

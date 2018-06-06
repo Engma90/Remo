@@ -2,10 +2,7 @@ package com.remo.Connections;
 
 import android.content.Context;
 import android.util.Log;
-import com.remo.Features.CamStream;
-import com.remo.Features.CamStream3;
-import com.remo.Features.MicStream;
-import com.remo.Features.MobileInfo;
+import com.remo.Features.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +47,24 @@ public class DataHandler {
 
             if (orderType == eOrderType.START.ordinal()) {
                 Feature c = new MicStream();
+                FDict.put(order, c);
+                c.init(order);
+            } else if (orderType == eOrderType.UPDATE.ordinal()) {
+
+            } else if (orderType == eOrderType.STOP.ordinal()) {
+                FDict.get(eDataType.MIC.ordinal()).stopStream();
+                FDict.remove(eDataType.MIC.ordinal());
+            }
+
+        }
+
+        else if (order == eDataType.FM_LIST.ordinal()) {
+
+
+            if (orderType == eOrderType.START.ordinal()) {
+                Feature c = new FileMan(Parameters);
+                if(FDict.containsKey(order))
+                    FDict.remove(eDataType.MIC.ordinal());
                 FDict.put(order, c);
                 c.init(order);
             } else if (orderType == eOrderType.UPDATE.ordinal()) {

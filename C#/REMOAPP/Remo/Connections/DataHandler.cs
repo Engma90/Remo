@@ -192,7 +192,7 @@ namespace Remo.Connections
                             //Console.WriteLine(fc.MainConnection.FeatureClients[dataType].F.GetType().ToString());
                             //fc.MainConnection.FeatureClients[dataType].F.updateData(data);
                         fc.F.updateData(data);
-                        mTCPHandler.GetInstance().send("OK", fc.tcpClient);
+                        //mTCPHandler.GetInstance().send("OK", fc.tcpClient);
                         //Console.WriteLine("end Try");
 
                     }

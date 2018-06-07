@@ -20,11 +20,11 @@ public class MobileInfo extends Feature {
 //    private TCP_Transceiver tcp;
 
     public MobileInfo() {
-        UseMainConnection = true;
+        UseMainConnection = false;
         Feature_type = DataHandler.eDataType.INFO.ordinal();
     }
 
-    public String getInfo(Context context) {
+    private String getInfo(Context context) {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent batteryStatus = context.registerReceiver(null, ifilter);
 
@@ -37,7 +37,7 @@ public class MobileInfo extends Feature {
         return device + "/" + ((int) batteryPct);
     }
 
-    public void sendInfo(Context context) {
+    private void sendInfo(Context context) {
         //Log.d("REMODROID", "4");
         //connect();
         Log.d("REMODROID", tcp.isConnected + "");

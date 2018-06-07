@@ -300,7 +300,7 @@ namespace Remo.Connections
         public IFeature addFClient(string MainClientIP, int Feature_type)
         {
             IFClient fc = (IFClient)(IMClient)Activator.CreateInstance(ClientClass.GetType());                                                                // {
-            fc.MainConnection = getClientByIP(MainClientIP);
+    //        fc.MainConnection = getClientByIP(MainClientIP);//
             getClientByIP(MainClientIP).FeatureClients.Add(Feature_type, fc);
             var types = Assembly
             .GetExecutingAssembly()
@@ -314,7 +314,7 @@ namespace Remo.Connections
                 if (TempFeature.DATA_TYPE == Feature_type)
                 {
                     fc.F = TempFeature;
-                    fc.F.mc = fc.MainConnection;
+          //          fc.F.mc = fc.MainConnection;          //
                     Console.WriteLine(t.Name);
                     return TempFeature;
                 }

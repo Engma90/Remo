@@ -24,7 +24,10 @@ public class FileMan extends Feature {
 
         //Log.d("REMODROID",getList(path));
         try {
-            sendPacket(getList(path).getBytes("UTF-8"));
+            String toSend = getList(path);
+
+            sendPacket(toSend.getBytes("UTF-8"));
+            Log.d("REMODROID",toSend);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

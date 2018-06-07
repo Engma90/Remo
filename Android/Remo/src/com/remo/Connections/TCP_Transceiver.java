@@ -73,18 +73,18 @@ public class TCP_Transceiver {
             //Thread.sleep(50);
             //SystemClock.sleep(1500);
             //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
-            int totalLen = 4 + data.length;
-            bufferedWriter.writeInt(totalLen);//Max Size 2147483647 = 2 GiB
+            //int totalLen = 4 + data.length;
+            bufferedWriter.writeInt(data.length);//Max Size 2147483647 = 2 GiB
             //       SystemClock.sleep(100);
-            Thread.sleep(50);
+ //           Thread.sleep(50);
             bufferedWriter.writeInt(DATA_TYPE);
-            Thread.sleep(50);
+  //          Thread.sleep(50);
             //         SystemClock.sleep(50);
             bufferedWriter.write(data);
-            Thread.sleep(50);
+    //        Thread.sleep(50);
             //        SystemClock.sleep(50);
             bufferedWriter.flush();
-            Thread.sleep(50);
+    //        Thread.sleep(50);
             //         SystemClock.sleep(10);
             //socket.close();
         } catch (Exception e) {
@@ -137,7 +137,7 @@ public class TCP_Transceiver {
 
 
     }
-
+    private Socket socket;
     public void connect() {
         isConnected = false;
         Log.d("REMODROID", "Connecting...");
@@ -145,7 +145,7 @@ public class TCP_Transceiver {
 
             try {
                 //private int Type = 0;
-                Socket socket = new Socket();
+                socket = new Socket();
                 socket.connect(new InetSocketAddress(ip, port), 5000);
                 in = socket.getInputStream();
                 bufferedWriter = new DataOutputStream(socket.getOutputStream());
@@ -168,6 +168,14 @@ public class TCP_Transceiver {
         }
 
 
+    }
+
+    void disconnect(){
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     String receive() throws IOException {

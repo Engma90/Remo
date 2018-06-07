@@ -77,14 +77,15 @@ public class CamStream3 extends Feature {
 
 
             Log.d("REMODROID", "Got the camera, creating the dummy surface texture");
-            Camera.Parameters parameters = camera.getParameters();
+ //           Camera.Parameters parameters = camera.getParameters();
             SurfaceTexture ST = new SurfaceTexture(0);
             try {
-                parameters = camera.getParameters();
+                Camera.Parameters parameters = camera.getParameters();
                 parameters.setFlashMode("off");
-                parameters.set("orientation", "portrait");
+                camera.setDisplayOrientation(90);
+      //          parameters.set("orientation", "portrait");
                 //parameters.setPreviewFrameRate(16);
-                parameters.setRotation(RotationAngle);
+    //            parameters.setRotation(RotationAngle);
 //                if (CamIndex == 0) {
 //                    parameters.setRotation(90);
 //                } else {
@@ -212,7 +213,7 @@ public class CamStream3 extends Feature {
         @Override
         public void onPreviewFrame(byte[] data, Camera camera) {
             doneWithPic = true;
-
+            try {
             Camera.Parameters parameters = camera.getParameters();
             int width = parameters.getPreviewSize().width;
             int height = parameters.getPreviewSize().height;
@@ -246,7 +247,7 @@ public class CamStream3 extends Feature {
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-            try {
+
                             /*Log.d("REMODROID", "sending... ");
                             udpSender.dataToSend = toByteArray;
                             Log.d("REMODROID", toByteArray.length+"");

@@ -90,7 +90,7 @@ namespace Remo.Features
             {
 
                 bufferedWaveProvider.AddSamples(data, 0, data.Length);
-                if (bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(2))
+                if (bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(1))
                 {
                     waveOut.Play();
                 }

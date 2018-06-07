@@ -79,7 +79,7 @@ namespace Remo.Features
                 mStream.Write(pData, 0, Convert.ToInt32(pData.Length));
                 Bitmap bm = new Bitmap(mStream, false);
                 mStream.Dispose();
-
+                bm.RotateFlip(RotateFlipType.Rotate90FlipNone);
                 pictureBox1.Image = bm;
 
             }

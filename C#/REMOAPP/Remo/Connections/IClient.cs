@@ -14,33 +14,14 @@ namespace Remo.Connections
         DateTime LastChecked { get; set; }
 
     }
-
         public interface IMClient:IClient{
-        
-        string MANUFACTURER { get; set; }
-        string BATTERY_LEVEL { get; set; }
-
         Dictionary<int, IFClient> FeatureClients { get; set; }
-
-
-        
-
-        string[] getInfo();
-
-        //IFeatureClient[] FC { get; set; }
-        //bool isMainConn { get; set; }
-        //Dictionary< int , IFeature> Features { get; set; }
-        //IFeature cam { get; set; }
-        //IFeature Mic { get; set; }
-        //IFeature FM { get; set; }
-        //IMainClient MainConnection { get; set; }
 
     }
 
     public interface IFClient : IClient
     {
-        IMClient MainConnection { get; set; }
-        //void initFeature(int dataType);
+        //IMClient MainConnection { get; set; }
         IFeature F { get; set; }
     }
 }

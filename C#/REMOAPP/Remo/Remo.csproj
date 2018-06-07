@@ -81,6 +81,24 @@
     <Compile Include="Connections\UDPReceiver.cs" />
     <Compile Include="Features\Client.cs" />
     <Compile Include="Connections\IFeature.cs" />
+    <Compile Include="Features\CallLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Features\CallLog.Designer.cs">
+      <DependentUpon>CallLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Features\SMS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Features\SMS.Designer.cs">
+      <DependentUpon>SMS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Contacts.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Features\Contacts.Designer.cs">
+      <DependentUpon>Contacts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Features\FileDownloader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +129,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Features\CamStream.resx">
       <DependentUpon>CamStream.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\CallLog.resx">
+      <DependentUpon>CallLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\SMS.resx">
+      <DependentUpon>SMS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\Contacts.resx">
+      <DependentUpon>Contacts.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Features\FileDownloader.resx">
       <DependentUpon>FileDownloader.cs</DependentUpon>

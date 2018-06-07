@@ -15,17 +15,15 @@ public abstract class Feature {
     boolean isRootRequired = false;
     int minSDK = 1;
     String Name = "";
-    //TCP_Transceiver tcp = new TCP_Transceiver(false);
-    public boolean UseMainConnection = false;
-    public boolean stopFlag = false;
-    public int Feature_type;
-    public TCP_Transceiver tcp;
+    protected boolean UseMainConnection = false;
+    protected boolean stopFlag = false;
+    protected int Feature_type;
+    protected TCP_Transceiver tcp;
 
-    public void init(int Feature_type){
+    void init(int Feature_type){
         this.Feature_type = Feature_type;
         if(UseMainConnection) {
             tcp = TCP_Transceiver.MainConn;
-            Feature_type = 1;
         }
         else {
             tcp = new TCP_Transceiver(UseMainConnection);
@@ -42,6 +40,7 @@ public abstract class Feature {
             @Override
             public void run() {
                 AsyncTaskFunc();
+                tcp.disconnect();
             }
         });
         t.start();
@@ -50,7 +49,7 @@ public abstract class Feature {
 
 
 
-    public void stopStream() {
+    protected void stopStream() {
 
         //audiorecord.stop();
         //tcp.tcpStopFlag = true;
@@ -59,9 +58,7 @@ public abstract class Feature {
         Log.e("REMODROID", "Stopped");
     }
 
-    public abstract void AsyncTaskFunc();
-
-    public void connect(){
+    private void connect(){
          tcp.Feature_type = Feature_type;
          tcp.connect();
     }
@@ -80,23 +77,26 @@ public abstract class Feature {
 //        }
     }
 
+
+    public abstract void AsyncTaskFunc();
+
 //    abstract void reportError(String error);
 
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11
-    public static <T> void executeAsyncTask(AsyncTask<T, ?, ?> asyncTask, T... params) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
-        else
-            asyncTask.execute(params);
-    }
-    private class Task extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-                    AsyncTaskFunc();
-            return null;
-        }
-    }
+//
+//    @TargetApi(Build.VERSION_CODES.HONEYCOMB) // API 11
+//    public static <T> void executeAsyncTask(AsyncTask<T, ?, ?> asyncTask, T... params) {
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+//            asyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+//        else
+//            asyncTask.execute(params);
+//    }
+//    private class Task extends AsyncTask<String, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//                    AsyncTaskFunc();
+//            return null;
+//        }
+//    }
 
 }

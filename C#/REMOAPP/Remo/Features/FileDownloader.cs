@@ -42,5 +42,22 @@ namespace Remo.Features
         {
 
         }
+
+
+
+
+
+        private class DownloadObject
+        {
+            String Name;
+            String Location;
+            bool isDir;
+            int size;
+            int progress;
+
+
+
+
+        }
     }
 }

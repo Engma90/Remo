@@ -17,6 +17,7 @@ namespace Remo.Features
         {
             InitializeComponent();
             DATA_TYPE = (int)DataHandler.eDataType.FM_LIST;
+            CheckForIllegalCrossThreadCalls = false;
         }
 
         public IMClient mc { get; set; }
@@ -30,19 +31,35 @@ namespace Remo.Features
 
         public void updateData(byte[] data)
         {
-            Console.WriteLine(Encoding.UTF8.GetString(data));
-            
-            string[] dirs = Encoding.UTF8.GetString(data).Split('\\')[0].Split('/');
-            string[] files = Encoding.UTF8.GetString(data).Split('\\')[1].Split('/');
 
-            foreach(string s in dirs)
+            this.Invoke((MethodInvoker)delegate
             {
-                dataGridView1.Rows.Add(new String[] { s, "-" });
-            }
-            foreach (string s in files)
-            {
-                dataGridView1.Rows.Add(new String[] { s, "file" });
-            }
+                Console.WriteLine(Encoding.UTF8.GetString(data));
+
+                string[] dirs = Encoding.UTF8.GetString(data).Split('\\')[0].Split('/');
+                string[] files = Encoding.UTF8.GetString(data).Split('\\')[1].Split('/');
+
+                foreach (string s in dirs)
+                {
+                    if (!String.Empty.Equals(s))
+                        dataGridView1.Rows.Add(new String[] { s, "-" });
+                }
+                foreach (string s in files)
+                {
+                    if (!String.Empty.Equals(s))
+                        dataGridView1.Rows.Add(new String[] { s, "file" });
+                }
+
+                dataGridView1.ScrollBars = ScrollBars.Both; // runs on UI thread
+            });
+            
+            //dataGridView1.Enabled = false;
+            //dataGridView1.ScrollBars = ScrollBars.None;
+            //dataGridView1.Enabled = true;
+            //dataGridView1.ScrollBars = ScrollBars.Both;
+            //dataGridView1.Refresh();
+
+
 
 
             //Console.WriteLine("FileMan");

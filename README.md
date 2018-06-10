@@ -1,11 +1,12 @@
 # Graduation Project
 
 ## Progress:<br />
-<pre>
+
 *Core:*<br />
+<pre>
 *Multithreading clients Accept	100%
-*Connections Handling	80%
-*Data Distribute	80%
+*Connections Handling			80%
+*Data Distribute			80%
 </pre>
 *Features:*<br />
 

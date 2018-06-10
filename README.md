@@ -1,14 +1,13 @@
 # Graduation Project
 
-
 ## Progress:<br />
 
-###Core:<br />
-*Multithreading Server	100<br />
-*Connections Handling 	80%<br />
-*Data Distribute
+*Core:*<br />
+*Multithreading clients Accept	100<br />
+*Connections Handling			80%<br />
+*Data Distribute				80%<br />
 ---<br />
-###Features:<br />
+*Features:*<br />
 
 | Feature  				| Progress 	|	Note					|
 | ----------------------|-----------|----------------------------

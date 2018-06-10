@@ -33,24 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IQToolkit, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\LinqToWiki.Core.1.3\lib\net40-client\IQToolkit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NAudio, Version=1.8.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NAudio.1.8.4\lib\net35\NAudio.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.1.0\lib\net452\RestSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SimpleTCP, Version=1.0.24.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimpleTCP.1.0.24\lib\net45\SimpleTCP.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -79,13 +63,20 @@
       <DependentUpon>CamStream.cs</DependentUpon>
     </Compile>
     <Compile Include="Connections\UDPReceiver.cs" />
-    <Compile Include="Features\Client.cs" />
+    <Compile Include="Connections\Client.cs" />
     <Compile Include="Connections\IFeature.cs" />
     <Compile Include="Features\CallLog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Features\CallLog.Designer.cs">
       <DependentUpon>CallLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Features\DataGridViewProgressColumn.cs" />
+    <Compile Include="Features\GPS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Features\GPS.Designer.cs">
+      <DependentUpon>GPS.cs</DependentUpon>
     </Compile>
     <Compile Include="Features\SMS.cs">
       <SubType>Form</SubType>
@@ -132,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Features\CallLog.resx">
       <DependentUpon>CallLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\GPS.resx">
+      <DependentUpon>GPS.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Features\SMS.resx">
       <DependentUpon>SMS.cs</DependentUpon>

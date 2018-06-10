@@ -58,6 +58,8 @@ namespace Remo.Connections
                     catch (Exception ex)
                     {
                         Console.WriteLine("No Feature Found Exception " + ex.Message);
+                        Console.WriteLine("DataType " + dataType);
+                        Console.WriteLine("Time Since Run : " + (DateTime.Now - mTCPHandler.GetInstance().DateStarted));
                         throw new Exception();
                     }
                 }

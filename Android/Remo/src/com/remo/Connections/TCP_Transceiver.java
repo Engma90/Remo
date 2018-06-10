@@ -1,8 +1,6 @@
 package com.remo.Connections;
 
-import android.os.SystemClock;
 import android.util.Log;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,10 +19,9 @@ public class TCP_Transceiver {
     public boolean isConnected = false;
     private InputStream in;
     private DataOutputStream bufferedWriter;
-    public static TCP_Transceiver MainConn;
+    private static TCP_Transceiver MainConn;
     public boolean tcpStopFlag = false;
-    //private boolean isMainConn;
-    //private Context context;
+    private Socket socket;
     public int Feature_type;
 
 //public static enum eDataType{
@@ -64,7 +61,7 @@ public class TCP_Transceiver {
 
 
 
-    public void send(int DATA_TYPE, byte[] data) {
+    void send(int DATA_TYPE, byte[] data) {
 
 //        try {
 
@@ -100,45 +97,7 @@ public class TCP_Transceiver {
 
 
 
-
-
-
-    public void send2(int DATA_TYPE, byte[] data) {
-
-//        try {
-
-        try {
-            Log.d("REMODROID", "Sending Data of type: " + DATA_TYPE);
-            //Thread.sleep(50);
-            //SystemClock.sleep(1500);
-            //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
-            int totalLen = 4 + data.length;
-            bufferedWriter.writeInt(totalLen);//Max Size 2147483647 = 2 GiB
-     //       SystemClock.sleep(100);
-  //          Thread.sleep(50);
-            bufferedWriter.writeInt(DATA_TYPE);
- //           Thread.sleep(50);
-   //         SystemClock.sleep(50);
-            bufferedWriter.write(data);
- //           Thread.sleep(50);
-    //        SystemClock.sleep(50);
-            bufferedWriter.flush();
-
-  //          Thread.sleep(50);
-   //         SystemClock.sleep(10);
-            //socket.close();
-        } catch (Exception e) {
-            Log.d("REMODROID", "Sending Exception " + e.getMessage());
-            tcpStopFlag = true;
-        }
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//    }
-
-
-    }
-    private Socket socket;
-    public void connect() {
+    void connect() {
         isConnected = false;
         Log.d("REMODROID", "Connecting...");
         while (!isConnected) {
@@ -178,10 +137,8 @@ public class TCP_Transceiver {
         }
     }
 
-    String receive() throws IOException {
-        String MessageFromServer;
-//            DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-//            MessageFromServer = in.readUTF();
+    String receive() {
+
 
         StringBuilder sb = new StringBuilder();
         try {
@@ -192,12 +149,10 @@ public class TCP_Transceiver {
             while (((c = in.read()) > 0) && (c != 0x0a /* <LF> */)) {
                 if (c != 0x0d /* <CR> */) {
                     sb.append((char) c);
-                } else {
-                    // Ignore <CR>.
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("REMODROID","Receive Method Exception");
             isConnected = false;
             connect();
         }

@@ -32,8 +32,8 @@ namespace Remo.Features
         {
             // throw new NotImplementedException();
             mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.INFO).ToString(),
-     ((int)DataHandler.eOrderType.START).ToString(),
-         mc.tcpClient);
+                ((int)DataHandler.eOrderType.START).ToString(),"aa",
+                    mc.tcpClient);
         }
 
         public void updateData(byte[] data)

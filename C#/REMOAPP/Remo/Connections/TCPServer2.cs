@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SimpleTCP;
+//using SimpleTCP;
 using System.Reflection;
 
 namespace Remo.Connections
@@ -22,10 +22,11 @@ namespace Remo.Connections
         public Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
         public int Port { get; set; }
         public int CheckIsConnectedInterval_ms { get; set; } = 5000;
-        public IMClient ClientClass { get; set; }
-
+        //    public IMClient ClientClass { get; set; }
+        public DateTime DateStarted { get; set; }
         private TCPServer2()
         {
+            DateStarted = DateTime.Now;
             MainClientsDict = new Dictionary<string, IMClient>();
             FeatureClientsMapDict = new Dictionary<string, IMClient>();
             _server = new TcpListener(IPAddress.Any, port);
@@ -34,6 +35,7 @@ namespace Remo.Connections
             _isRunning = true;
             Thread t = new Thread(new ThreadStart(LoopClients));
             t.Start();
+
 
             //LoopClients();
         }
@@ -68,13 +70,22 @@ namespace Remo.Connections
             Console.WriteLine("TCP Server Started");
             while (_isRunning)
             {
-                // wait for client connection
-                TcpClient newClient = _server.AcceptTcpClient();
+                try
+                {
+                    // wait for client connection
+                    TcpClient newClient = _server.AcceptTcpClient();
+                   // TcpClient newClient = newClient0.Clone
 
-                // client found.
-                // create a thread to handle communication
-                Thread t = new Thread(new ParameterizedThreadStart(HandleClient));
-                t.Start(newClient);
+                    // client found.
+                    // create a thread to handle communication
+                    Thread t = new Thread(new ParameterizedThreadStart(HandleClient));
+                    t.Start(newClient);
+                }
+                catch
+                {
+                    Console.WriteLine("TCP Server Stopped");
+                    _isRunning = false;
+                }
             }
         }
 
@@ -104,7 +115,7 @@ namespace Remo.Connections
             // but there is no forcing flush, even when requested
 
             Boolean bClientConnected = true;
-            String sData = null;
+           // String sData = null;
             IMClient c = null;
             while (bClientConnected && _isRunning)
             {
@@ -260,8 +271,8 @@ namespace Remo.Connections
                 }
                 else
                 {
-    //                Console.WriteLine("NotBoundedBefore");
-                    c = (IMClient)Activator.CreateInstance(ClientClass.GetType());
+                    //                Console.WriteLine("NotBoundedBefore");
+                    c = new Client();//(IMClient)Activator.CreateInstance(ClientClass.GetType());
                     c.tcpClient = e;
                 }
 
@@ -280,7 +291,7 @@ namespace Remo.Connections
             //}
 
             //Monitor.Exit(GetInstance());
-            Console.WriteLine();
+           // Console.WriteLine();
 
         }
 
@@ -300,7 +311,7 @@ namespace Remo.Connections
             throw new NotImplementedException();
         }
 
-        public void Server_DataReceived(object sender, Message e)
+        public void Server_DataReceived(object sender, object e)
         {
             throw new NotImplementedException();
         }
@@ -313,6 +324,7 @@ namespace Remo.Connections
         public void StopServer()
         {
             _isRunning = false;
+            _server.Stop();
         }
 
 
@@ -327,7 +339,7 @@ namespace Remo.Connections
 
         public IFeature addFClient(string MainClientIP, int Feature_type)
         {
-            IFClient fc = (IFClient)(IMClient)Activator.CreateInstance(ClientClass.GetType());                                                                // {
+            IFClient fc = new Client();//(IMClient)Activator.CreateInstance(ClientClass.GetType());                                                                // {
    //         fc.MainConnection = getClientByIP(MainClientIP);               ////
             try
             {
@@ -367,11 +379,11 @@ namespace Remo.Connections
             ((TcpClient)c).Client.Send(Encoding.UTF8.GetBytes(Message + ":" + OrderType + "\n"));
 
         }
-        public void send(string Message, object c)
-        {
-            ((TcpClient)c).Client.Send(Encoding.UTF8.GetBytes(Message + "\n"));
+        //public void send(string Message, object c)
+        //{
+        //    ((TcpClient)c).Client.Send(Encoding.UTF8.GetBytes(Message + "\n"));
 
-        }
+        //}
 
 
 

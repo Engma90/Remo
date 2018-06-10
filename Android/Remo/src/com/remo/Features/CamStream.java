@@ -1,11 +1,10 @@
 package com.remo.Features;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.SurfaceTexture;
+import android.graphics.*;
 import android.hardware.Camera;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import com.remo.Connections.DataHandler;
 import com.remo.Connections.Feature;
 
@@ -15,13 +14,14 @@ import java.io.IOException;
 public class CamStream extends Feature {
 
 
+    int Quality = 50;
     public static int CamIndex = 0;
     public static int RotationAngle = 90;
     private static volatile boolean doneWithPic = false;
-   // private static boolean stopCamFlag = false;
+    // private static boolean stopCamFlag = false;
     //TCP_Transceiver tcp;
     public CamStream(){
- //       stopCamFlag = false;
+        //       stopCamFlag = false;
 //        tcp = new TCP_Transceiver(isMaainConn);
 //        tcp.tcpStopFlag = false;
 
@@ -30,8 +30,8 @@ public class CamStream extends Feature {
 //        Thread t = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
-                //task.execute();
-    //            executeAsyncTask(task);
+        //task.execute();
+        //            executeAsyncTask(task);
 //            }
 //        });
 //        t.start();
@@ -50,14 +50,19 @@ public class CamStream extends Feature {
 //    }
 
     @Override
-    public void AsyncTaskFunc(){
+    public void AsyncTaskFunc(String Params){
 
         StartCam();
     }
 
-    private void StartCam() {
-        Camera camera = null;
+    @Override
+    public void update(String Params) {
+        this.Quality = Integer.parseInt(Params);
+    }
 
+    private void StartCam() {
+
+        Camera camera = null;
         //udpSender = new UDPSender();
 
         Log.d("REMODROID", "Preparing to take photo on camera " + CamIndex);
@@ -78,14 +83,15 @@ public class CamStream extends Feature {
 
 
             Log.d("REMODROID", "Got the camera, creating the dummy surface texture");
-            Camera.Parameters parameters = camera.getParameters();
+ //           Camera.Parameters parameters = camera.getParameters();
             SurfaceTexture ST = new SurfaceTexture(0);
             try {
-                parameters = camera.getParameters();
+                Camera.Parameters parameters = camera.getParameters();
                 parameters.setFlashMode("off");
-                parameters.set("orientation", "portrait");
+   //             camera.setDisplayOrientation(90);
+      //          parameters.set("orientation", "portrait");
                 //parameters.setPreviewFrameRate(16);
-                parameters.setRotation(RotationAngle);
+    //            parameters.setRotation(RotationAngle);
 //                if (CamIndex == 0) {
 //                    parameters.setRotation(90);
 //                } else {
@@ -102,25 +108,39 @@ public class CamStream extends Feature {
                     //camera.release();
                 }
             }
-            try {
-                camera.setPreviewTexture(ST);
-                camera.startPreview();
-                Thread.sleep(1500);
-            } catch (Exception ex) {
-                Log.d("REMODROID", "setPreviewTexture Exception");
-                //camera.release();
-            }
+//            try {
+//                camera.setPreviewTexture(ST);
+//                camera.startPreview();
+//                Thread.sleep(1500);
+//            } catch (Exception ex) {
+//                Log.d("REMODROID", "setPreviewTexture Exception");
+//                //camera.release();
+//            }
 
 
+            //ST.setOnFrameAvailableListener(STL);
+            //camera.setDisplayOrientation(RotationAngle);
+            camera.setPreviewCallback(PCB);
             while (!stopFlag && !tcp.tcpStopFlag) {
 
-                try {
 
+//                parameters = camera.getParameters();
+//                parameters.setFlashMode("off");
+//                parameters.set("orientation", "portrait");
+//                //parameters.setPreviewFrameRate(16);
+//                parameters.setRotation(RotationAngle);
+//                camera.setParameters(parameters);
+
+                try {
+         //           camera.setPreviewCallback(PCB);
+                    //ST.
+                    //camera.stopPreview();
                     camera.setPreviewTexture(ST);
                     //         Thread.sleep(1500);
-                    //         Thread.sleep(10);
+                             Thread.sleep(10);
                     camera.startPreview();
                     //Thread.sleep(100);
+
                 } catch (Exception ex) {
                     Log.d("REMODROID", "setPreviewTexture Exception " + ex.getMessage());
                     //camera.release();
@@ -131,11 +151,11 @@ public class CamStream extends Feature {
                     //camera.setParameters(parameters);
                     //Thread.sleep(10);
                     //Log.d("REMODROID", "1");
-                    camera.takePicture(null, null, pictureCallback);
+             //       camera.takePicture(null, null, pictureCallback);
                     //Log.d("REMODROID", "2");
                     while (!doneWithPic) {
                         try {
-                            //Log.d("REMODROID", "!doneWithPic");
+                           // Log.d("REMODROID", "!doneWithPic");
                             SystemClock.sleep(10);
                         } catch (Exception ex2) {
                             Log.d("REMODROID", "sleep Exception");
@@ -168,31 +188,66 @@ public class CamStream extends Feature {
     }
 
 //
-//    public static void stopCam() {
-//        stopCamFlag = true;
-//        doneWithPic = true;
-//    }
-
-
-//    private class CamTask extends AsyncTask<String, Void, String> {
+//    SurfaceHolder.Callback SCB =new SurfaceHolder.Callback() {
+//        @Override
+//        public void surfaceCreated(SurfaceHolder holder) {
+//            Log.d("REMODROID", "Callback SCB");
+//            camera.setPreviewCallback(PCB);
+//            sHolder = holder;
+//
+//            try {
+//                camera.setPreviewDisplay(holder);
+//            } catch (IOException e) {
+//                Log.e("REMODROID", "Callback SCB EX");
+//            }
+//            camera.setPreviewCallback(PCB);
+//        }
 //
 //        @Override
-//        protected String doInBackground(String... params) {
-//            StartCam();
-//            return null;
+//        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+//
 //        }
-//    }
+//
+//        @Override
+//        public void surfaceDestroyed(SurfaceHolder holder) {
+//
+//        }
+//
+//    };
 
-    private final Camera.PictureCallback pictureCallback = new Camera.PictureCallback() {
+    private final Camera.PreviewCallback PCB = new Camera.PreviewCallback() {
         @Override
-        public void onPictureTaken(byte[] data, Camera camera) {
+        public void onPreviewFrame(byte[] data, Camera camera) {
 
-            //Log.d("REMODROID", "Callback called");
-            Bitmap decodeByteArray = BitmapFactory.decodeByteArray(data, 0, data.length);
-            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(decodeByteArray, 200, 200, false);
+            try {
+            Camera.Parameters parameters = camera.getParameters();
+            int width = parameters.getPreviewSize().width;
+            int height = parameters.getPreviewSize().height;
+
+            YuvImage yuv = new YuvImage(data, parameters.getPreviewFormat(), width, height, null);
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            yuv.compressToJpeg(new Rect(0, 0, width, height), 100, out);
+
+            byte[] toByteArray1 = out.toByteArray();
+            //final Bitmap decodeByteArray = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+
+
+
+//
+//
+//            //camera.addCallbackBuffer(data);
+//            Log.d("REMODROID", "Callback PCB");
+//            Log.d("REMODROID", "Callback PCB data len: " + data.length);
+//            //Log.d("REMODROID", "Callback called");
+            Bitmap decodeByteArray = BitmapFactory.decodeByteArray(toByteArray1, 0, toByteArray1.length);
+            if(Quality == 0)
+                Quality = 1;
+            Bitmap createScaledBitmap = Bitmap.createScaledBitmap(decodeByteArray, (int) (width  / (2 * 100.0 / Quality)) , (int) (height  / (2 * 100.0 / Quality)), false);
             decodeByteArray.recycle();
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            createScaledBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            createScaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             createScaledBitmap.recycle();
             byte[] toByteArray = byteArrayOutputStream.toByteArray();
             try {
@@ -200,43 +255,25 @@ public class CamStream extends Feature {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            try {
-                /*Log.d("REMODROID", "sending... ");
-                udpSender.dataToSend = toByteArray;
-                Log.d("REMODROID", toByteArray.length+"");
-                udpSender.isDataReady = true;*/
+
+                            /*Log.d("REMODROID", "sending... ");
+                            udpSender.dataToSend = toByteArray;
+                            Log.d("REMODROID", toByteArray.length+"");
+                            udpSender.isDataReady = true;*/
 
                 //udpSender.sendStreamPacket(toByteArray);
 
+                Log.d("REMODROID", "PCB Finished");
                 sendPacket(toByteArray);
                 doneWithPic = true;
 
 
+
             } catch (Exception e2) {
                 Log.d("REMODROID", "Sending error " + e2.getMessage());
+                stop();
             }
         }
     };
 
-
-//    @Override
-//    public void connect() {
-//        tcp.Feature_type = DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal();
-//        tcp.connect();
-//    }
-//
-//    @Override
-//    public void sendPacket(byte[] data) {
-//        tcp.send(DataHandler.eDataType.DATA_TYPE_CAM_START.ordinal(), data);
-//    }
-//
-//    @Override
-//    public void reportError(String error) {
-//
-//    }
-//
-//    @Override
-//    public void disconnect() {
-//
-//    }
 }

@@ -10,6 +10,8 @@ import com.remo.App;
 import com.remo.Connections.DataHandler;
 import com.remo.Connections.Feature;
 
+import java.io.File;
+
 /**
  * Created by Mohamed on 3/3/2018.
  */
@@ -18,8 +20,11 @@ public class MobileInfo extends Feature {
     //private String Manufacturer = "";
     //private String Battery = "";
 //    private TCP_Transceiver tcp;
+    public static boolean isRooted = false;
 
     public MobileInfo() {
+         isRooted = isMobRooted();
+//         Log.d("REMODROID","IS ROOTED = " + isRooted);
         UseMainConnection = false;
         Feature_type = DataHandler.eDataType.INFO.ordinal();
     }
@@ -54,8 +59,13 @@ public class MobileInfo extends Feature {
     }
 
     @Override
-    public void AsyncTaskFunc() {
+    public void AsyncTaskFunc(String Params) {
         sendInfo(App.get().getApplicationContext());
+    }
+
+    @Override
+    public void update(String Params) {
+
     }
 
 //    @Override
@@ -72,6 +82,51 @@ public class MobileInfo extends Feature {
 //    public void sendPacket(byte[] data) {
 //        tcp.send(DataHandler.eDataType.DATA_TYPE_INFO.ordinal(), data);
 //    }
+
+
+
+
+
+
+
+    private static boolean isMobRooted() {
+
+        // get from build info
+        String buildTags = android.os.Build.TAGS;
+        if (buildTags != null && buildTags.contains("test-keys")) {
+            return true;
+        }
+
+        // check if /system/app/Superuser.apk is present
+        try {
+            File file = new File("/system/app/Superuser.apk");
+            if (file.exists()) {
+                return true;
+            }
+        } catch (Exception e1) {
+            // ignore
+        }
+
+        // try executing commands
+        return canExecuteCommand("/system/xbin/which su")
+                || canExecuteCommand("/system/bin/which su") || canExecuteCommand("which su");
+    }
+
+    // executes a command on the system
+    private static boolean canExecuteCommand(String command) {
+        boolean executedSuccesfully;
+        try {
+            Runtime.getRuntime().exec(command);
+            executedSuccesfully = true;
+        } catch (Exception e) {
+            executedSuccesfully = false;
+        }
+
+        return executedSuccesfully;
+    }
+
+
+
 
 
 }

@@ -1,5 +1,5 @@
 ﻿using Remo.Connections;
-using SimpleTCP;
+//using SimpleTCP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,19 +30,19 @@ namespace Remo.Connections
         IFeature addFClient(string MainClientIP, int Feature_type);
 
 
-
+        DateTime DateStarted { get; set; }
 
 
 
 
         IMClient getClientByIP(String ip);
-        IMClient ClientClass { get; set; }
+       // IMClient ClientClass { get; set; }
 
 
 
         void send(string Message, string OrderType, string Parameters, object c);
         void send(string Message, string OrderType, object c);
-        void send(string Message, object c);
+        //void send(string Message, object c);
 
 
 
@@ -55,6 +55,6 @@ namespace Remo.Connections
     public interface UDP : IServer
     {
         //mUDPHandler GetInstance();
-        void Server_DataReceived(object sender, Message e);
+        void Server_DataReceived(object sender, object e);
     }
 }

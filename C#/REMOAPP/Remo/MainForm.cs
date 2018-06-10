@@ -1,6 +1,6 @@
 ﻿using Remo.Connections;
 using Remo.Features;
-using SimpleTCP;
+//using SimpleTCP;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,7 +44,7 @@ namespace Remo
             //Start handler
             mTCPH = mTCPHandler.GetInstance();
 
-            mTCPH.ClientClass = new Client();
+      //      mTCPH.ClientClass = new Client();
             //udpr = UDPReceiver.GetInstance(4447);
             //Thread.Sleep(5000);
 
@@ -54,7 +54,14 @@ namespace Remo
             {
                 while (!Stop)
                 {
-                    RefreshClientsList();
+
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        RefreshClientsList();
+                    });
+
+
+                    
                     Thread.Sleep(5000);
                 }
             });

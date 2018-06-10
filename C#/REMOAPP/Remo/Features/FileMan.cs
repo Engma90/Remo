@@ -75,5 +75,11 @@ namespace Remo.Features
                 ((int)DataHandler.eOrderType.START).ToString(), "Internal",
                     mc.tcpClient);
         }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var dataIndexNo = dataGridView1.Rows[e.RowIndex].Index.ToString();
+            string fileName = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+        }
     }
 }

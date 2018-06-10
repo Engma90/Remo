@@ -33,7 +33,7 @@ namespace Remo.Features
         {
             this.Invoke((MethodInvoker)delegate
             {
-                Console.WriteLine(Encoding.UTF8.GetString(data));
+               // Console.WriteLine(Encoding.UTF8.GetString(data));
 
                 string[] Name_Num = Encoding.UTF8.GetString(data).Split('\\');
                // string[] files = Encoding.UTF8.GetString(data).Split('\\')[1].Split('/');

@@ -3,9 +3,9 @@
 ## Progress:<br />
 <pre>
 *Core:*<br />
-*Multithreading clients Accept	100%<br />
-*Connections Handling			80%<br />
-*Data Distribute				80%<br />
+*Multithreading clients Accept	100%
+*Connections Handling	80%
+*Data Distribute	80%
 </pre>
 *Features:*<br />
 

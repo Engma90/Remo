@@ -4,9 +4,9 @@
 
 *Core:*<br />
 <pre>
-*Multithreading clients Accept	100%
-*Connections Handling		80%
-*Data Distribute		80%
+* Multithreading clients Accept	100%
+* Connections Handling		80%
+* Data Distribute		80%
 </pre>
 *Features:*<br />
 
@@ -26,4 +26,4 @@
 
 
 
-##ScreenShots (Soon)<br />
+## ScreenShots (Soon)<br />

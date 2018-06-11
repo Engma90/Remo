@@ -12,13 +12,13 @@
 
 | Feature  				| Progress 	|	Note					|
 | ----------------------|-----------|----------------------------
-| Camera  				| 90 %  	|							|
+| Camera  				| 95 %  	|							|
 | Mic		  			| 90 %  	|							|
 | Calllog  				| 95 %  	|							|
 | Contacts		  		| 95 %  	|							|
 | SMS  					| 95 %  	|							|
 | File Manager		  	| 50 %  	|							|
-| GPS Location  		| 40 %  	|							|
+| GPS Location  		| 80 %  	|							|
 | Call Recorder		  	| 0  %  	|							|
 |Open Network By SMS	|✔ 			|Root Privilege Required 	|
 |Erase All Data			|✘			|							|

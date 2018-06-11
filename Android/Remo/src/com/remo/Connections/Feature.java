@@ -19,7 +19,7 @@ public abstract class Feature {
     protected int Feature_type;
     protected TCP_Transceiver tcp;
 
-    void start(int Feature_type){//int Feature_type
+    void start(int Feature_type,String Params){//int Feature_type
         this.Feature_type = Feature_type;
         tcp = new TCP_Transceiver(UseMainConnection);
         connect();
@@ -29,7 +29,7 @@ public abstract class Feature {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                AsyncTaskFunc("");
+                AsyncTaskFunc(Params);
                // tcp.disconnect();
             }
         });

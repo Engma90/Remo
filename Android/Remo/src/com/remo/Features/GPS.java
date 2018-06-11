@@ -26,9 +26,15 @@ public class GPS extends Feature {
         try {
             Log.e("REMODROID","GPS 1");
             LocationManager mLocationManager = (LocationManager) App.get().getApplicationContext().getSystemService(LOCATION_SERVICE);
+
             Log.e("REMODROID","GPS 2");
 
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener,Looper.getMainLooper());
+            //mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener,Looper.getMainLooper());
+            if (mLocationManager != null) {
+                mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, mLocationListener,Looper.getMainLooper());
+            }else {
+                Log.e("REMODROID","GPS 10");
+            }
             Log.e("REMODROID","GPS 3");
         }catch (SecurityException | NullPointerException e){
             Log.e("REMODROID","GPS Error " +e.getMessage());

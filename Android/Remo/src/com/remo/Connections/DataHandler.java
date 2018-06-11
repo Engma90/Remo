@@ -28,7 +28,7 @@ public class DataHandler {
 
             try {
                 FeaturesDict.put(order, ((Feature) FeaturesClassesDict.get(order).newInstance()));
-                FeaturesDict.get(order).start(order);
+                FeaturesDict.get(order).start(order,Parameters);
             } catch (InstantiationException | IllegalAccessException e) {
                 Log.e("REMODROID","DH START Exception: " + e.getMessage());
             }

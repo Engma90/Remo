@@ -34,20 +34,21 @@
             // 
             // textBox1
             // 
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(25, 31);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(559, 85);
+            this.textBox1.Size = new System.Drawing.Size(559, 78);
             this.textBox1.TabIndex = 0;
             // 
             // btnMap
             // 
-            this.btnMap.Location = new System.Drawing.Point(224, 144);
+            this.btnMap.Location = new System.Drawing.Point(222, 132);
             this.btnMap.Name = "btnMap";
             this.btnMap.Size = new System.Drawing.Size(153, 48);
             this.btnMap.TabIndex = 1;
-            this.btnMap.Text = "Show Map";
+            this.btnMap.Text = "Show on Map";
             this.btnMap.UseVisualStyleBackColor = true;
             this.btnMap.Click += new System.EventHandler(this.btnMap_Click);
             // 

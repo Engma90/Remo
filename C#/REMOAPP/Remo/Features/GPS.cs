@@ -16,6 +16,10 @@ namespace Remo.Features
 {
     public partial class GPS : Form,IFeature
     {
+
+        private string url = String.Empty, Latitude = String.Empty, Longitude = String.Empty;
+        private readonly string Key = "AIzaSyAs_UvGLCbaWSEWPpvDHCUGPxlllRdUrSw";
+
         public GPS()
         {
             InitializeComponent();
@@ -33,37 +37,38 @@ namespace Remo.Features
 
         public void updateData(byte[] data)
         {
-            string Latitude = Encoding.UTF8.GetString(data).Split('/')[0];
-            string Longitude = Encoding.UTF8.GetString(data).Split('/')[1];
-            //textBox1.Text = Encoding.UTF8.GetString(data);
-            string url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + Latitude + "," + Longitude;//+ ",15z"
-            Console.WriteLine(url);
-
-            using (WebClient wc = new WebClient())
+            try
             {
-                var json = wc.DownloadString(url);
-               // Console.WriteLine(json);
-                dynamic data1 = JObject.Parse(json);
-                Console.WriteLine(data1.results);
-                Console.WriteLine(data1.formatted_address);
-                Console.WriteLine(data1.address_components);
+                Latitude = Encoding.UTF8.GetString(data).Split('/')[0];
+                Longitude = Encoding.UTF8.GetString(data).Split('/')[1];
+                string keyPart = "&key=" + Key;
+                url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + Latitude + "," + Longitude;
+                using (WebClient wc = new WebClient())
+                {
+                    var json = wc.DownloadString(url + keyPart);
+                    JObject data1 = JObject.Parse(json);
+                    if (data1["status"].ToString().Equals("OK"))
+                    {
+                        Console.WriteLine("Getting Result");
+                        String Address = data1["results"][0]["formatted_address"].ToString();
+
+                        textBox1.Text = Address;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error");
+                    }
+                }
 
 
 
-                textBox1.Text = data1.results;
-                textBox1.ScrollBars = ScrollBars.Both;
-                textBox1.Anchor = AnchorStyles.Top;
-                textBox1.Anchor = AnchorStyles.Right;
-                textBox1.Anchor = AnchorStyles.Left;
-                textBox1.Anchor = AnchorStyles.Bottom;
+
+
+
+            }catch(Exception e)
+            {
+                Console.WriteLine("UPDATE DATA EX: "+ e.Message);
             }
-
-
-
-
-
-
-
 
 
             // 
@@ -78,7 +83,7 @@ namespace Remo.Features
 
         private void btnMap_Click(object sender, EventArgs e)
         {
-
+            System.Diagnostics.Process.Start("https://www.google.com/maps/@"+Latitude+","+Longitude + ",15z");
         }
     }
 }

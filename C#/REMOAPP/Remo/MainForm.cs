@@ -104,7 +104,7 @@ namespace Remo
             if (dgv1.Rows.Count > 0 && dgv1.SelectedRows[0] != null)
                 saveRow = dgv1.SelectedRows[0].Index;
             dgv1.Rows.Clear();
-                foreach (IMClient c in mTCPH.MainClientsDict.Values.ToList())
+                foreach (IMConnection c in mTCPH.MainConnectionsDict.Values.ToList())
                 {
                 if(!c.FeatureClients.ContainsKey((int)DataHandler.eDataType.INFO))
                     mTCPH.addFClient((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(), (int)DataHandler.eDataType.INFO).Show();
@@ -117,7 +117,7 @@ namespace Remo
 
         }
 
-        private IMClient getSelectedClient()
+        private IMConnection getSelectedClient()
         {
             Console.WriteLine(dgv1.SelectedRows[0].Cells[0].Value.ToString());
             return mTCPH.getClientByIP(dgv1.SelectedRows[0].Cells[0].Value.ToString());

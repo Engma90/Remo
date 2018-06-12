@@ -18,17 +18,17 @@ namespace Remo.Connections
         private volatile Boolean _isRunning;
         int port = 4447;
 
-        public Dictionary<string, IMClient> MainClientsDict { get; }
-        public Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
+        public Dictionary<string, IMConnection> MainConnectionsDict { get; }
+        public Dictionary<string, IMConnection> FeatureConnectionsMapDict { get; }//string = IFConnection ip
         public int Port { get; set; }
         public int CheckIsConnectedInterval_ms { get; set; } = 5000;
-        //    public IMClient ClientClass { get; set; }
+        //    public IMConnection ClientClass { get; set; }
         public DateTime DateStarted { get; set; }
         private TCPServer2()
         {
             DateStarted = DateTime.Now;
-            MainClientsDict = new Dictionary<string, IMClient>();
-            FeatureClientsMapDict = new Dictionary<string, IMClient>();
+            MainConnectionsDict = new Dictionary<string, IMConnection>();
+            FeatureConnectionsMapDict = new Dictionary<string, IMConnection>();
             _server = new TcpListener(IPAddress.Any, port);
             _server.Start();
 
@@ -116,7 +116,7 @@ namespace Remo.Connections
 
             Boolean bClientConnected = true;
            // String sData = null;
-            IMClient c = null;
+            IMConnection c = null;
             while (bClientConnected && _isRunning)
             {
         //        Console.WriteLine("Loooop");
@@ -163,27 +163,27 @@ namespace Remo.Connections
 
 
 
-        public void clientDisconnected(IMClient mc,TcpClient c)
+        public void clientDisconnected(IMConnection mc,TcpClient c)
         {
             try
             {
-                if (FeatureClientsMapDict.ContainsKey(c.Client.RemoteEndPoint.ToString()))
+                if (FeatureConnectionsMapDict.ContainsKey(c.Client.RemoteEndPoint.ToString()))
                 {
-                    IFClient fc = (IFClient)mc;
+                    IFConnection fc = (IFConnection)mc;
                     fc.F = null;
                     fc.tcpClient.Client.Disconnect(false);
-                    FeatureClientsMapDict.Remove(c.Client.RemoteEndPoint.ToString());
+                    FeatureConnectionsMapDict.Remove(c.Client.RemoteEndPoint.ToString());
                 }
-                else if (MainClientsDict.ContainsKey((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
+                else if (MainConnectionsDict.ContainsKey((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
                 {
-                    MainClientsDict.Remove((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
-                    //Console.WriteLine(mc.LastChecked);
+                    MainConnectionsDict.Remove((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
+                    //Console.WriteLine(MainConnection.LastChecked);
                     //Console.WriteLine(DateTime.Now);
-                    foreach (IFClient fc in mc.FeatureClients.Values.ToList())
+                    foreach (IFConnection fc in mc.FeatureClients.Values.ToList())
                     {
                         fc.F = null;
                         fc.tcpClient.Client.Disconnect(false);
-                        FeatureClientsMapDict.Remove(fc.tcpClient.Client.RemoteEndPoint.ToString());
+                        FeatureConnectionsMapDict.Remove(fc.tcpClient.Client.RemoteEndPoint.ToString());
                     }
                     mc.tcpClient.Client.Disconnect(false);
                 }
@@ -193,15 +193,15 @@ namespace Remo.Connections
 
 
 
-        //public IMClient CheckClientExistance(TcpClient e ,int DataType )
+        //public IMConnection CheckClientExistance(TcpClient e ,int DataType )
         //{
-        //    IMClient c;
+        //    IMConnection c;
         //    try
         //    {
         //        if(DataType == (int)DataHandler.eDataType.INIT_CONNECTION)
         //        {
         //            Console.WriteLine("NotBoundedBefore");
-        //            c = (IMClient)Activator.CreateInstance(ClientClass.GetType());
+        //            c = (IMConnection)Activator.CreateInstance(ClientClass.GetType());
         //            c.tcpClient = e;
         //        }
                 
@@ -238,17 +238,17 @@ namespace Remo.Connections
 
 
 
-        public IMClient CheckClientExistance2(TcpClient e, int DataType)
+        public IMConnection CheckClientExistance2(TcpClient e, int DataType)
         {
-            IMClient c;
+            IMConnection c;
             try
             {
 
 
-                if (FeatureClientsMapDict.ContainsKey(e.Client.RemoteEndPoint.ToString()))
+                if (FeatureConnectionsMapDict.ContainsKey(e.Client.RemoteEndPoint.ToString()))
                 {
                     Console.WriteLine("Found in FMap Dict");
-                    c = FeatureClientsMapDict[e.Client.RemoteEndPoint.ToString()];
+                    c = FeatureConnectionsMapDict[e.Client.RemoteEndPoint.ToString()];
                     c.tcpClient = e;
                 }
 
@@ -259,20 +259,20 @@ namespace Remo.Connections
                     getClientByIP((e.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients.ContainsKey(DataType))
                 {
   //                  Console.WriteLine("Found initialized Before");
-                    c = (IMClient)getClientByIP((e.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[DataType];
+                    c = (IMConnection)getClientByIP((e.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[DataType];
                     c.tcpClient = e;
 
                 }
 
-                else if (MainClientsDict.ContainsKey((e.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
+                else if (MainConnectionsDict.ContainsKey((e.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
                 {
       //              Console.WriteLine("Found in Main Dict");
-                    c = MainClientsDict[(e.Client.RemoteEndPoint as IPEndPoint).Address.ToString()];
+                    c = MainConnectionsDict[(e.Client.RemoteEndPoint as IPEndPoint).Address.ToString()];
                 }
                 else
                 {
                     //                Console.WriteLine("NotBoundedBefore");
-                    c = new Client();//(IMClient)Activator.CreateInstance(ClientClass.GetType());
+                    c = new Client();//(IMConnection)Activator.CreateInstance(ClientClass.GetType());
                     c.tcpClient = e;
                 }
 
@@ -329,17 +329,17 @@ namespace Remo.Connections
 
 
 
-        public IMClient getClientByIP(String ip)
+        public IMConnection getClientByIP(String ip)
         {
-            IMClient ret;
-            MainClientsDict.TryGetValue(ip, out ret);
+            IMConnection ret;
+            MainConnectionsDict.TryGetValue(ip, out ret);
             return ret;
 
         }
 
         public IFeature addFClient(string MainClientIP, int Feature_type)
         {
-            IFClient fc = new Client();//(IMClient)Activator.CreateInstance(ClientClass.GetType());                                                                // {
+            IFConnection fc = new Client();//(IMConnection)Activator.CreateInstance(ClientClass.GetType());                                                                // {
    //         fc.MainConnection = getClientByIP(MainClientIP);               ////
             try
             {
@@ -358,7 +358,7 @@ namespace Remo.Connections
                 if (TempFeature.DATA_TYPE == Feature_type)
                 {
                     fc.F = TempFeature;
-                    fc.F.mc = getClientByIP(MainClientIP);               
+                    fc.F.MainConnection = getClientByIP(MainClientIP);               
                     Console.WriteLine(t.Name);
                     return TempFeature;
                 }

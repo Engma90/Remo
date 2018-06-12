@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,16 +21,16 @@ namespace Remo.Features
             CheckForIllegalCrossThreadCalls = false;
         }
 
-        public IMClient mc { get; set; }
+        public IMConnection MainConnection { get; set; }
 
         public int DATA_TYPE { get; set; }
 
-        public void onError(string error)
+        public void onErrorReceived(string error)
         {
             throw new NotImplementedException();
         }
 
-        public void updateData(byte[] data)
+        public void onDataReceived(byte[] data)
         {
             this.Invoke((MethodInvoker)delegate
             {
@@ -42,8 +43,8 @@ namespace Remo.Features
                 {
                     if (!String.Empty.Equals(s))
                     {
-                        string[] array = s.Split('/');
-                        dataGridView1.Rows.Add(array);
+                        
+                        dataGridView1.Rows.Add(s.Split('/'));
                     }
                 }
                 dataGridView1.ScrollBars = ScrollBars.Both; // runs on UI thread
@@ -56,13 +57,29 @@ namespace Remo.Features
             //Console.WriteLine("FileMan");
             mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.CALL_LOG).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
-                    mc.tcpClient);
+                    MainConnection.tcpClient);
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
            
            
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.AddExtension = true;
+            sfd.DefaultExt = "csv";
+            sfd.Filter = "csv|*.csv";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                dataGridView1.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
+                dataGridView1.SelectAll();
+                DataObject dataObject = dataGridView1.GetClipboardContent();
+                File.WriteAllText(sfd.FileName, dataObject.GetText(TextDataFormat.CommaSeparatedValue), Encoding.UTF8);
+            }
         }
     }
 }

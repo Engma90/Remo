@@ -28,14 +28,14 @@ namespace Remo.Features
 
         public int DATA_TYPE { get; set; }
 
-        public IMClient mc { get; set; }
+        public IMConnection MainConnection { get; set; }
 
-        public void onError(string error)
+        public void onErrorReceived(string error)
         {
             throw new NotImplementedException();
         }
 
-        public void updateData(byte[] data)
+        public void onDataReceived(byte[] data)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Remo.Features
         {
             mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.GPS).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
-                    mc.tcpClient);
+                    MainConnection.tcpClient);
         }
 
         private void btnMap_Click(object sender, EventArgs e)

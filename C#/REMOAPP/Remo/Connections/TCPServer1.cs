@@ -16,16 +16,16 @@
 //    public class TCPServer1 : SimpleTcpServer, TCP
 //    {
 
-//        //public Dictionary<TcpClient,IMClient> MainClientsDict { get; }
-//        public Dictionary<string, IMClient> MainClientsDict { get; }
-//        public Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
+//        //public Dictionary<TcpClient,IMConnection> MainConnectionsDict { get; }
+//        public Dictionary<string, IMConnection> MainConnectionsDict { get; }
+//        public Dictionary<string, IMConnection> FeatureConnectionsMapDict { get; }//string = IFConnection ip
 //        public int CheckIsConnectedInterval_ms { get; set; } = 5000;
 //        public int Port { get; set; }
 //        private Thread AckClientsThread;
 //        private static volatile TCPServer1 instance = null;
 //        private static object syncRoot = new Object();
 //        bool StopFlag = false;
-//        public IMClient ClientClass { get; set; }
+//        public IMConnection ClientClass { get; set; }
 
 //        private TCPServer1()
 //        {
@@ -33,8 +33,8 @@
 //            ClientConnected += Server_ClientConnected;
 //            ClientDisconnected += Server_ClientDisconnected;
 //            DataReceived += Server_DataReceived;
-//            MainClientsDict = new Dictionary<string, IMClient>();
-//            FeatureClientsMapDict = new Dictionary<string, IMClient>();
+//            MainConnectionsDict = new Dictionary<string, IMConnection>();
+//            FeatureConnectionsMapDict = new Dictionary<string, IMConnection>();
 //            StartServer(this.Port);
 //            Console.WriteLine("TCP Server Started!");
 //        }
@@ -49,24 +49,24 @@
 //                    try
 //                    {
 //                        //Broadcast(Encoding.UTF8.GetBytes("Info\n"));
-//                        foreach (IMClient mc in MainClientsDict.Values.ToList())
+//                        foreach (IMConnection MainConnection in MainConnectionsDict.Values.ToList())
 //                        {
-//                            //if (mc.isMainConn)
+//                            //if (MainConnection.isMainConn)
 //                            //{
-//                            send(((int)DataHandler.eDataType.INFO).ToString(), mc.tcpClient);
+//                            send(((int)DataHandler.eDataType.INFO).ToString(), MainConnection.tcpClient);
 //                            //Thread.Sleep(10);
-//                            if ((DateTime.Now - mc.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms * 2))
+//                            if ((DateTime.Now - MainConnection.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms * 2))
 //                            {
-//                                MainClientsDict.Remove((mc.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
-//                                //Console.WriteLine(mc.LastChecked);
+//                                MainConnectionsDict.Remove((MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
+//                                //Console.WriteLine(MainConnection.LastChecked);
 //                                //Console.WriteLine(DateTime.Now);
-//                                foreach (IFClient fc in mc.FeatureClients.Values.ToList())
+//                                foreach (IFConnection fc in MainConnection.FeatureClients.Values.ToList())
 //                                {
 //                                    fc.F = null;
 //                                    fc.tcpClient.Client.Disconnect(false);
-//                                    FeatureClientsMapDict.Remove(fc.tcpClient.Client.RemoteEndPoint.ToString());
+//                                    FeatureConnectionsMapDict.Remove(fc.tcpClient.Client.RemoteEndPoint.ToString());
 //                                }
-//                                mc.tcpClient.Client.Disconnect(false);
+//                                MainConnection.tcpClient.Client.Disconnect(false);
 //                            }
 //                            // }
 //                        }
@@ -168,11 +168,11 @@
 
 
 //            //Console.WriteLine("MainClient Connected: " + e.Client.RemoteEndPoint);
-//            //IMClient mc = (IMClient)Activator.CreateInstance(ClientClass.GetType());///////////////////////
-//            //mc.tcpClient = e;
-//            //mc.isMainConn = false;
-//            //mc.LastChecked = DateTime.Now;
-//            //Clients.Add(mc);
+//            //IMConnection MainConnection = (IMConnection)Activator.CreateInstance(ClientClass.GetType());///////////////////////
+//            //MainConnection.tcpClient = e;
+//            //MainConnection.isMainConn = false;
+//            //MainConnection.LastChecked = DateTime.Now;
+//            //Clients.Add(MainConnection);
 
 
 //        }
@@ -214,11 +214,11 @@
 //                try
 //                {
 
-//                    IMClient c;
-//                    if (FeatureClientsMapDict.ContainsKey(e.TcpClient.Client.RemoteEndPoint.ToString()))
+//                    IMConnection c;
+//                    if (FeatureConnectionsMapDict.ContainsKey(e.TcpClient.Client.RemoteEndPoint.ToString()))
 //                    {
 //                        Console.WriteLine("Found in FMap Dict");
-//                        c = FeatureClientsMapDict[e.TcpClient.Client.RemoteEndPoint.ToString()];
+//                        c = FeatureConnectionsMapDict[e.TcpClient.Client.RemoteEndPoint.ToString()];
 //                        c.tcpClient = e.TcpClient;
 //                    }
 
@@ -229,20 +229,20 @@
 //                        getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients.ContainsKey(DataType))
 //                    {
 //                        Console.WriteLine("Found initialized Before");
-//                        c = (IMClient)getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[DataType];
+//                        c = (IMConnection)getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[DataType];
 //                        c.tcpClient = e.TcpClient;
 
 //                    }
 
-//                    else if (MainClientsDict.ContainsKey((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
+//                    else if (MainConnectionsDict.ContainsKey((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
 //                    {
 //                        Console.WriteLine("Found in Main Dict");
-//                        c = MainClientsDict[(e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()];
+//                        c = MainConnectionsDict[(e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()];
 //                    }
 //                    else
 //                    {
 //                        Console.WriteLine("NotBoundedBefore");
-//                        c = (IMClient)Activator.CreateInstance(ClientClass.GetType());
+//                        c = (IMConnection)Activator.CreateInstance(ClientClass.GetType());
 //                        c.tcpClient = e.TcpClient;
 //                    }
 //                    Console.WriteLine("Distributing to Client : " + c.tcpClient.Client.RemoteEndPoint.ToString());
@@ -276,12 +276,12 @@
 //        private void Server_ClientDisconnected(object sender, TcpClient e)
 //        {
 //            Console.WriteLine("MainClient Disconnected: " + e.Client.RemoteEndPoint);
-//            MainClientsDict.Remove(e.Client.RemoteEndPoint.ToString());
-//            //foreach (IMainClient mc in MainClientsDict.Values.ToList())
+//            MainConnectionsDict.Remove(e.Client.RemoteEndPoint.ToString());
+//            //foreach (IMainClient MainConnection in MainConnectionsDict.Values.ToList())
 //            //{
-//            //    if(mc.tcpClient == e)
+//            //    if(MainConnection.tcpClient == e)
 //            //    {
-//            //        MainClients.Remove(mc);
+//            //        MainClients.Remove(MainConnection);
 
 //            //    }
 //            //}
@@ -289,17 +289,17 @@
 //        }
 
 
-//        public IMClient getClientByIP(String ip)
+//        public IMConnection getClientByIP(String ip)
 //        {
-//            IMClient ret;
-//            MainClientsDict.TryGetValue(ip, out ret);
+//            IMConnection ret;
+//            MainConnectionsDict.TryGetValue(ip, out ret);
 //            return ret;
 
 //        }
 
 //        public IFeature addFClient(string MainClientIP, int Feature_type)
 //        {
-//            IFClient fc = (IFClient)(IMClient)Activator.CreateInstance(ClientClass.GetType());                                                                // {
+//            IFConnection fc = (IFConnection)(IMConnection)Activator.CreateInstance(ClientClass.GetType());                                                                // {
 //    //        fc.MainConnection = getClientByIP(MainClientIP);//
 //            getClientByIP(MainClientIP).FeatureClients.Add(Feature_type, fc);
 //            var types = Assembly
@@ -314,7 +314,7 @@
 //                if (TempFeature.DATA_TYPE == Feature_type)
 //                {
 //                    fc.F = TempFeature;
-//          //          fc.F.mc = fc.MainConnection;          //
+//          //          fc.F.MainConnection = fc.MainConnection;          //
 //                    Console.WriteLine(t.Name);
 //                    return TempFeature;
 //                }

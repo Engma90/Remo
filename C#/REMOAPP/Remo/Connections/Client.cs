@@ -11,16 +11,16 @@ using System.Net;
 namespace Remo.Connections
 {
 
-    class Client : IClient,IMClient,IFClient
+    class Client : IConnection,IMConnection,IFConnection
     {
-        public IMClient MainConnection { get; set; }
-        public Dictionary<int, IFClient> FeatureClients { get; set; }
+        public IMConnection MainConnection { get; set; }
+        public Dictionary<int, IFConnection> FeatureClients { get; set; }
         public IFeature F { get; set; }
         public DateTime LastChecked { get; set; }
         public TcpClient tcpClient { get; set; }
         public Client()
         {
-            FeatureClients = new Dictionary<int, IFClient>();
+            FeatureClients = new Dictionary<int, IFConnection>();
         }
     }
 }

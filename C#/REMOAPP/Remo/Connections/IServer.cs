@@ -24,8 +24,8 @@ namespace Remo.Connections
     }
     public interface TCP : IServer
     {
-        Dictionary<string, IMClient> MainClientsDict { get; }
-        Dictionary<string, IMClient> FeatureClientsMapDict { get; }//string = IFClient ip
+        Dictionary<string, IMConnection> MainConnectionsDict { get; }
+        Dictionary<string, IMConnection> FeatureConnectionsMapDict { get; }//string = IFConnection ip
         int CheckIsConnectedInterval_ms { get; set; }
         IFeature addFClient(string MainClientIP, int Feature_type);
 
@@ -35,8 +35,8 @@ namespace Remo.Connections
 
 
 
-        IMClient getClientByIP(String ip);
-       // IMClient ClientClass { get; set; }
+        IMConnection getClientByIP(String ip);
+       // IMConnection ClientClass { get; set; }
 
 
 

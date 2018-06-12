@@ -50,12 +50,18 @@ public class SMS extends Feature {
             String date =getDate(cur.getString(cur.getColumnIndexOrThrow("date")));
             String body = cur.getString(cur.getColumnIndexOrThrow("body"));
 
-
+            char doubleQ = '\"';
+            sb.append(doubleQ);
             sb.append(address);
+            sb.append(doubleQ);
             sb.append("/");
+            sb.append(doubleQ);
             sb.append(date);
+            sb.append(doubleQ);
             sb.append("/");
+            sb.append(doubleQ);
             sb.append(body);
+            sb.append(doubleQ);
             sb.append("\\");
 
         }

@@ -21,7 +21,7 @@ namespace Remo.Features
         //UDPReceiver dgt;
         //mTCPHandler mTCPH;
 
-        public IMClient mc{get;set;}
+        public IMConnection MainConnection{get;set;}
 
         public int DATA_TYPE { get; set; }
 
@@ -46,7 +46,7 @@ namespace Remo.Features
         {
             mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
-                    mc.tcpClient);
+                    MainConnection.tcpClient);
             waveOut = new WaveOut();
             bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(8000, 16, 1));
             bufferedWaveProvider.BufferDuration = TimeSpan.FromMinutes(10);
@@ -84,7 +84,7 @@ namespace Remo.Features
 
         }
 
-        public void updateData(byte[] data)
+        public void onDataReceived(byte[] data)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace Remo.Features
             }
         }
 
-        public void onError(String error)
+        public void onErrorReceived(String error)
         {
 
         }
@@ -119,7 +119,7 @@ namespace Remo.Features
         {
             mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
                     ((int)DataHandler.eOrderType.STOP).ToString(),
-                        mc.tcpClient);
+                        MainConnection.tcpClient);
             waveOut.Stop();
             waveOut.Dispose();
             bufferedWaveProvider = null;

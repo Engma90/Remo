@@ -20,16 +20,16 @@ namespace Remo.Features
             CheckForIllegalCrossThreadCalls = false;
         }
 
-        public IMClient mc { get; set; }
+        public IMConnection MainConnection { get; set; }
 
         public int DATA_TYPE { get; set; }
 
-        public void onError(string error)
+        public void onErrorReceived(string error)
         {
             throw new NotImplementedException();
         }
 
-        public void updateData(byte[] data)
+        public void onDataReceived(byte[] data)
         {
 
             this.Invoke((MethodInvoker)delegate
@@ -65,7 +65,7 @@ namespace Remo.Features
             //Console.WriteLine("FileMan");
             //mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
             //    ((int)DataHandler.eOrderType.STOP).ToString(),
-            //        mc.tcpClient);
+            //        MainConnection.tcpClient);
         }
 
         private void FileMan_Load(object sender, EventArgs e)
@@ -73,7 +73,7 @@ namespace Remo.Features
             Console.WriteLine("FileMan");
             mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(), "Internal",
-                    mc.tcpClient);
+                    MainConnection.tcpClient);
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

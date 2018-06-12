@@ -81,7 +81,7 @@ namespace Remo.Connections
 
                     // Start an asynchronous socket to listen for connections.
                     Console.WriteLine("Waiting for a connection...");
-                    //mTCPHandler.GetInstance().send("Start-Cam", mTCPHandler.GetInstance().MainClientsDict.Values.ToArray()[0].tcpClient);
+                    //mTCPHandler.GetInstance().send("Start-Cam", mTCPHandler.GetInstance().MainConnectionsDict.Values.ToArray()[0].tcpClient);
 
                     StateObject state = new StateObject();
                     state.workSocket = listener;

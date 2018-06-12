@@ -12,7 +12,7 @@ namespace Remo.Connections
 
     static class DataHandler
     {
-        public static void distribute(int dataType,byte[] data, IMClient c)
+        public static void distribute(int dataType,byte[] data, IMConnection c)
         {
             try {
                 c.LastChecked = DateTime.Now;
@@ -26,23 +26,23 @@ namespace Remo.Connections
                     {
                         //try
                         //{
-                            mTCPHandler.GetInstance().MainClientsDict.Remove((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
-                            mTCPHandler.GetInstance().MainClientsDict.Add((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(), c);
+                            mTCPHandler.GetInstance().MainConnectionsDict.Remove((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
+                            mTCPHandler.GetInstance().MainConnectionsDict.Add((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(), c);
                         //}
                         //catch(Exception ex)
                         //{
-                        //    Console.WriteLine("MainClientsDict Add Exception: "+ex.Message);
+                        //    Console.WriteLine("MainConnectionsDict Add Exception: "+ex.Message);
                         //    throw new Exception();
                         //}
                     }
                     else if (Connection_type == (int)eConnectionType.Feature)
                     {
-                        IFClient fc = mTCPHandler.GetInstance().getClientByIP((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[Feature_type];
+                        IFConnection fc = mTCPHandler.GetInstance().getClientByIP((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[Feature_type];
                         fc.tcpClient = c.tcpClient;
-                        mTCPHandler.GetInstance().FeatureClientsMapDict.Remove(
+                        mTCPHandler.GetInstance().FeatureConnectionsMapDict.Remove(
                             c.tcpClient.Client.RemoteEndPoint.ToString());
 
-                        mTCPHandler.GetInstance().FeatureClientsMapDict.Add(
+                        mTCPHandler.GetInstance().FeatureConnectionsMapDict.Add(
                             c.tcpClient.Client.RemoteEndPoint.ToString(),
                             mTCPHandler.GetInstance().getClientByIP(
                                 (c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()));
@@ -52,8 +52,8 @@ namespace Remo.Connections
                 else {
                     try
                     {
-                        IFClient fc = (IFClient)c;
-                        fc.F.updateData(data);
+                        IFConnection fc = (IFConnection)c;
+                        fc.F.onDataReceived(data);
                     }
                     catch (Exception ex)
                     {

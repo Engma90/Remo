@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace Remo.Connections
 {
-        public interface IClient
-        {
+    public interface IConnection
+    {
         TcpClient tcpClient { get; set; }
         DateTime LastChecked { get; set; }
 
     }
-        public interface IMClient:IClient{
-        Dictionary<int, IFClient> FeatureClients { get; set; }
+    public interface IMConnection : IConnection
+    {
+        Dictionary<int, IFConnection> FeatureClients { get; set; }
 
     }
 
-    public interface IFClient : IClient
+    public interface IFConnection : IConnection
     {
-        //IMClient MainConnection { get; set; }
         IFeature F { get; set; }
     }
 }

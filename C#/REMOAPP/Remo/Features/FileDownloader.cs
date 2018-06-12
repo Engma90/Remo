@@ -19,7 +19,7 @@ namespace Remo.Features
             DATA_TYPE = (int)DataHandler.eDataType.FM_DOWN;
         }
 
-        public IMClient mc
+        public IMConnection MainConnection
         {
             get;
 
@@ -28,12 +28,12 @@ namespace Remo.Features
 
         public int DATA_TYPE { get; set; }
 
-        public void updateData(byte[] data)
+        public void onDataReceived(byte[] data)
         {
             throw new NotImplementedException();
         }
 
-        public void onError(String error)
+        public void onErrorReceived(String error)
         {
 
         }

@@ -14,11 +14,11 @@
 | ----------------------|-----------|----------------------------
 | Camera  				| 95 %  	|							|
 | Mic		  			| 90 %  	|							|
-| Calllog  				| 95 %  	|							|
-| Contacts		  		| 95 %  	|							|
-| SMS  					| 95 %  	|							|
+| Calllog  				| 100 %  	|							|
+| Contacts		  		| 100 %  	|							|
+| SMS  					| 100 %  	|							|
 | File Manager		  	| 50 %  	|							|
-| GPS Location  		| 80 %  	|							|
+| GPS Location  		| 100 %  	|							|
 | Call Recorder		  	| 0  %  	|							|
 |Open Network By SMS	|✔ 			|Root Privilege Required 	|
 |Erase All Data			|✘			|							|

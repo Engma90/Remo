@@ -72,16 +72,26 @@ public class Call_Log extends Feature {
 
             dur = formatTime(Integer.parseInt(dur));
 
-
+            char doubleQ = '\"';
+            sb.append(doubleQ);
             sb.append(name);
+            sb.append(doubleQ);
             sb.append("/");
+            sb.append(doubleQ);
             sb.append(number);
+            sb.append(doubleQ);
             sb.append("/");
+            sb.append(doubleQ);
             sb.append(type);
+            sb.append(doubleQ);
             sb.append("/");
+            sb.append(doubleQ);
             sb.append(dur);
+            sb.append(doubleQ);
             sb.append("/");
+            sb.append(doubleQ);
             sb.append(time);
+            sb.append(doubleQ);
             sb.append("\\");
 
         }

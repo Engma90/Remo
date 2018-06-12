@@ -44,9 +44,14 @@ public class Contacts extends Feature {
             String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
+            char doubleQ = '\"';
+            sb.append(doubleQ);
             sb.append(name);
+            sb.append(doubleQ);
             sb.append("/");
+            sb.append(doubleQ);
             sb.append(phoneNumber);
+            sb.append(doubleQ);
             sb.append("\\");
 
         }

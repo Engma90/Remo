@@ -28,12 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.txtAddressBar = new System.Windows.Forms.TextBox();
             this.btnUP = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.downloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtAddressBar
@@ -55,6 +60,7 @@
             this.btnUP.TabIndex = 1;
             this.btnUP.Text = "UP";
             this.btnUP.UseVisualStyleBackColor = true;
+            this.btnUP.Click += new System.EventHandler(this.btnUP_Click);
             // 
             // dataGridView1
             // 
@@ -70,6 +76,7 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
             this.Column2});
+            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridView1.Location = new System.Drawing.Point(12, 38);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -91,6 +98,27 @@
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.downloadToolStripMenuItem,
+            this.deleteToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(129, 48);
+            // 
+            // downloadToolStripMenuItem
+            // 
+            this.downloadToolStripMenuItem.Name = "downloadToolStripMenuItem";
+            this.downloadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.downloadToolStripMenuItem.Text = "Download";
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
             // FileMan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -101,8 +129,10 @@
             this.Controls.Add(this.txtAddressBar);
             this.Name = "FileMan";
             this.Text = "FileMan";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FileMan_FormClosing);
             this.Load += new System.EventHandler(this.FileMan_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -115,5 +145,8 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem downloadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

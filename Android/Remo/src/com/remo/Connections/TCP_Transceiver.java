@@ -104,6 +104,11 @@ public class TCP_Transceiver {
 
             try {
                 //private int Type = 0;
+                try {
+                    socket.close();
+                }catch (Exception e){
+
+                }
                 socket = new Socket();
                 socket.connect(new InetSocketAddress(ip, port), 5000);
                 in = socket.getInputStream();

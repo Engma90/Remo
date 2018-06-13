@@ -1,4 +1,4 @@
-package com.remo.Connections;
+package com.remo.connections;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

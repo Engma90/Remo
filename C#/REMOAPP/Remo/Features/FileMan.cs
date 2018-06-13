@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Remo.Connections;
+using System.Net;
 
 namespace Remo.Features
 {
@@ -17,6 +18,9 @@ namespace Remo.Features
         private string CurrentPath = "/";
         public int DATA_TYPE { get; set; }
         public IMConnection MainConnection { get; set; }
+
+        IFeature FD = null;
+
         public FileMan()
         {
             InitializeComponent();
@@ -29,7 +33,7 @@ namespace Remo.Features
             throw new NotImplementedException();
         }
 
-        public void onDataReceived(byte[] data)
+        public void onDataReceived(int Flag, byte[] data)
         {
 
             this.Invoke((MethodInvoker)delegate
@@ -118,7 +122,7 @@ namespace Remo.Features
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(MessageBox.Show("Are You Sure ?","Confirm",MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if(MessageBox.Show("Are You Sure ?","Confirm",MessageBoxButtons.YesNo,MessageBoxIcon.Warning) == DialogResult.Yes)
             {
 
 
@@ -134,11 +138,52 @@ namespace Remo.Features
             }
         }
 
+
+
+        private void downloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.ShowNewFolderButton = true;
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+
+                if (this.FD == null)
+                {
+                   FD = mTCPHandler.GetInstance().addFClient(
+                        (MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(),
+                        (int)DataHandler.eDataType.FM_DOWN);
+                    FD.Show();
+                    foreach (DataGridViewRow r in dataGridView1.SelectedRows)
+                    {
+                        ((FileDownloader)FD).addToList(fbd.SelectedPath,CurrentPath + "/" + r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString().Equals("Folder"));
+                    }
+                }
+                else
+                {
+
+
+                    foreach (DataGridViewRow r in dataGridView1.SelectedRows)
+                    {
+                        ((FileDownloader)FD).addToList(fbd.SelectedPath,CurrentPath + "/" + r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString().Equals("Folder"));
+                    }
+                }
+            }
+
+
+
+
+        }
+
+
+
         private void FileMan_FormClosing(object sender, FormClosingEventArgs e)
         {
             mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
                 ((int)DataHandler.eOrderType.STOP).ToString(),
                     MainConnection.tcpClient);
         }
+
+
     }
 }

@@ -1,4 +1,4 @@
-package com.remo.Features;
+package com.remo.features;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import com.remo.App;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.Feature;
+import com.remo.connections.DataHandler;
+import com.remo.connections.Feature;
 
 import java.io.UnsupportedEncodingException;
 
@@ -49,7 +49,7 @@ public class GPS extends Feature {
         @Override
         public void onLocationChanged(final Location location) {
             try {
-                sendPacket((
+                sendPacket(0,(
                         location.getLatitude() + "/" +location.getLongitude()).getBytes("UTF-8"));
                 Log.d("REMODROID",location.getLatitude() + "/" +location.getLongitude());
             } catch (UnsupportedEncodingException e) {

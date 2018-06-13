@@ -1,13 +1,11 @@
-package com.remo.Features;
+package com.remo.features;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.ContactsContract;
-import android.provider.Telephony;
 import android.util.Log;
 import com.remo.App;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.Feature;
+import com.remo.connections.DataHandler;
+import com.remo.connections.Feature;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
@@ -26,7 +24,7 @@ public class SMS extends Feature {
         try {
             String toSend = getList();
 
-            sendPacket(toSend.getBytes("UTF-8"));
+            sendPacket(0,toSend.getBytes("UTF-8"));
           //  Log.d("REMODROID",toSend);
         } catch (UnsupportedEncodingException e) {
             Log.e("REMODROID","Contacts Exception");

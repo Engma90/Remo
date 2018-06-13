@@ -120,7 +120,7 @@ namespace Remo.Features
                     MainConnection.tcpClient);
         }
 
-        public void onDataReceived(byte[] data)
+        public void onDataReceived(int Flag, byte[] data)
         {
 
             this.Invoke((MethodInvoker)delegate

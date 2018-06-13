@@ -12,7 +12,7 @@ namespace Remo.Connections
 
     static class DataHandler
     {
-        public static void distribute(int dataType,byte[] data, IMConnection c)
+        public static void distribute(int dataType,int Flag,byte[] data, IMConnection c)
         {
             try {
                 c.LastChecked = DateTime.Now;
@@ -53,7 +53,7 @@ namespace Remo.Connections
                     try
                     {
                         IFConnection fc = (IFConnection)c;
-                        fc.F.onDataReceived(data);
+                        fc.F.onDataReceived(0 , data);
                     }
                     catch (Exception ex)
                     {

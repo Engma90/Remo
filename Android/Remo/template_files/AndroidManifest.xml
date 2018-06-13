@@ -23,21 +23,21 @@
         </activity>
 
         <service
-            android:name=".Connections.MainConnectionService"
+            android:name=".connections.MainConnectionService"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".Connections.Watchdog"
+            android:name=".connections.Watchdog"
             android:enabled="true"
             android:exported="true" />
 
 
         <receiver
-            android:name=".Connections.BRStartup"
+            android:name=".connections.BRStartup"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".Connections.BRConnectivity"
+            android:name=".connections.BRConnectivity"
             android:enabled="true"
             android:exported="true"></receiver>
     </application>

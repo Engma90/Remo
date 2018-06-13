@@ -1,8 +1,8 @@
-package com.remo.Features;
+package com.remo.features;
 
 import android.util.Log;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.Feature;
+import com.remo.connections.DataHandler;
+import com.remo.connections.Feature;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -25,7 +25,7 @@ public class FileMan extends Feature {
             try {
                 String toSend = getList(toMob(Params.split("=")[1]));
 
-                sendPacket(toSend.getBytes("UTF-8"));
+                sendPacket(0,toSend.getBytes("UTF-8"));
                // Log.d("REMODROID",toSend);
             } catch (UnsupportedEncodingException e) {
                 Log.d("REMODROID","File List Ex");
@@ -46,7 +46,7 @@ public class FileMan extends Feature {
             try {
                 String toSend = getList(toMob(Params.split("=")[1]));
 
-                sendPacket(toSend.getBytes("UTF-8"));
+                sendPacket(0,toSend.getBytes("UTF-8"));
                 //Log.d("REMODROID",toSend);
             } catch (UnsupportedEncodingException e) {
                 Log.d("REMODROID","File List Ex");

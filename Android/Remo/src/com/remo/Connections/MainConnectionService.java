@@ -1,4 +1,4 @@
-package com.remo.Connections;
+package com.remo.connections;
 
 import android.app.Service;
 import android.content.Intent;

@@ -19,3 +19,4 @@ D:\Faculty\GradProject\C#\REMOAPP\Remo\obj\Debug\Remo.Features.CallLog.resources
 D:\Faculty\GradProject\C#\REMOAPP\Remo\obj\Debug\Remo.Features.GPS.resources
 D:\Faculty\GradProject\C#\REMOAPP\Remo\bin\Debug\Newtonsoft.Json.dll
 D:\Faculty\GradProject\C#\REMOAPP\Remo\bin\Debug\Newtonsoft.Json.xml
+D:\Faculty\GradProject\C#\REMOAPP\Remo\obj\Debug\Remo.Features.CallRecorder.resources

@@ -36,7 +36,7 @@ namespace Remo.Features
                     MainConnection.tcpClient);
         }
 
-        public void onDataReceived(byte[] data)
+        public void onDataReceived(int Flag, byte[] data)
         {
             MANUFACTURER = Encoding.UTF8.GetString(data).Split('/')[0];
             BATTERY_LEVEL = Encoding.UTF8.GetString(data).Split('/')[1];

@@ -36,10 +36,6 @@
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnCam = new System.Windows.Forms.Button();
-            this.btnFM = new System.Windows.Forms.Button();
-            this.btnContacts = new System.Windows.Forms.Button();
-            this.btnSMS = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.camToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.micToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +44,11 @@
             this.sMSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.callLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gPSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnCam = new System.Windows.Forms.Button();
+            this.btnFM = new System.Windows.Forms.Button();
+            this.btnContacts = new System.Windows.Forms.Button();
+            this.btnSMS = new System.Windows.Forms.Button();
+            this.callRecorderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -123,46 +124,6 @@
             this.Column3.Name = "Column3";
             this.Column3.ReadOnly = true;
             // 
-            // btnCam
-            // 
-            this.btnCam.Location = new System.Drawing.Point(279, 309);
-            this.btnCam.Name = "btnCam";
-            this.btnCam.Size = new System.Drawing.Size(75, 23);
-            this.btnCam.TabIndex = 5;
-            this.btnCam.Text = "Cam";
-            this.btnCam.UseVisualStyleBackColor = true;
-            this.btnCam.Click += new System.EventHandler(this.btnCam_Click);
-            // 
-            // btnFM
-            // 
-            this.btnFM.Location = new System.Drawing.Point(360, 309);
-            this.btnFM.Name = "btnFM";
-            this.btnFM.Size = new System.Drawing.Size(75, 23);
-            this.btnFM.TabIndex = 6;
-            this.btnFM.Text = "FM";
-            this.btnFM.UseVisualStyleBackColor = true;
-            this.btnFM.Click += new System.EventHandler(this.btnFM_Click);
-            // 
-            // btnContacts
-            // 
-            this.btnContacts.Location = new System.Drawing.Point(441, 309);
-            this.btnContacts.Name = "btnContacts";
-            this.btnContacts.Size = new System.Drawing.Size(75, 23);
-            this.btnContacts.TabIndex = 7;
-            this.btnContacts.Text = "Contacts";
-            this.btnContacts.UseVisualStyleBackColor = true;
-            this.btnContacts.Click += new System.EventHandler(this.btnContacts_Click);
-            // 
-            // btnSMS
-            // 
-            this.btnSMS.Location = new System.Drawing.Point(522, 309);
-            this.btnSMS.Name = "btnSMS";
-            this.btnSMS.Size = new System.Drawing.Size(75, 23);
-            this.btnSMS.TabIndex = 8;
-            this.btnSMS.Text = "SMS";
-            this.btnSMS.UseVisualStyleBackColor = true;
-            this.btnSMS.Click += new System.EventHandler(this.btnSMS_Click);
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -172,9 +133,10 @@
             this.contactsToolStripMenuItem,
             this.sMSToolStripMenuItem,
             this.callLogToolStripMenuItem,
-            this.gPSToolStripMenuItem});
+            this.gPSToolStripMenuItem,
+            this.callRecorderToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 180);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 202);
             // 
             // camToolStripMenuItem
             // 
@@ -225,6 +187,53 @@
             this.gPSToolStripMenuItem.Text = "GPS";
             this.gPSToolStripMenuItem.Click += new System.EventHandler(this.gPSToolStripMenuItem_Click);
             // 
+            // btnCam
+            // 
+            this.btnCam.Location = new System.Drawing.Point(279, 309);
+            this.btnCam.Name = "btnCam";
+            this.btnCam.Size = new System.Drawing.Size(75, 23);
+            this.btnCam.TabIndex = 5;
+            this.btnCam.Text = "Cam";
+            this.btnCam.UseVisualStyleBackColor = true;
+            this.btnCam.Click += new System.EventHandler(this.btnCam_Click);
+            // 
+            // btnFM
+            // 
+            this.btnFM.Location = new System.Drawing.Point(360, 309);
+            this.btnFM.Name = "btnFM";
+            this.btnFM.Size = new System.Drawing.Size(75, 23);
+            this.btnFM.TabIndex = 6;
+            this.btnFM.Text = "FM";
+            this.btnFM.UseVisualStyleBackColor = true;
+            this.btnFM.Click += new System.EventHandler(this.btnFM_Click);
+            // 
+            // btnContacts
+            // 
+            this.btnContacts.Location = new System.Drawing.Point(441, 309);
+            this.btnContacts.Name = "btnContacts";
+            this.btnContacts.Size = new System.Drawing.Size(75, 23);
+            this.btnContacts.TabIndex = 7;
+            this.btnContacts.Text = "Contacts";
+            this.btnContacts.UseVisualStyleBackColor = true;
+            this.btnContacts.Click += new System.EventHandler(this.btnContacts_Click);
+            // 
+            // btnSMS
+            // 
+            this.btnSMS.Location = new System.Drawing.Point(522, 309);
+            this.btnSMS.Name = "btnSMS";
+            this.btnSMS.Size = new System.Drawing.Size(75, 23);
+            this.btnSMS.TabIndex = 8;
+            this.btnSMS.Text = "SMS";
+            this.btnSMS.UseVisualStyleBackColor = true;
+            this.btnSMS.Click += new System.EventHandler(this.btnSMS_Click);
+            // 
+            // callRecorderToolStripMenuItem
+            // 
+            this.callRecorderToolStripMenuItem.Name = "callRecorderToolStripMenuItem";
+            this.callRecorderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.callRecorderToolStripMenuItem.Text = "Call Recorder";
+            this.callRecorderToolStripMenuItem.Click += new System.EventHandler(this.callRecorderToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -269,6 +278,7 @@
         private System.Windows.Forms.ToolStripMenuItem sMSToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem callLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gPSToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem callRecorderToolStripMenuItem;
     }
 }
 

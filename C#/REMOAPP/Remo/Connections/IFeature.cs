@@ -11,7 +11,7 @@ namespace Remo.Connections
     {
         IMConnection MainConnection { get; set; }
         int DATA_TYPE { get; set; }
-        void onDataReceived(byte[] data);
+        void onDataReceived(int Flag,byte[] data);
         void onErrorReceived(String error);
         void Show();
     }

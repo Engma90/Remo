@@ -30,7 +30,7 @@ namespace Remo.Features
             throw new NotImplementedException();
         }
 
-        public void onDataReceived(byte[] data)
+        public void onDataReceived(int Flag, byte[] data)
         {
             this.Invoke((MethodInvoker)delegate
             {

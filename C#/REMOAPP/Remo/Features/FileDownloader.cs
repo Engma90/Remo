@@ -17,8 +17,9 @@ namespace Remo.Features
         {
             InitializeComponent();
             DATA_TYPE = (int)DataHandler.eDataType.FM_DOWN;
+            DownloadList = new List<DownloadObject>();
         }
-
+        List<DownloadObject> DownloadList;
         public IMConnection MainConnection
         {
             get;
@@ -28,9 +29,36 @@ namespace Remo.Features
 
         public int DATA_TYPE { get; set; }
 
-        public void onDataReceived(byte[] data)
+
+
+
+
+        public void addToList(string PCPath, string MobPath,bool isDir)
         {
-            throw new NotImplementedException();
+            DownloadObject DO = new DownloadObject();
+            DO.PCPath = PCPath;
+            DO.MobPath = MobPath;
+            DO.progress = 22;
+            DO.isDir = isDir;
+            DownloadList.Add(DO);
+            dataGridView1.Rows.Add(DO.getInfo());
+        }
+        public void onDataReceived(int Flag, byte[] data)
+        {
+            
+            if(Flag == (int)Flages.FILE_PACKET)
+            {
+                //current file.append binary packet
+            }
+
+
+
+
+
+
+
+
+
         }
 
         public void onErrorReceived(String error)
@@ -44,6 +72,8 @@ namespace Remo.Features
             DataGridViewProgressColumn column = new DataGridViewProgressColumn();
             column.HeaderText = "Progress";
             column.FillWeight = 30;
+            column.Frozen = false;
+            column.ReadOnly = true;
             dataGridView1.Columns.Add(column);
 
             object[] row1 = new object[] { "test1", "test2", 50 };
@@ -57,27 +87,31 @@ namespace Remo.Features
             }
         }
 
+        private class DownloadObject
+        {
+           public string Name ,PCPath, MobPath;
+            public bool isDir;
+            public int size;
+            public int progress;
+
+            public string[] getInfo ()
+            {
+                return new string[] { PCPath,(isDir?"Folder":"File"),progress.ToString()};
+            }
+        }
 
         private enum Flages
         {
             FOLDER_START,
             FILE_START,
+            FILE_PACKET,
             FILE_END,
             FOLDER_END,
-        }
 
 
-        private class DownloadObject
-        {
-            String Name;
-            String Location;
-            bool isDir;
-            int size;
-            int progress;
-
-
-
-
+            MKDIR,
+            UP,
+            CD
         }
 
 

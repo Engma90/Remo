@@ -125,7 +125,7 @@ namespace Remo.Connections
                 try
                 {
                     byte[] bArray;
-                    int n, Length, DataType;
+                    int n, Length, DataType,Flag;
                     //String Messsage = "";
                     bArray = new byte[4];
                     n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
@@ -134,7 +134,10 @@ namespace Remo.Connections
 
                     n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
                     DataType = readInt(bArray);
-            //        Console.WriteLine("DataType = " + DataType);
+                    //        Console.WriteLine("DataType = " + DataType);
+
+                    n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
+                    Flag = readInt(bArray);
 
                     byte[] data = readMessage(client, Length);
                     // Console.WriteLine(client.Client.RemoteEndPoint.ToString());
@@ -142,7 +145,7 @@ namespace Remo.Connections
                    c = CheckClientExistance2(client, DataType);
 
               //      Console.WriteLine("Distributing to Client : " + c.tcpClient.Client.RemoteEndPoint.ToString());
-                    DataHandler.distribute(DataType, data, c);
+                    DataHandler.distribute(DataType,Flag, data, c);
 
                 }
                 catch(Exception ex)

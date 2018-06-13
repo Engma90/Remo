@@ -1,12 +1,11 @@
-package com.remo.Features;
+package com.remo.features;
 
 import android.graphics.*;
 import android.hardware.Camera;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.Feature;
+import com.remo.connections.DataHandler;
+import com.remo.connections.Feature;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -159,7 +158,7 @@ public class CamStream extends Feature {
                 //udpSender.sendStreamPacket(toByteArray);
 
 //                Log.d("REMODROID", "PCB Finished");
-                sendPacket(toByteArray);
+                sendPacket(0,toByteArray);
                 doneWithPic = true;
 
 

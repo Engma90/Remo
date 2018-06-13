@@ -84,7 +84,7 @@ namespace Remo.Features
 
         }
 
-        public void onDataReceived(byte[] data)
+        public void onDataReceived(int Flag, byte[] data)
         {
             try
             {

@@ -1,4 +1,4 @@
-package com.remo.Features.Root;
+package com.remo.features.Root;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

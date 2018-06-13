@@ -19,7 +19,7 @@
 | SMS  					| 100 %  	|							|
 | File Manager		  	| 70 %  	|							|
 | GPS Location  		| 100 %  	|							|
-| Call Recorder		  	| 0  %  	|							|
+| Call Recorder		  	| 50  %  	|							|
 |Open Network By SMS	|✔ 			|Root Privilege Required 	|
 |Erase All Data			|✘			|							|
 |Make Noise				|✘			|							|

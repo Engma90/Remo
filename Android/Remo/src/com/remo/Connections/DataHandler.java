@@ -1,8 +1,7 @@
-package com.remo.Connections;
+package com.remo.connections;
 
 import android.content.Context;
 import android.util.Log;
-import com.remo.Features.*;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.remo.Connections;
+package com.remo.connections;
 
 import android.util.Log;
 import java.io.DataOutputStream;
@@ -61,7 +61,7 @@ public class TCP_Transceiver {
 
 
 
-    void send(int DATA_TYPE, byte[] data) {
+    void send(int DATA_TYPE,int flag, byte[] data) {
 
 //        try {
 
@@ -76,6 +76,8 @@ public class TCP_Transceiver {
  //           Thread.sleep(50);
             bufferedWriter.writeInt(DATA_TYPE);
   //          Thread.sleep(50);
+            bufferedWriter.writeInt(flag);
+
             //         SystemClock.sleep(50);
             bufferedWriter.write(data);
     //        Thread.sleep(50);
@@ -116,10 +118,10 @@ public class TCP_Transceiver {
 //                socket.setSoTimeout(10);
 //                System.out.println(socket.getSoTimeout());
                 if (this == MainConn) {
-                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal(), ((DataHandler.eConnectionType.Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal(),0, ((DataHandler.eConnectionType.Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
                 else {
-                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal() , ((DataHandler.eConnectionType.Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal() ,1, ((DataHandler.eConnectionType.Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
                 }
 
                 isConnected = true;

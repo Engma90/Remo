@@ -192,5 +192,10 @@ namespace Remo
         {
             mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.GPS).Show();
         }
+
+        private void callRecorderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CALL_RECORDS).Show();
+        }
     }
 }

@@ -1,11 +1,11 @@
-package com.remo.Features;
+package com.remo.features;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.Feature;
+import com.remo.connections.DataHandler;
+import com.remo.connections.Feature;
 
 public class MicStream extends Feature {
 
@@ -95,7 +95,7 @@ public class MicStream extends Feature {
 
             while (!tcp.tcpStopFlag && !stopFlag) {
                 audiorecord.read(buffer, 0, minBufSize);
-                sendPacket(buffer);
+                sendPacket(0,buffer);
             }
             audiorecord.stop();
             audiorecord.release();

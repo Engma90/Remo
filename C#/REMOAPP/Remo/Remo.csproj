@@ -76,6 +76,12 @@
       <DependentUpon>CallLog.cs</DependentUpon>
     </Compile>
     <Compile Include="Features\DataGridViewProgressColumn.cs" />
+    <Compile Include="Features\CallRecorder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Features\CallRecorder.Designer.cs">
+      <DependentUpon>CallRecorder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Features\GPS.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Features\CallLog.resx">
       <DependentUpon>CallLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Features\CallRecorder.resx">
+      <DependentUpon>CallRecorder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Features\GPS.resx">
       <DependentUpon>GPS.cs</DependentUpon>

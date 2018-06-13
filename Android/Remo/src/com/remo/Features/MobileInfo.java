@@ -1,4 +1,4 @@
-package com.remo.Features;
+package com.remo.features;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,8 +7,8 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.util.Log;
 import com.remo.App;
-import com.remo.Connections.DataHandler;
-import com.remo.Connections.Feature;
+import com.remo.connections.DataHandler;
+import com.remo.connections.Feature;
 
 import java.io.File;
 
@@ -49,7 +49,7 @@ public class MobileInfo extends Feature {
         //Log.d("REMODROID", "5");
         try {
             //Log.d("REMODROID", "6");
-            sendPacket(((getInfo(context)).getBytes("UTF-8")));
+            sendPacket(0,((getInfo(context)).getBytes("UTF-8")));
             //Log.d("REMODROID", "7");
         } catch (Exception e) {
             Log.e("REMODROID", e.getMessage());
@@ -112,7 +112,7 @@ public class MobileInfo extends Feature {
                 || canExecuteCommand("/system/bin/which su") || canExecuteCommand("which su");
     }
 
-    // executes a command on the system
+    // executes context command on the system
     private static boolean canExecuteCommand(String command) {
         boolean executedSuccesfully;
         try {

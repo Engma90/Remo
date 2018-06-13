@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.remo.Connections.TCP_Transceiver;
+import com.remo.connections.TCP_Transceiver;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 
         StrictMode.setThreadPolicy(policy);
 
-        startService(new Intent(getApplicationContext(),com.remo.Connections.MainConnectionService.class));
+        startService(new Intent(getApplicationContext(),com.remo.connections.MainConnectionService.class));
 
     }
 

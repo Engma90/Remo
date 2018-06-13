@@ -1,4 +1,4 @@
-package com.remo.Connections;
+package com.remo.connections;
 
 /**
  * Created by Mohamed on 3/3/2018.

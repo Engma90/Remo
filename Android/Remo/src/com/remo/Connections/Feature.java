@@ -1,11 +1,6 @@
-package com.remo.Connections;
+package com.remo.connections;
 
-import android.annotation.TargetApi;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
-
-import java.io.IOException;
 
 /**
  * Created by Mohamed on 2/1/2018.
@@ -48,8 +43,8 @@ public abstract class Feature {
          tcp.connect();
     }
 
-    public void sendPacket(byte[] data){
-        tcp.send(Feature_type, data);
+    public void sendPacket(int flag,byte[] data){
+        tcp.send(Feature_type,flag, data);
     }
 
 

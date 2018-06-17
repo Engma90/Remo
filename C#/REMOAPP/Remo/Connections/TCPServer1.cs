@@ -224,12 +224,12 @@
 
 
 //                    else if (
-//                        null != getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString())
+//                        null != getMainConnectionByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString())
 //                        &&
-//                        getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients.ContainsKey(DataType))
+//                        getMainConnectionByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients.ContainsKey(DataType))
 //                    {
 //                        Console.WriteLine("Found initialized Before");
-//                        c = (IMConnection)getClientByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[DataType];
+//                        c = (IMConnection)getMainConnectionByIP((e.TcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString()).FeatureClients[DataType];
 //                        c.tcpClient = e.TcpClient;
 
 //                    }
@@ -289,7 +289,7 @@
 //        }
 
 
-//        public IMConnection getClientByIP(String ip)
+//        public IMConnection getMainConnectionByIP(String ip)
 //        {
 //            IMConnection ret;
 //            MainConnectionsDict.TryGetValue(ip, out ret);
@@ -297,11 +297,11 @@
 
 //        }
 
-//        public IFeature addFClient(string MainClientIP, int Feature_type)
+//        public IFeature startFeature(string MainClientIP, int Feature_type)
 //        {
 //            IFConnection fc = (IFConnection)(IMConnection)Activator.CreateInstance(ClientClass.GetType());                                                                // {
-//    //        fc.MainConnection = getClientByIP(MainClientIP);//
-//            getClientByIP(MainClientIP).FeatureClients.Add(Feature_type, fc);
+//    //        fc.MainConnection = getMainConnectionByIP(MainClientIP);//
+//            getMainConnectionByIP(MainClientIP).FeatureClients.Add(Feature_type, fc);
 //            var types = Assembly
 //            .GetExecutingAssembly()
 //            .GetTypes()
@@ -355,7 +355,7 @@
 //            catch { }
 //        }
 
-//        public void HandleClient(object obj)
+//        public void ClientHandler(object obj)
 //        {
 //            throw new NotImplementedException();
 //        }

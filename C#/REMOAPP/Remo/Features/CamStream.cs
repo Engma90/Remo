@@ -21,7 +21,7 @@ namespace Remo.Features
             InitializeComponent();
             DATA_TYPE = (int)DataHandler.eDataType.CAM;
         }
-        public IMConnection MainConnection { get; set; }
+        public IConnection MainConnection { get; set; }
 
         public int DATA_TYPE { get; set; }
         private int Rotation = 0;
@@ -45,7 +45,7 @@ namespace Remo.Features
         private void start()
         {
             Console.WriteLine("Cam Start");
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),trackBar1.Value+"/"+ comboBox1.SelectedIndex,
                 MainConnection.tcpClient);
         }
@@ -115,7 +115,7 @@ namespace Remo.Features
         public void Stop()
         {
             Console.WriteLine("Cam Stop");
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
                 ((int)DataHandler.eOrderType.STOP).ToString(),
                     MainConnection.tcpClient);
         }
@@ -227,7 +227,7 @@ namespace Remo.Features
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
             ((int)DataHandler.eOrderType.UPDATE).ToString(),trackBar1.Value.ToString(),
             MainConnection.tcpClient);
         }

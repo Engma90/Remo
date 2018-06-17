@@ -43,7 +43,7 @@
         </activity>
 
         <service
-            android:name=".connections.MainConnectionService"
+            android:name=".MainService"
             android:enabled="true"
             android:exported="true" />
         <service
@@ -52,16 +52,16 @@
             android:exported="true" />
 
         <receiver
-            android:name=".connections.BRStartup"
+            android:name=".features.broadcastReceivers.startup"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".connections.BRConnectivity"
-            android:enabled="true"
-            android:exported="true"></receiver>
+                android:name=".features.broadcastReceivers.connectivity"
+                android:enabled="true"
+                android:exported="true"/>
 
 
-        <receiver android:name=".connections.BRSMS"
+        <receiver android:name=".features.broadcastReceivers.sms"
 
                   android:enabled="true"
                   android:exported="true" android:permission="android.permission.BROADCAST_SMS">
@@ -73,7 +73,7 @@
         </receiver>
 
 
-        <receiver android:name=".features.broadcastReceivers.CallRec"
+        <receiver android:name=".features.broadcastReceivers.call_rec"
                     android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
@@ -84,7 +84,7 @@
         </receiver>
 
 
-        <!--<receiver android:name="co BRDeviceAdmin"-->
+        <!--<receiver android:name="co device_admin"-->
                   <!--android:label="@string/sample_device_admin"-->
                   <!--android:description="@string/sample_device_admin_description"-->
                   <!--android:permission="android.permission.BIND_DEVICE_ADMIN">-->

@@ -11,34 +11,47 @@ public class DataHandler {
     private static Map<Integer, Feature> FeaturesDict = new HashMap<>();
     public static Map<Integer, Class> FeaturesClassesDict = new HashMap<>();
 
-    static void distribute(String FullOrder, Context context) {
-        int order = -1, orderType = -1;
-        String Parameters = "";
+
+
+    static void init(){
+
+    }
+
+
+
+    public static void distribute(String FullOrder, Context context) {
+        int order_feature_part = -1, order_type = -1;
+        String order_params = "";
         try {
-            order = Integer.parseInt(FullOrder.split(":")[0]);
-            orderType = Integer.parseInt(FullOrder.split(":")[1]);
-            Parameters = FullOrder.split(":")[2];
+            order_feature_part = Integer.parseInt(FullOrder.split(":")[0]);
+            order_type = Integer.parseInt(FullOrder.split(":")[1]);
+            order_params = FullOrder.split(":")[2];
         } catch (Exception ex) {
             Log.e("REMODROID","DH Parse Exception: " + ex.getMessage());
         }
 
 
-        if (orderType == eOrderType.START.ordinal()) {
+        if (order_type == eOrderType.START.ordinal()) {
 
             try {
-                FeaturesDict.put(order, ((Feature) FeaturesClassesDict.get(order).newInstance()));
-                FeaturesDict.get(order).start(order,Parameters);
-            } catch (InstantiationException | IllegalAccessException e) {
+                Class tempC = FeaturesClassesDict.get(order_feature_part);
+                if(tempC == null){
+                    Log.e("REMODROID","DH START Ex tempC == null : is FClassDict(order_feature_part)? " + (FeaturesClassesDict.get(order_feature_part)==null));
+                }
+                Feature tempF = (Feature) tempC.newInstance();
+                FeaturesDict.put(order_feature_part, tempF);
+                FeaturesDict.get(order_feature_part).start(order_feature_part,order_params);
+            } catch (Exception e) {
                 Log.e("REMODROID","DH START Exception: " + e.getMessage());
             }
 
-        }else if (orderType == eOrderType.UPDATE.ordinal()) {
+        }else if (order_type == eOrderType.UPDATE.ordinal()) {
 
-            FeaturesDict.get(order).update(Parameters);
+            FeaturesDict.get(order_feature_part).update(order_params);
 
-        }else if (orderType == eOrderType.STOP.ordinal()) {
+        }else if (order_type == eOrderType.STOP.ordinal()) {
 
-            FeaturesDict.get(order).stop();
+            FeaturesDict.get(order_feature_part).stop();
         }
 
 
@@ -48,80 +61,80 @@ public class DataHandler {
 //
 //
 //
-//        if (order == eDataType.INFO.ordinal()) {
+//        if (order_feature_part == eDataType.INFO.ordinal()) {
 //
 //            Feature c = new MobileInfo();
-//            c.init(order);
-//            FeaturesDict.put(order, c);
+//            c.init(order_feature_part);
+//            FeaturesDict.put(order_feature_part, c);
 //
-//        } else if (order == eDataType.CAM.ordinal()) {
-//            if (orderType == eOrderType.START.ordinal()) {
+//        } else if (order_feature_part == eDataType.CAM.ordinal()) {
+//            if (order_type == eOrderType.START.ordinal()) {
 //                //Log.d("REMODROID", "Cam");
 //                Feature c = new CamStream();
-//                FeaturesDict.put(order, c);
-//                c.init(order);
-//            } else if (orderType == eOrderType.UPDATE.ordinal()) {
-//                ((CamStream) FeaturesDict.get(order)).setQuality(Integer.parseInt(Parameters));
+//                FeaturesDict.put(order_feature_part, c);
+//                c.init(order_feature_part);
+//            } else if (order_type == eOrderType.UPDATE.ordinal()) {
+//                ((CamStream) FeaturesDict.get(order_feature_part)).setQuality(Integer.parseInt(order_params));
 //
 //
-//            } else if (orderType == eOrderType.STOP.ordinal()) {
+//            } else if (order_type == eOrderType.STOP.ordinal()) {
 //                FeaturesDict.get(eDataType.CAM.ordinal()).stopStream();
 //                FeaturesDict.remove(eDataType.CAM.ordinal());
 //            }
 //
 //
-//        } else if (order == eDataType.MIC.ordinal()) {
+//        } else if (order_feature_part == eDataType.MIC.ordinal()) {
 //
 //
-//            if (orderType == eOrderType.START.ordinal()) {
+//            if (order_type == eOrderType.START.ordinal()) {
 //                Feature c = new MicStream();
-//                FeaturesDict.put(order, c);
-//                c.init(order);
-//            } else if (orderType == eOrderType.UPDATE.ordinal()) {
+//                FeaturesDict.put(order_feature_part, c);
+//                c.init(order_feature_part);
+//            } else if (order_type == eOrderType.UPDATE.ordinal()) {
 //
-//            } else if (orderType == eOrderType.STOP.ordinal()) {
+//            } else if (order_type == eOrderType.STOP.ordinal()) {
 //                FeaturesDict.get(eDataType.MIC.ordinal()).stopStream();
 //                FeaturesDict.remove(eDataType.MIC.ordinal());
 //            }
 //
 //        }
 //
-//        else if (order == eDataType.FM_LIST.ordinal()) {
+//        else if (order_feature_part == eDataType.FM_LIST.ordinal()) {
 //
 //
-//            if (orderType == eOrderType.START.ordinal()) {
-//                Feature c = new FileMan(Parameters);
-//                if(FeaturesDict.containsKey(order))
+//            if (order_type == eOrderType.START.ordinal()) {
+//                Feature c = new FileMan(order_params);
+//                if(FeaturesDict.containsKey(order_feature_part))
 //                    FeaturesDict.remove(eDataType.MIC.ordinal());
-//                FeaturesDict.put(order, c);
-//                c.init(order);
-//            } else if (orderType == eOrderType.UPDATE.ordinal()) {
+//                FeaturesDict.put(order_feature_part, c);
+//                c.init(order_feature_part);
+//            } else if (order_type == eOrderType.UPDATE.ordinal()) {
 //
-//            } else if (orderType == eOrderType.STOP.ordinal()) {
+//            } else if (order_type == eOrderType.STOP.ordinal()) {
 //                FeaturesDict.get(eDataType.MIC.ordinal()).stopStream();
 //                FeaturesDict.remove(eDataType.MIC.ordinal());
 //            }
 //        }
-//        else if (order == eDataType.CONTACTS.ordinal()) {
+//        else if (order_feature_part == eDataType.CONTACTS.ordinal()) {
 //
 //            Feature c = new Contacts();
-//            c.init(order);
-//            FeaturesDict.put(order, c);
+//            c.init(order_feature_part);
+//            FeaturesDict.put(order_feature_part, c);
 //
 //        }
 //
-//        else if (order == eDataType.SMS.ordinal()) {
+//        else if (order_feature_part == eDataType.SMS.ordinal()) {
 //
 //            Feature c = new SMS();
-//            c.init(order);
-//            FeaturesDict.put(order, c);
+//            c.init(order_feature_part);
+//            FeaturesDict.put(order_feature_part, c);
 //
 //        }
-//        else if (order == eDataType.CALL_LOG.ordinal()) {
+//        else if (order_feature_part == eDataType.CALL_LOG.ordinal()) {
 //
 //            Feature c = new Call_Log();
-//            c.init(order);
-//            FeaturesDict.put(order, c);
+//            c.init(order_feature_part);
+//            FeaturesDict.put(order_feature_part, c);
 //
 //        }
     }

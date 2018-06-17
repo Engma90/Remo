@@ -21,7 +21,7 @@ namespace Remo.Features
             CheckForIllegalCrossThreadCalls = false;
         }
 
-        public IMConnection MainConnection { get; set; }
+        public IConnection MainConnection { get; set; }
 
         public int DATA_TYPE { get; set; }
 
@@ -54,7 +54,7 @@ namespace Remo.Features
         private void SMS_Load(object sender, EventArgs e)
         {
             //Console.WriteLine("FileMan");
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.SMS).ToString(),
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.SMS).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
                     MainConnection.tcpClient);
         }

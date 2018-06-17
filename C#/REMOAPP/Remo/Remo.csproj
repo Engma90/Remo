@@ -56,10 +56,12 @@
   <ItemGroup>
     <Compile Include="Connections\IServer.cs" />
     <Compile Include="Connections\DataHandler.cs" />
-    <Compile Include="Connections\IClient.cs" />
+    <Compile Include="Connections\IConnection.cs" />
     <Compile Include="Connections\mUDPHandler.cs" />
+    <Compile Include="Connections\AsynchronousSocketListener.cs" />
     <Compile Include="Connections\TCPServer2.cs" />
     <Compile Include="Connections\TCPServer1.cs" />
+    <Compile Include="Connections\TcpServer3.cs" />
     <Compile Include="Features\CamStream.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -67,7 +69,7 @@
       <DependentUpon>CamStream.cs</DependentUpon>
     </Compile>
     <Compile Include="Connections\UDPReceiver.cs" />
-    <Compile Include="Connections\Client.cs" />
+    <Compile Include="Connections\Connection.cs" />
     <Compile Include="Connections\IFeature.cs" />
     <Compile Include="Features\CallLog.cs">
       <SubType>Form</SubType>
@@ -125,7 +127,7 @@
     <Compile Include="Features\MicStream.Designer.cs">
       <DependentUpon>MicStream.cs</DependentUpon>
     </Compile>
-    <Compile Include="Connections\mTCPHandler.cs" />
+    <Compile Include="Connections\ServerFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Features\CamStream.resx">

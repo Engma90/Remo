@@ -12,11 +12,11 @@ public class Watchdog extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         try {
-            //stopService(new Intent(getApplicationContext(),com.remo.connections.MainConnectionService.class));
+            //stopService(new Intent(getApplicationContext(),com.remo.MainService.class));
         } catch (Exception ex) {
 
         }
-        //startService(new Intent(getApplicationContext(),com.remo.connections.MainConnectionService.class));
+        //startService(new Intent(getApplicationContext(),com.remo.MainService.class));
         return START_NOT_STICKY;
     }
 

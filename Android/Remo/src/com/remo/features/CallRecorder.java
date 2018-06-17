@@ -22,10 +22,10 @@ public class CallRecorder extends PhoneStateListener {
     
      
     
-  //  final /* synthetic */ CallRec c;
+  //  final /* synthetic */ call_rec c;
 
     public CallRecorder() {
-  //      this.c = CallRec;
+  //      this.c = call_rec;
        // RecordsPath = new File (App.get().getApplicationContext().getFilesDir().getAbsolutePath(),"/Rec");
        // this.context = context;
         Log.d("REMODROID",RecordsPath.getAbsolutePath());

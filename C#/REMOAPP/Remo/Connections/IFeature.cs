@@ -9,10 +9,12 @@ namespace Remo.Connections
 {
     public interface IFeature
     {
-        IMConnection MainConnection { get; set; }
+        IConnection MainConnection { get; set; }
         int DATA_TYPE { get; set; }
         void onDataReceived(int Flag,byte[] data);
         void onErrorReceived(String error);
         void Show();
+        bool IsDisposed { get; }
+        void Dispose();
     }
 }

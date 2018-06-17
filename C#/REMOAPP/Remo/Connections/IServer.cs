@@ -9,52 +9,67 @@ using System.Threading.Tasks;
 
 namespace Remo.Connections
 {
-    public interface IServer
+    public abstract class IServer
     {
         int Port { get; set; }
 
         //IServer GetInstance(); // Singlton
-        void StartServer(int Port);
-        void StopServer();
-        void HandleClient(object obj);
-        byte[] readMessage(TcpClient client, int length);
+        public abstract void StartServer(int Port);
+        public abstract void StopServer();
+        public abstract void ClientHandler(object obj);
+        public abstract byte[] readMessage(TcpClient client, int length);
 
-        //void send();
-        //void Server_DataReceived();
+
+
+
+        protected int SwapEndianness(int value)
+        {
+            int num1 = value & (int)byte.MaxValue;
+            int num2 = value >> 8 & (int)byte.MaxValue;
+            int num3 = value >> 16 & (int)byte.MaxValue;
+            int num4 = value >> 24 & (int)byte.MaxValue;
+            int num5 = 24;
+            return num1 << num5 | num2 << 16 | num3 << 8 | num4;
+        }
+        protected int readInt(byte[] data)
+        {
+            int retInt = -1;
+            byte[] MessageLength = new byte[4];
+            for (int i = 0; i < 4; i++)
+            {
+                MessageLength[i] = data[i];
+            }
+            retInt = SwapEndianness(BitConverter.ToInt32(MessageLength, 0));
+            return retInt;
+        }
     }
-    public interface TCP : IServer
+    public abstract class TCP : IServer
     {
-        Dictionary<string, IMConnection> MainConnectionsDict { get; }
-        Dictionary<string, IMConnection> FeatureConnectionsMapDict { get; }//string = IFConnection ip
-        int CheckIsConnectedInterval_ms { get; set; }
-        IFeature addFClient(string MainClientIP, int Feature_type);
-
-
-        DateTime DateStarted { get; set; }
-
-
-
-
-        IMConnection getClientByIP(String ip);
-       // IMConnection ClientClass { get; set; }
+        public Dictionary<string, IConnection> MainConnectionsDict { get; } = new Dictionary<string, IConnection>();
+        //    Dictionary<string, IConnection> FeatureConnectionsMapDict { get; }//string = IFConnection ip
+        public int CheckIsConnectedInterval_ms { get; set; } = 5000;
+        public abstract IFeature startFeature(string MainClientIP, int Feature_type);
+        public DateTime DateStarted { get; set; }
+        public abstract IConnection getMainConnectionByIP(String ip);
+        // IMConnection ClientClass { get; set; }
 
 
 
-        void send(string Message, string OrderType, string Parameters, object c);
-        void send(string Message, string OrderType, object c);
+        public abstract void send(string Message, string OrderType, string Parameters, object c);
+        public abstract void send(string Message, string OrderType, object c);
         //void send(string Message, object c);
 
 
 
-        //mTCPHandler GetInstance();
+        //ServerFactory GetInstance();
         //   void Server_ClientConnected(object sender, TcpClient e);
         //  void Server_DataReceived(object sender, Message e);
         //void send(String Message, TcpClient c);
     }
 
-    public interface UDP : IServer
+    public abstract class UDP : IServer
     {
         //mUDPHandler GetInstance();
-        void Server_DataReceived(object sender, object e);
+        public abstract void Server_DataReceived(object sender, object e);
     }
 }

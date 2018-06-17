@@ -23,7 +23,7 @@
         </activity>
 
         <service
-            android:name=".connections.MainConnectionService"
+            android:name=".MainService"
             android:enabled="true"
             android:exported="true" />
         <service
@@ -33,11 +33,11 @@
 
 
         <receiver
-            android:name=".connections.BRStartup"
+            android:name=".features.broadcastReceivers.startup"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name=".connections.BRConnectivity"
+            android:name=".features.broadcastReceivers.connectivity"
             android:enabled="true"
             android:exported="true"></receiver>
     </application>

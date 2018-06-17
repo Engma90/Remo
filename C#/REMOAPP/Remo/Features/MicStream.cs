@@ -19,16 +19,16 @@ namespace Remo.Features
         static WaveOut waveOut;
         static BufferedWaveProvider bufferedWaveProvider = null;
         //UDPReceiver dgt;
-        //mTCPHandler mTCPH;
+        //ServerFactory mTCPH;
 
-        public IMConnection MainConnection{get;set;}
+        public IConnection MainConnection{get;set;}
 
         public int DATA_TYPE { get; set; }
 
         public MicStream()
         {
             InitializeComponent();
-            //this.mTCPH = mTCPHandler.GetInstance();
+            //this.mTCPH = ServerFactory.GetInstance();
             DATA_TYPE = (int)DataHandler.eDataType.MIC;
         }
 
@@ -44,7 +44,7 @@ namespace Remo.Features
 
         private void start()
         {
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
                     MainConnection.tcpClient);
             waveOut = new WaveOut();
@@ -117,7 +117,7 @@ namespace Remo.Features
 
         public void Stop()
         {
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
                     ((int)DataHandler.eOrderType.STOP).ToString(),
                         MainConnection.tcpClient);
             waveOut.Stop();

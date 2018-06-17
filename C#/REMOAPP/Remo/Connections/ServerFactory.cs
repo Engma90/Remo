@@ -13,12 +13,12 @@ using System.Reflection;
 namespace Remo.Connections
 {
 
-    public class mTCPHandler 
+    public class ServerFactory 
     {
         private static volatile TCP instance = null;
         private static object syncRoot = new Object();
 
-        private mTCPHandler()
+        private ServerFactory()
         {
             Console.WriteLine("TCP Server Started!");
         }

@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class CallRec extends BroadcastReceiver{
+public class call_rec extends BroadcastReceiver{
     private static boolean isRecording = false;
     private static boolean isOutCall = false;
     private static String mLastState;
@@ -41,7 +41,7 @@ public class CallRec extends BroadcastReceiver{
                mLastState = state;
                if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
 
-                   String formatted_date = new SimpleDateFormat("yyyy.MM.dd  HH.mm.ss",Locale.US).format(new Date());
+                   String formatted_date = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss",Locale.US).format(new Date());
                    startRecording(number + "_" + (isOutCall?"OUT":"IN") + "_"+ formatted_date);
 
 
@@ -67,16 +67,16 @@ public class CallRec extends BroadcastReceiver{
 
    private void startRecording(String outputfile) {
        try {
+           isRecording = true;
            Log.d("REMODROID", "startRecording "+outputfile);
            mediaRecorder = new MediaRecorder();
-           mediaRecorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);//4
-        //   mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);//1
-           mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);//2
+           mediaRecorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+        //   mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+           mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
            mediaRecorder.setOutputFile(outputfile);
-           mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);//3
+           mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
            mediaRecorder.prepare();
            mediaRecorder.start();
-           isRecording = true;
        }catch (IOException e){
            isRecording = false;
        }

@@ -66,7 +66,7 @@ public class TCP_Transceiver {
 //        try {
 
         try {
-            Log.d("REMODROID", "Sending Data of type: " + DATA_TYPE);
+            Log.d("REMODROID", "Sending Data of type: " + DATA_TYPE +":"+flag);
             //Thread.sleep(50);
             //SystemClock.sleep(1500);
             //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
@@ -99,7 +99,7 @@ public class TCP_Transceiver {
 
 
 
-    void connect() {
+    public void connect() {
         isConnected = false;
         Log.d("REMODROID", "Connecting...");
         while (!isConnected) {
@@ -118,10 +118,10 @@ public class TCP_Transceiver {
 //                socket.setSoTimeout(10);
 //                System.out.println(socket.getSoTimeout());
                 if (this == MainConn) {
-                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal(),0, ((DataHandler.eConnectionType.Main).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal(),(DataHandler.eConnectionType.Main).ordinal(), "".getBytes("UTF-8"));
                 }
                 else {
-                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal() ,1, ((DataHandler.eConnectionType.Feature).ordinal()+","+Feature_type).getBytes("UTF-8"));
+                    send(DataHandler.eDataType.INIT_CONNECTION.ordinal() ,(DataHandler.eConnectionType.Feature).ordinal(),(""+Feature_type).getBytes("UTF-8"));
                 }
 
                 isConnected = true;
@@ -144,7 +144,7 @@ public class TCP_Transceiver {
         }
     }
 
-    String receive() {
+    public String receive() {
 
 
         StringBuilder sb = new StringBuilder();

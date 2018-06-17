@@ -14,7 +14,9 @@ namespace Remo.Features
         public string MANUFACTURER { get; set; }
         public string BATTERY_LEVEL { get; set; }
 
-        public IMConnection MainConnection { get; set; }
+        public IConnection MainConnection { get; set; }
+
+        public bool IsDisposed { get; } = false;
 
         public MobInfo()
         {
@@ -31,8 +33,8 @@ namespace Remo.Features
         public void Show()
         {
             // throw new NotImplementedException();
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.INFO).ToString(),
-                ((int)DataHandler.eOrderType.START).ToString(),"aa",
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.INFO).ToString(),
+                ((int)DataHandler.eOrderType.START).ToString(),
                     MainConnection.tcpClient);
         }
 
@@ -45,8 +47,12 @@ namespace Remo.Features
 
         public string[] getInfo()
         {
-            return new string[] { (MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(), MANUFACTURER, BATTERY_LEVEL };
+            return new string[] { MainConnection.IP+":"+MainConnection.Port, MANUFACTURER, BATTERY_LEVEL };
         }
 
+        public void Dispose()
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

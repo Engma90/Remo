@@ -59,16 +59,29 @@ public class CamStream extends Feature {
             SurfaceTexture ST = new SurfaceTexture(0);
 
             try {
-                Camera.Parameters parameters = camera.getParameters();
-                parameters.setFlashMode("off");
-                if (parameters.getSupportedFocusModes().contains(
-                        Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-                    parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+
+
+
+                try {
+                    Camera.Parameters parameters = camera.getParameters();
+                    parameters.setFlashMode("off");
+                    if (parameters.getSupportedFocusModes().contains(
+                            Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
+
+                    }
+                    else{
+                        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+                    }
+
+
+                    camera.setParameters(parameters);
+
+                }catch (Exception e){
+                    Log.d("REMODROID", "Could not set the Params: " + e.getMessage());
                 }
-                else{
-                    parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                }
-                camera.setParameters(parameters);
+
+
 
 
 

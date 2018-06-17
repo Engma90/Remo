@@ -28,7 +28,7 @@ namespace Remo.Features
 
         public int DATA_TYPE { get; set; }
 
-        public IMConnection MainConnection { get; set; }
+        public IConnection MainConnection { get; set; }
 
         public void onErrorReceived(string error)
         {
@@ -76,14 +76,14 @@ namespace Remo.Features
 
         private void GPS_Load(object sender, EventArgs e)
         {
-            mTCPHandler.GetInstance().send(((int)DataHandler.eDataType.GPS).ToString(),
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.GPS).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
                     MainConnection.tcpClient);
         }
 
         private void btnMap_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.google.com/maps/@"+Latitude+","+Longitude + ",15z");
+            System.Diagnostics.Process.Start("http://maps.google.com/maps?q=" + Latitude+","+Longitude );
         }
     }
 }

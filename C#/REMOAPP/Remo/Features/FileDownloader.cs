@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Remo.Connections;
+using System.IO;
 
 namespace Remo.Features
 {
@@ -20,7 +21,10 @@ namespace Remo.Features
             DownloadList = new List<DownloadObject>();
         }
         List<DownloadObject> DownloadList;
-        public IMConnection MainConnection
+        static string Current_Downloading_file;
+        static string Current_Downloading_Dir;
+
+        public IConnection MainConnection
         {
             get;
 
@@ -45,10 +49,34 @@ namespace Remo.Features
         }
         public void onDataReceived(int Flag, byte[] data)
         {
-            
-            if(Flag == (int)Flages.FILE_PACKET)
+
+            if (Flag == (int)Flages.DOWNLOAD_START)
             {
                 //current file.append binary packet
+            }
+            else if (Flag == (int)Flages.DOWNLOAD_FINISHED)
+            {
+
+            }
+
+            else if (Flag == (int)Flages.FILE_START)
+            {
+                Current_Downloading_file = Encoding.UTF8.GetString(data);
+                if(!File.Exists(Current_Downloading_Dir+Current_Downloading_file))
+                    File.Create(Current_Downloading_Dir+Current_Downloading_file);
+            }
+            else if (Flag == (int)Flages.FILE_PACKET)
+            {
+                using (var stream = new FileStream(Current_Downloading_Dir + Current_Downloading_file, FileMode.Append))
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+            }
+
+            else if (Flag == (int)Flages.CD)
+            {
+                if (Directory.Exists(Current_Downloading_Dir))
+                    Directory.CreateDirectory(Current_Downloading_Dir);
             }
 
 
@@ -102,16 +130,16 @@ namespace Remo.Features
 
         private enum Flages
         {
+            DOWNLOAD_START,
             FOLDER_START,
             FILE_START,
             FILE_PACKET,
             FILE_END,
             FOLDER_END,
+            DOWNLOAD_FINISHED,
 
-
-            MKDIR,
-            UP,
             CD
+            
         }
 
 

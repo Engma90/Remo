@@ -1,9 +1,8 @@
 package com.remo.connections;
 
 import android.util.Log;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
@@ -13,22 +12,17 @@ import java.net.Socket;
 
 public class TCP_Transceiver {
 
-    //private static final TCP_Transceiver instance  = new TCP_Transceiver();
     private int port;
     private String ip;
     public boolean isConnected = false;
-    private InputStream in;
+    private BufferedReader br;
     private DataOutputStream bufferedWriter;
     private static TCP_Transceiver MainConn;
     public boolean tcpStopFlag = false;
     private Socket socket;
     public int Feature_type;
 
-//public static enum eDataType{
-//    DATA_TYPE_INFO ,
-//    DATA_TYPE_CAM ,
-//    DATA_TYPE_MIC
-//}
+
     //public static final int DATA_TYPE_INFO = 0;
     //public static final int DATA_TYPE_SMS = 1;
 
@@ -37,63 +31,26 @@ public class TCP_Transceiver {
         si.init();
         this.ip = si.getIp();
         this.port = si.getPort();
-        //this.isMainConn = isMainConn;
-        //this.context = App.get().getApplicationContext();
         if (isMainConn) {
             MainConn = this;
             Feature_type = -1;
         }
     }
 
-//    public static TCP_Transceiver GetInstance(boolean isMainConn){
-//        this.isMainConn = isMainConn;
-//        //t.Type = Type;
-//        return new TCP_Transceiver();
-//        //return instance;
-//    }
-
-
-    //@Override
-    //public Object clone(){
-    //return GetInstance();
-    //}
-
-
-
 
     void send(int DATA_TYPE,int flag, byte[] data) {
 
-//        try {
-
         try {
             Log.d("REMODROID", "Sending Data of type: " + DATA_TYPE +":"+flag);
-            //Thread.sleep(50);
-            //SystemClock.sleep(1500);
-            //Log.d("REMODROID", "Sending Message of Length: " + (int)(4 + 4 + data.length));
-            //int totalLen = 4 + data.length;
             bufferedWriter.writeInt(data.length);//Max Size 2147483647 = 2 GiB
-            //       SystemClock.sleep(100);
- //           Thread.sleep(50);
             bufferedWriter.writeInt(DATA_TYPE);
-  //          Thread.sleep(50);
             bufferedWriter.writeInt(flag);
-
-            //         SystemClock.sleep(50);
             bufferedWriter.write(data);
-    //        Thread.sleep(50);
-            //        SystemClock.sleep(50);
             bufferedWriter.flush();
-    //        Thread.sleep(50);
-            //         SystemClock.sleep(10);
-            //socket.close();
         } catch (Exception e) {
             Log.d("REMODROID", "Sending Exception " + e.getMessage());
             tcpStopFlag = true;
         }
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//    }
-
 
     }
 
@@ -105,18 +62,18 @@ public class TCP_Transceiver {
         while (!isConnected) {
 
             try {
-                //private int Type = 0;
                 try {
+                    socket.shutdownInput();
+                    socket.shutdownOutput();
                     socket.close();
                 }catch (Exception e){
-
+                    Log.e("REMODROID", "socket.close() Exception");
                 }
                 socket = new Socket();
                 socket.connect(new InetSocketAddress(ip, port), 5000);
-                in = socket.getInputStream();
+                InputStream in = socket.getInputStream();
                 bufferedWriter = new DataOutputStream(socket.getOutputStream());
-//                socket.setSoTimeout(10);
-//                System.out.println(socket.getSoTimeout());
+                br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
                 if (this == MainConn) {
                     send(DataHandler.eDataType.INIT_CONNECTION.ordinal(),(DataHandler.eConnectionType.Main).ordinal(), "".getBytes("UTF-8"));
                 }
@@ -127,7 +84,7 @@ public class TCP_Transceiver {
                 isConnected = true;
 
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("REMODROID", "Connect Exception");
                 isConnected = false;
 
             }
@@ -138,31 +95,14 @@ public class TCP_Transceiver {
 
     void disconnect(){
         try {
+            tcpStopFlag= true;
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String receive() {
-
-
-        StringBuilder sb = new StringBuilder();
-        try {
-
-
-            int c;
-
-            while (((c = in.read()) > 0) && (c != 0x0a /* <LF> */)) {
-                if (c != 0x0d /* <CR> */) {
-                    sb.append((char) c);
-                }
-            }
-        } catch (IOException e) {
-            Log.e("REMODROID","Receive Method Exception");
-            isConnected = false;
-            connect();
-        }
-        return sb.toString();
+    public String receive() throws IOException {
+        return br.readLine();
     }
 }

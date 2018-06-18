@@ -19,7 +19,7 @@ namespace Remo.Features
         public int DATA_TYPE { get; set; }
         public IConnection MainConnection { get; set; }
 
-        IFeature FD = null;
+       // IFeature FD = null;
 
         public CallRecorder()
         {
@@ -109,15 +109,15 @@ namespace Remo.Features
             if (fbd.ShowDialog() == DialogResult.OK)
             {
 
-                if (this.FD == null)
+                if (MainForm.FileDownloader == null || MainForm.FileDownloader.IsDisposed)
                 {
-                   FD = ServerFactory.GetInstance().startFeature(
+                    MainForm.FileDownloader = ServerFactory.GetInstance().startFeature(
                         (MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(),
                         (int)DataHandler.eDataType.FM_DOWN);
-                    FD.Show();
+                    MainForm.FileDownloader.Show();
                     foreach (DataGridViewRow r in dataGridView1.SelectedRows)
                     {
-                        ((FileDownloader)FD).addToList(fbd.SelectedPath,CurrentPath + "/" + r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString().Equals("Folder"));
+                        ((FileDownloader)MainForm.FileDownloader).addToList(fbd.SelectedPath,CurrentPath , r.Cells[0].Value.ToString(), ( r.Cells[1].Value.ToString().Equals("Folder")));
                     }
                 }
                 else
@@ -126,7 +126,7 @@ namespace Remo.Features
 
                     foreach (DataGridViewRow r in dataGridView1.SelectedRows)
                     {
-                        ((FileDownloader)FD).addToList(fbd.SelectedPath,CurrentPath + "/" + r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString().Equals("Folder"));
+                        ((FileDownloader)MainForm.FileDownloader).addToList(fbd.SelectedPath,CurrentPath , r.Cells[0].Value.ToString(), ( r.Cells[1].Value.ToString().Equals("Folder")));
                     }
                 }
             }

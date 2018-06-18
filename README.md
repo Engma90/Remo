@@ -17,9 +17,9 @@
 | Calllog  				| 100 %  	|							|
 | Contacts		  		| 100 %  	|							|
 | SMS  					| 100 %  	|							|
-| File Manager		  	| 70 %  	|							|
+| File Manager		  	| 95 %  	|							|
 | GPS Location  		| 100 %  	|							|
-| Call Recorder		  	| 50  %  	|							|
+| Call Recorder		  	| 70  %  	|							|
 |Open Network By SMS	|✔ 			|Root Privilege Required 	|
 |Erase All Data			|✘			|							|
 |Make Noise				|✘			|							|

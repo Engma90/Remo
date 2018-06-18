@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 //using SimpleTCP;
 using System.Reflection;
+using System.Collections;
 
 namespace Remo.Connections
 {
@@ -22,7 +23,7 @@ namespace Remo.Connections
         public int Port { get; set; }
     //    public int CheckIsConnectedInterval_ms { get; set; } = 5000;
         //    public IMConnection ClientClass { get; set; }
-        public DateTime DateStarted { get; set; }
+       // public DateTime DateStarted { get; set; }
         private TCPServer2()
         {
             DateStarted = DateTime.Now;
@@ -102,22 +103,30 @@ namespace Remo.Connections
 
                 try
                 {
-                    byte[] bArray;
-                    int n, Length, DataType,Flag;
+                    byte[] bArray = null;
+                    int n = -1 , Length = -1, DataType = -1, Flag = -1;
                     //String Messsage = "";
-                    bArray = new byte[4];
+                    bArray = new byte[] { 0xff, 0xff , 0xff , 0xff };
+                    
                     
                     n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
                     Length = readInt(bArray);
-                    /// Console.WriteLine("DataLen = " + Length);
-
+                    Console.WriteLine("DataLen = " + Length);
+                    
+                    if (bArray[0] == 0xff && bArray[1] == 0xff && bArray[2] == 0xff && bArray[3] == 0xff)
+                    {
+                        Console.WriteLine("Read int Ex bArray = " + Length);
+                        bClientConnected = false;
+                        break;
+                    }
                     n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
                     DataType = readInt(bArray);
-                    Console.WriteLine("DataType = " + DataType);
+                    
+
 
                     n = client.Client.Receive(bArray, 0, 4, SocketFlags.None);
                     Flag = readInt(bArray);
-
+                    Console.WriteLine("DataType = {0} Flag = {1}", DataType,Flag);
                     byte[] data = readMessage(client, Length);
                     // Console.WriteLine(client.Client.RemoteEndPoint.ToString());
 
@@ -129,7 +138,16 @@ namespace Remo.Connections
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine("Recive Exception: " + ex.Message);
+                    Console.WriteLine("Recive Exception: " + ex.ToString());
+                    Console.WriteLine("Recive Exception: " + ex.StackTrace);
+
+                    if (ex.Data.Count > 0)
+                    {
+                        Console.WriteLine("  Extra details:");
+                        foreach (DictionaryEntry de in ex.Data)
+                            Console.WriteLine("    Key: {0,-20}      Value: {1}",
+                                              "'" + de.Key.ToString() + "'", de.Value);
+                    }
                     bClientConnected = false;
                     break;
                     //clientDisconnected(client);

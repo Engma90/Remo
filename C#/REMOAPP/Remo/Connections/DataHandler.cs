@@ -61,7 +61,7 @@ namespace Remo.Connections
                         conn.IP = (c.Client.RemoteEndPoint as IPEndPoint).Address.ToString();
                         conn.Port = (c.Client.RemoteEndPoint as IPEndPoint).Port.ToString();
                         conn.isMainConnection = false;
-                        ServerFactory.GetInstance().getMainConnectionByIP(conn.IP).Features[Feature_type].MainConnection = ServerFactory.GetInstance().getMainConnectionByIP(conn.IP);
+                //        ServerFactory.GetInstance().getMainConnectionByIP(conn.IP).Features[Feature_type].MainConnection = ServerFactory.GetInstance().getMainConnectionByIP(conn.IP);
                         //try
                         //{
                         //    ServerFactory.GetInstance().getMainConnectionByIP(conn.IP).Features.Remove(dataType);
@@ -76,8 +76,8 @@ namespace Remo.Connections
 
                 else
                 {
-                    try
-                    {
+                    //try
+                    //{
                         IConnection conn = new Connection();
                         conn = new Connection();
                         conn.tcpClient = c;
@@ -85,14 +85,14 @@ namespace Remo.Connections
                         conn.Port = (c.Client.RemoteEndPoint as IPEndPoint).Port.ToString();
                         conn.isMainConnection = false;
                         ServerFactory.GetInstance().getMainConnectionByIP(conn.IP).Features[dataType].onDataReceived(Flag, data);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("No Feature Found Exception " + ex.Message);
-                        Console.WriteLine("DataType " + dataType);
-                        Console.WriteLine("Time Since Run : " + (DateTime.Now - ServerFactory.GetInstance().DateStarted));
-                        throw new Exception();
-                    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    Console.WriteLine("No Feature Found Exception " + ex.Message);
+                    //    Console.WriteLine("DataType " + dataType);
+                    //    Console.WriteLine("Time Since Run : " + (DateTime.Now - ServerFactory.GetInstance().DateStarted));
+                    //    throw new Exception();
+                    //}
                 }
          //   }catch(Exception ex)
           //  {

@@ -19,7 +19,7 @@ namespace Remo.Features
         public int DATA_TYPE { get; set; }
         public IConnection MainConnection { get; set; }
 
-        IFeature FD = null;
+        
 
         public FileMan()
         {
@@ -81,6 +81,11 @@ namespace Remo.Features
             Console.WriteLine("FileMan");
             ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),"L="+ CurrentPath,
+                    MainConnection.tcpClient);
+
+
+            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_DOWN).ToString(),
+                ((int)DataHandler.eOrderType.START).ToString(), //Current_Downloading_Obj.MobPath,
                     MainConnection.tcpClient);
         }
 
@@ -148,24 +153,24 @@ namespace Remo.Features
             if (fbd.ShowDialog() == DialogResult.OK)
             {
 
-                if (this.FD == null)
+                if (MainForm.FileDownloader == null || MainForm.FileDownloader.IsDisposed)
                 {
-                   FD = ServerFactory.GetInstance().startFeature(
+                    MainForm.FileDownloader = ServerFactory.GetInstance().startFeature(
                         (MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(),
                         (int)DataHandler.eDataType.FM_DOWN);
-                    FD.Show();
+                    MainForm.FileDownloader.Show();
                     foreach (DataGridViewRow r in dataGridView1.SelectedRows)
                     {
-                        ((FileDownloader)FD).addToList(fbd.SelectedPath,CurrentPath + "/" + r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString().Equals("Folder"));
+                        ((FileDownloader)MainForm.FileDownloader).addToList(fbd.SelectedPath , CurrentPath , r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString().Equals("Folder"));
                     }
                 }
                 else
                 {
 
-
+                    //+ "/" + r.Cells[0].Value.ToString()
                     foreach (DataGridViewRow r in dataGridView1.SelectedRows)
                     {
-                        ((FileDownloader)FD).addToList(fbd.SelectedPath,CurrentPath + "/" + r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString().Equals("Folder"));
+                        ((FileDownloader)MainForm.FileDownloader).addToList(fbd.SelectedPath , CurrentPath , r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString().Equals("Folder"));
                     }
                 }
             }

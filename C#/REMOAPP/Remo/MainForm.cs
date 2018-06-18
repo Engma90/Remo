@@ -26,6 +26,7 @@ namespace Remo
         public static int Port = 4447;
         //private string SelectedClientIP = "";
         //MobInfo mi;
+        public static IFeature FileDownloader = null;
 
         public MainForm()
         {
@@ -107,20 +108,26 @@ namespace Remo
 
         private void RefreshClientsList()
         {
-            int saveRow = -1;
-            if (dgv1.Rows.Count > 0 && dgv1.SelectedRows[0] != null)
-                saveRow = dgv1.SelectedRows[0].Index;
-            dgv1.Rows.Clear();
+            //try
+            //{
+                int saveRow = -1;
+                if (dgv1.Rows.Count > 0 && dgv1.SelectedRows[0] != null)
+                    saveRow = dgv1.SelectedRows[0].Index;
+                dgv1.Rows.Clear();
                 foreach (IConnection c in mTCPH.MainConnectionsDict.Values.ToList())
                 {
-                if(!c.Features.ContainsKey((int)DataHandler.eDataType.INFO))
-                    mTCPH.startFeature(c.IP, (int)DataHandler.eDataType.INFO).Show();
-                dgv1.Rows.Add(((MobInfo)c.Features[(int)DataHandler.eDataType.INFO]).getInfo());
+                    if (!c.Features.ContainsKey((int)DataHandler.eDataType.INFO))
+                        mTCPH.startFeature(c.IP, (int)DataHandler.eDataType.INFO).Show();
+                    dgv1.Rows.Add(((MobInfo)c.Features[(int)DataHandler.eDataType.INFO]).getInfo());
                 }
-            if (saveRow != -1 && saveRow < dgv1.Rows.Count)
-                dgv1.Rows[saveRow].Selected = true;
-            //  dgv1.Rows[Selected].Selected = true;
+                if (saveRow != -1 && saveRow < dgv1.Rows.Count)
+                    dgv1.Rows[saveRow].Selected = true;
+                //  dgv1.Rows[Selected].Selected = true;
+            //}
+            //catch 
+            //{
 
+            //}
 
         }
 

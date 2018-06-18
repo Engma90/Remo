@@ -9,177 +9,242 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Remo.Connections;
 using System.IO;
+using System.Threading;
 
 namespace Remo.Features
 {
     public partial class FileDownloader : Form, IFeature
     {
+
+        public IConnection MainConnection { get; set; }
+        public int DATA_TYPE { get; set; }
+        private Thread RefreshDownloadListThread;
+        private bool Stop = false;
+
+        static List<DownloadObject> DownloadList;
+        static string current_file_name = "";
+        static string current_sub_dir = "";
+        static DownloadObject Current_Downloading_Obj;
+
+
         public FileDownloader()
         {
             InitializeComponent();
             DATA_TYPE = (int)DataHandler.eDataType.FM_DOWN;
             DownloadList = new List<DownloadObject>();
+            CheckForIllegalCrossThreadCalls = false;
         }
-        List<DownloadObject> DownloadList;
-        static string Current_Downloading_file;
-        static string Current_Downloading_Dir;
 
-        public IConnection MainConnection
+        private void Download()
         {
-            get;
-
-            set;
+            foreach (DownloadObject d in DownloadList.ToList())
+            {
+                if (!d.isCompleated)
+                {
+                    Current_Downloading_Obj = d;
+                    d.startDownload(MainConnection, dataGridView1.Rows[Current_Downloading_Obj.RowIndex].Cells[3]);
+                }
+               // DownloadList.Remove(d);
+            }
         }
 
-        public int DATA_TYPE { get; set; }
+
+
+        private void FileDownloader_Load(object sender, EventArgs e)
+        {
+
+            //DataGridViewProgressColumn column = new DataGridViewProgressColumn();
+            //column.HeaderText = "Progress";
+            //column.FillWeight = 30;
+            //column.Frozen = false;
+            //column.ReadOnly = true;
+            //dataGridView1.Columns.Add(column);
+
+
+
+            RefreshDownloadListThread = new Thread(delegate ()
+            {
+                while (!Stop)
+                {
+                    try
+                    {
+
+                        Download();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("DownloadThread Ex" + ex.ToString());
+                    }
+                    Thread.Sleep(5000);
+
+
+
+                }
+            });
+
+            RefreshDownloadListThread.Start();
+
+        }
+
+        //public void updateDGVProgress(int progress)
+        //{
+        //        Current_Downloading_Obj.getInfo(progress);
+        //}
 
 
 
 
-
-        public void addToList(string PCPath, string MobPath,bool isDir)
+        public void addToList(string PCPath, string MobPath, string Name, bool isDir)
         {
             DownloadObject DO = new DownloadObject();
+
+            if (MobPath.StartsWith("/"))
+            {
+                DO.MobPath = MobPath.Remove(0,1);
+            }
             DO.PCPath = PCPath;
-            DO.MobPath = MobPath;
-            DO.progress = 22;
+            
+            DO.Name = Name;
             DO.isDir = isDir;
             DownloadList.Add(DO);
-            dataGridView1.Rows.Add(DO.getInfo());
+            DO.RowIndex = dataGridView1.Rows.Add(DO.getInfo());
+
+
         }
         public void onDataReceived(int Flag, byte[] data)
         {
-
-            if (Flag == (int)Flages.DOWNLOAD_START)
+            Invoke(new Action(() =>
             {
-                //current file.append binary packet
-            }
-            else if (Flag == (int)Flages.DOWNLOAD_FINISHED)
-            {
-
-            }
-
-            else if (Flag == (int)Flages.FILE_START)
-            {
-                Current_Downloading_file = Encoding.UTF8.GetString(data);
-                if(!File.Exists(Current_Downloading_Dir+Current_Downloading_file))
-                    File.Create(Current_Downloading_Dir+Current_Downloading_file);
-            }
-            else if (Flag == (int)Flages.FILE_PACKET)
-            {
-                using (var stream = new FileStream(Current_Downloading_Dir + Current_Downloading_file, FileMode.Append))
+              //  Console.WriteLine("FM_DOWN onDataReceived Flag {0} Data {1}", Flag, Encoding.UTF8.GetString(data));
+                if (Flag == (int)Flages.FILE_START)
                 {
-                    stream.Write(data, 0, data.Length);
+                    Console.WriteLine(getFullFilePath());
+                    Current_Downloading_Obj.isStarted = true;
+                    current_file_name = Encoding.UTF8.GetString(data);
+                    var myFile = File.Create(getFullFilePath());
+                    myFile.Close();
+                 //   dataGridView1.Rows[Current_Downloading_Obj.RowIndex].Cells[3].Value = "Downloading";
                 }
-            }
+                else if (Flag == (int)Flages.FILE_PACKET)
+                {
+                    Console.WriteLine("getFullFilePath() : "+ getFullFilePath());
+                    using (var stream = new FileStream(getFullFilePath(), FileMode.Append))
+                    {
+                        stream.Write(data, 0, data.Length);
+                    }
+                }
+                else if (Flag == (int)Flages.FILE_FINISHED)
+                {
+                    // dataGridView1.Rows[Current_Downloading_Obj.RowIndex].Cells[3].Value = "Finished";
+                   // Current_Downloading_Obj.isCompleated = true;//
+                }
 
-            else if (Flag == (int)Flages.CD)
-            {
-                if (Directory.Exists(Current_Downloading_Dir))
-                    Directory.CreateDirectory(Current_Downloading_Dir);
-            }
+                else if (Flag == (int)Flages.CD)
+                {
+                    Console.WriteLine("MobPath = " + Current_Downloading_Obj.MobPath);
+                    current_sub_dir = Encoding.UTF8.GetString(data).Remove(0,Current_Downloading_Obj.MobPath.Length).Replace("/","\\");
+                    if (!Directory.Exists(getFullDirPath()))
+                        Directory.CreateDirectory(getFullDirPath());
+                }
 
+                if (Flag == (int)Flages.DOWNLOAD_OBJ_FINISHED)
+                {
+                    // dataGridView1.Rows[Current_Downloading_Obj.RowIndex].Cells[3].Value = "Finished";
+                     Current_Downloading_Obj.isCompleated = true;
+                }
 
-
-
-
-
+            }));
 
 
 
         }
+
+
+
+        private String getFullDirPath()
+        {
+            //   Current_Downloading_Obj = DownloadList[0];
+            return Current_Downloading_Obj.PCPath
+                + "\\"
+                + current_sub_dir;
+        }
+        private String getFullFilePath()
+        {
+           // Current_Downloading_Obj = DownloadList[0];
+            return Current_Downloading_Obj.PCPath
+                + "\\"
+                + current_sub_dir
+                + "\\"
+                + current_file_name;
+        }
+
 
         public void onErrorReceived(String error)
         {
 
         }
 
-        private void FileDownloader_Load(object sender, EventArgs e)
-        {
-            
-            DataGridViewProgressColumn column = new DataGridViewProgressColumn();
-            column.HeaderText = "Progress";
-            column.FillWeight = 30;
-            column.Frozen = false;
-            column.ReadOnly = true;
-            dataGridView1.Columns.Add(column);
 
-            object[] row1 = new object[] { "test1", "test2", 50 };
-            object[] row2 = new object[] { "test1", "test2", 55 };
-            object[] row3 = new object[] { "test1", "test2", 22 };
-            object[] rows = new object[] { row1, row2, row3 };
 
-            foreach (object[] row in rows)
-            {
-                dataGridView1.Rows.Add(row);
-            }
-        }
-
-        private class DownloadObject
-        {
-           public string Name ,PCPath, MobPath;
-            public bool isDir;
-            public int size;
-            public int progress;
-
-            public string[] getInfo ()
-            {
-                return new string[] { PCPath,(isDir?"Folder":"File"),progress.ToString()};
-            }
-        }
 
         private enum Flages
         {
-            DOWNLOAD_START,
-            FOLDER_START,
+            DOWNLOAD_OBJ_START,
             FILE_START,
             FILE_PACKET,
-            FILE_END,
-            FOLDER_END,
-            DOWNLOAD_FINISHED,
-
+            FILE_FINISHED,
+            DOWNLOAD_OBJ_FINISHED,
             CD
-            
+
+        }
+
+        private void FileDownloader_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Stop = true;
+            RefreshDownloadListThread.Abort();
         }
 
 
 
 
+        private class DownloadObject
+        {
+            public string Name, PCPath, MobPath;
+            public bool isDir;
+            public int size = 309238;
+            public bool isStarted;
+            public bool isCompleated;
+            public int RowIndex;
 
-        //private static bool CheckWellFormed(string input)
-        //{
-        //    var stack = new Stack<Flages>();
-        //    // dictionary of matching starting and ending pairs
-        //    var allowedChars = new Dictionary<Flages, Flages>() { { Flages.FOLDER_START, Flages.FOLDER_END }, { Flages.FILE_START, Flages.FILE_END } };
+            public string[] getInfo()
+            {
+                //   this.Downloaded_size += Downloaded_size;
+                // progress = (int)(((double)Downloaded_size / (double)size) * 100);
+                if (!isStarted)
+                    return new string[] { PCPath + "\\" + Name, (isDir ? "Folder" : "File"), size.ToString(), "Pending" };
+                return new string[] { PCPath +"\\"+ Name, (isDir ? "Folder" : "File"), size.ToString(), isCompleated ? "Finished" : "Downloading" };
+            }
 
-        //    var wellFormated = true;
-        //    foreach (var chr in input)
-        //    {
-        //        if (allowedChars.ContainsKey(chr))
-        //        {
-        //            // if starting char then push on stack
-        //            stack.Push(chr);
-        //        }
-        //        // ContainsValue is linear but with a small number is faster than creating another object
-        //        else if (allowedChars.ContainsValue(chr))
-        //        {
-        //            // make sure something to pop if not then know it's not well formated
-        //            wellFormated = stack.Any();
-        //            if (wellFormated)
-        //            {
-        //                // hit ending char grab previous starting char
-        //                var startingChar = stack.Pop();
-        //                // check it is in the dictionary
-        //                wellFormated = allowedChars.Contains(new KeyValuePair<char, char>(startingChar, chr));
-        //            }
-        //            // if not wellformated exit loop no need to continue
-        //            if (!wellFormated)
-        //            {
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    return wellFormated;
-        //}
+            public void startDownload(IConnection MainConnection,DataGridViewCell Status)
+            {
+                isCompleated = false;
+                ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_DOWN).ToString(),
+                    ((int)DataHandler.eOrderType.UPDATE).ToString(), MobPath +"/"+ Name,
+                    MainConnection.tcpClient);
+
+                Status.Value = "Downloading";
+                while (!isCompleated)
+                {
+                    Thread.Sleep(1000);
+                }
+                Status.Value = "Finished";
+
+            }
+        }
+
+
+
+
     }
 }

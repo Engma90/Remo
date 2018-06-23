@@ -35,23 +35,41 @@ namespace Remo.Features
             pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             comboBox1.SelectedIndex = 0;
+            btnStart.Enabled = true;
+            comboBox1.Enabled = true;
+            trackBar1.Enabled = false;
+            btnRR.Enabled = false;
+            btnRL.Enabled = false;
+            btnStop.Enabled = false;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            btnStart.Enabled = false;
+            comboBox1.Enabled = false;
+            trackBar1.Enabled = true;
+            btnRR.Enabled = true;
+            btnRL.Enabled = true;
+            btnStop.Enabled = true;
             start();
         }
 
         private void start()
         {
             Console.WriteLine("Cam Start");
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.CAM).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),trackBar1.Value+"/"+ comboBox1.SelectedIndex,
                 MainConnection.tcpClient);
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
+            btnStart.Enabled = true;
+            comboBox1.Enabled = true;
+            trackBar1.Enabled = false;
+            btnRR.Enabled = false;
+            btnRL.Enabled = false;
+            btnStop.Enabled = false;
             Stop();
         }
 
@@ -115,7 +133,7 @@ namespace Remo.Features
         public void Stop()
         {
             Console.WriteLine("Cam Stop");
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.CAM).ToString(),
                 ((int)DataHandler.eOrderType.STOP).ToString(),
                     MainConnection.tcpClient);
         }
@@ -227,7 +245,7 @@ namespace Remo.Features
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CAM).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.CAM).ToString(),
             ((int)DataHandler.eOrderType.UPDATE).ToString(),trackBar1.Value.ToString(),
             MainConnection.tcpClient);
         }

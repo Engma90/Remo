@@ -20,6 +20,7 @@ namespace Remo.Features
         static BufferedWaveProvider bufferedWaveProvider = null;
         //UDPReceiver dgt;
         //ServerFactory mTCPH;
+        bool isPaused = false;
 
         public IConnection MainConnection{get;set;}
 
@@ -28,58 +29,62 @@ namespace Remo.Features
         public MicStream()
         {
             InitializeComponent();
-            //this.mTCPH = ServerFactory.GetInstance();
+            //this.mTCPH = MainForm.mTCPH;
             DATA_TYPE = (int)DataHandler.eDataType.MIC;
         }
 
         private void MicStream_Load(object sender, EventArgs e)
         {
-
+            CheckForIllegalCrossThreadCalls = false;
+            btnStop.Enabled = false;
+            btnPause.Enabled = false;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            
+            btnStart.Enabled = false;
+            btnStop.Enabled = true;
+            btnPause.Enabled = true;
             start();
+            isPaused = false;
         }
 
         private void start()
         {
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
-                ((int)DataHandler.eOrderType.START).ToString(),
-                    MainConnection.tcpClient);
-            waveOut = new WaveOut();
-            bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(8000, 16, 1));
-            bufferedWaveProvider.BufferDuration = TimeSpan.FromMinutes(10);
-            waveOut.Init(bufferedWaveProvider);
+            if (!isPaused)
+            {
+                MainForm.mTCPH.send(((int)DataHandler.eDataType.MIC).ToString(),
+                    ((int)DataHandler.eOrderType.START).ToString(),
+                        MainConnection.tcpClient);
+                waveOut = new WaveOut();
+                bufferedWaveProvider = new BufferedWaveProvider(new WaveFormat(8000, 16, 1));
+                bufferedWaveProvider.BufferDuration = TimeSpan.FromMinutes(10);
+                waveOut.Init(bufferedWaveProvider);
+            }
+            else
+            {
+                waveOut.Play();
+            }
 
             //dgt = UDPReceiver.GetInstance(4447);
             //dgt.UDPDataReceived += Dgt_UDPDataReceived;
             //dgt.ReceiveMessages();
         }
 
-        //private void Dgt_UDPDataReceived(object sender, UDPReceiver.UDPDataEventArgs e)
-        //{
-        //    try
-        //    {
-
-        //        bufferedWaveProvider.AddSamples(e.data, 0, e.data.Length);
-        //        if(bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(5))
-        //        {
-        //            waveOut.Play();
-        //        }
-        //        else
-        //        {
-        //            waveOut.Pause();
-        //        }
-                
-        //    }
-        //    catch {
-        //    }
-
-        //}
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            isPaused = true;
+            btnPause.Enabled = false;
+            btnStart.Enabled = true;
+            waveOut.Pause();
+        }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
+            btnStop.Enabled = false;
+            btnPause.Enabled = false;
+            btnStart.Enabled = true;
             Stop();
 
         }
@@ -90,14 +95,27 @@ namespace Remo.Features
             {
 
                 bufferedWaveProvider.AddSamples(data, 0, data.Length);
-                if (bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(1))
+                if (!isPaused)
                 {
-                    waveOut.Play();
+                    if (bufferedWaveProvider.BufferedDuration >= TimeSpan.FromSeconds(1))
+                    {
+
+                        waveOut.Play();
+                    }
+                    else
+                    {
+                        waveOut.Pause();
+                    }
                 }
-                else
+
+
+                this.Invoke((MethodInvoker)delegate
                 {
-                    waveOut.Pause();
-                }
+                    toolStripStatusLabel1.Text = "Buffered : "+ bufferedWaveProvider.BufferedDuration.ToString();
+                    progressBar1.Value = (int)((float)bufferedWaveProvider.BufferedDuration.Ticks / (float)bufferedWaveProvider.BufferedDuration.Ticks);
+                });
+
+
 
             }
             catch
@@ -112,12 +130,13 @@ namespace Remo.Features
 
         private void MicStream_FormClosing(object sender, FormClosingEventArgs e)
         {
+            isPaused = false;
             Stop();
         }
 
         public void Stop()
         {
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.MIC).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.MIC).ToString(),
                     ((int)DataHandler.eOrderType.STOP).ToString(),
                         MainConnection.tcpClient);
             waveOut.Stop();
@@ -126,5 +145,7 @@ namespace Remo.Features
             Console.WriteLine();
             Console.WriteLine("The MIC was stopped!");
         }
+
+
     }
 }

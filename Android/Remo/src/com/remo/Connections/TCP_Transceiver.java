@@ -62,13 +62,13 @@ public class TCP_Transceiver {
         while (!isConnected) {
 
             try {
-                try {
-                    socket.shutdownInput();
-                    socket.shutdownOutput();
-                    socket.close();
-                }catch (Exception e){
-                    Log.e("REMODROID", "socket.close() Exception");
-                }
+//                try {
+//                    socket.shutdownInput();
+//                    socket.shutdownOutput();
+//                    socket.close();
+//                }catch (Exception e){
+//                    Log.e("REMODROID", "socket.close() Exception");
+//                }
                 socket = new Socket();
                 socket.connect(new InetSocketAddress(ip, port), 5000);
                 InputStream in = socket.getInputStream();
@@ -93,7 +93,7 @@ public class TCP_Transceiver {
 
     }
 
-    void disconnect(){
+    public void disconnect(){
         try {
             tcpStopFlag= true;
             socket.close();

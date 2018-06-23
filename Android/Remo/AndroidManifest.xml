@@ -27,6 +27,8 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
             android:name="com.remo.App"
         android:allowBackup="true"
@@ -51,10 +53,11 @@
             android:enabled="true"
             android:exported="true" />
 
-        <receiver
-            android:name=".features.broadcastReceivers.startup"
-            android:enabled="true"
-            android:exported="true" />
+        <receiver android:name="com.remo.features.broadcastReceivers.startup" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <receiver
                 android:name=".features.broadcastReceivers.connectivity"
                 android:enabled="true"
@@ -74,7 +77,9 @@
 
 
         <receiver android:name=".features.broadcastReceivers.call_rec"
-                    android:enabled="true">
+                    android:enabled="true"
+                    android:exported="true"
+                    >
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
@@ -83,6 +88,12 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name="com.remo.features.broadcastReceivers.DeviceAdmin" android:permission="android.permission.BIND_DEVICE_ADMIN" android:description="@string/device_description">
+            <meta-data android:name="android.app.device_admin" android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
 
         <!--<receiver android:name="co device_admin"-->
                   <!--android:label="@string/sample_device_admin"-->

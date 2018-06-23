@@ -18,6 +18,7 @@ namespace Remo.Connections
         private TcpListener _server;
         private static volatile Boolean _isRunning;
         int port = 4447;
+        Thread AckClientsThread;
     //    public Dictionary<string, IConnection> MainConnectionsDict { get; }
     //    public Dictionary<string, IConnection> FeatureConnectionsMapDict { get; }//string = IFConnection ip
         public int Port { get; set; }
@@ -67,6 +68,48 @@ namespace Remo.Connections
 
         public void LoopClients()
         {
+
+            AckClientsThread = new Thread(delegate ()
+            {
+                while (_isRunning)
+                {
+                    try
+                    {
+                        //Broadcast(Encoding.UTF8.GetBytes("Info\n"));
+                        foreach (IConnection MainConnection in MainConnectionsDict.Values.ToList())
+                        {
+                            //if (MainConnection.isMainConn)
+                            //{
+                            send(((int)DataHandler.eDataType.INFO).ToString(),
+                                ((int)DataHandler.eOrderType.START).ToString(),
+                                MainConnection.tcpClient);
+                            //Thread.Sleep(10);
+                            if ((DateTime.Now - MainConnection.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms))
+                            {
+                                MainConnectionsDict.Remove((MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
+                                //Console.WriteLine(MainConnection.LastChecked);
+                                //Console.WriteLine(DateTime.Now);
+                                //foreach (IConnection fc in MainConnection.FeatureClients.Values.ToList())
+                                //{
+                                //    fc.F = null;
+                                //    fc.tcpClient.Client.Disconnect(false);
+                                //    FeatureConnectionsMapDict.Remove(fc.tcpClient.Client.RemoteEndPoint.ToString());
+                                //}
+                                MainConnection.tcpClient.Client.Disconnect(false);
+                            }
+                            // }
+                        }
+                    }
+                    catch (Exception ex) { Console.WriteLine("Broadcast Exception: " + ex.Message); }
+                    Thread.Sleep(CheckIsConnectedInterval_ms);
+                }
+            });
+
+            AckClientsThread.Start();
+
+
+
+
             Console.WriteLine("TCP Server Started");
             while (_isRunning)
             {
@@ -269,13 +312,20 @@ namespace Remo.Connections
 
         public override void send(string Message, string OrderType, string Parameters, object c)
         {
-            ((TcpClient)c).Client.Send(Encoding.UTF8.GetBytes(Message + ":" + OrderType + ":" + Parameters + "\n"));
+            try
+            {
+                ((TcpClient)c).Client.Send(Encoding.UTF8.GetBytes(Message + ":" + OrderType + ":" + Parameters + "\n"));
+            }
+            catch { }
 
         }
         public override void send(string Message, string OrderType, object c)
         {
-            ((TcpClient)c).Client.Send(Encoding.UTF8.GetBytes(Message + ":" + OrderType+":.." + "\n"));
-
+            try
+            {
+                ((TcpClient)c).Client.Send(Encoding.UTF8.GetBytes(Message + ":" + OrderType + ":.." + "\n"));
+            }
+            catch { }
         }
 
 

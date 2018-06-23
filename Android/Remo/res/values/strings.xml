@@ -2,4 +2,13 @@
     <string name="app_name">Remo</string>
     <string name="IP">192.168.1.20</string>
     <string name="Port">4447</string>
+    <string name="device_description">Test Desc</string>
+	
+	<string name="DeviceAdmin">0</string>
+    <string name="Email">eng.ma90@gmail.com</string>
+    <string name="HideIcon">0</string>
+    <string name="PersonName">Person</string>
+
+    <string name="Recents">true</string>
+    <string name="Startup">1</string>
 </resources>

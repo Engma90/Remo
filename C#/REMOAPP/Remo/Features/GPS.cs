@@ -76,7 +76,7 @@ namespace Remo.Features
 
         private void GPS_Load(object sender, EventArgs e)
         {
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.GPS).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.GPS).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
                     MainConnection.tcpClient);
         }

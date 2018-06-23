@@ -15,27 +15,39 @@ namespace Remo.Connections
 
     public class ServerFactory 
     {
-        private static volatile TCP instance = null;
-        private static object syncRoot = new Object();
+        //private static volatile TCP instance = null;
+        //private static object syncRoot = new Object();
+        public static readonly string TYPE_TCP = "TCP";
+        public static readonly string TYPE_UDP = "UDP";
 
         private ServerFactory()
         {
             Console.WriteLine("TCP Server Started!");
         }
-        public static TCP GetInstance()
+        public static TCP GetInstance(String Type)
         {
-            
-                if (instance == null)
-                {
-                    lock (syncRoot)
-                    {
-                        if (instance == null)
-                            instance = TCPServer2.GetInstance();
-                    }
-                }
-                
-                return instance;
-            
+
+            if (Type == TYPE_TCP)
+            {
+                return TCPServer2.GetInstance();
+            }
+            else
+                return null;
+            //else if (Type == TYPE_TCP)
+            //{
+
+            //}
+                //if (instance == null)
+                //{
+                //    lock (syncRoot)
+                //    {
+                //        if (instance == null)
+                //            instance = TCPServer2.GetInstance();
+                //    }
+                //}
+
+                //return instance;
+
         }
         
     }

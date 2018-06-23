@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builder.cs" />
     <Compile Include="Connections\IServer.cs" />
     <Compile Include="Connections\DataHandler.cs" />
     <Compile Include="Connections\IConnection.cs" />

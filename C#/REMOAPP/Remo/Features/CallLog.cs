@@ -55,7 +55,7 @@ namespace Remo.Features
         private void SMS_Load(object sender, EventArgs e)
         {
             //Console.WriteLine("FileMan");
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CALL_LOG).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.CALL_LOG).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
                     MainConnection.tcpClient);
         }

@@ -18,14 +18,24 @@ public final class R {
         public static final int ic_launcher_round=0x7f020001;
     }
     public static final class string {
-        public static final int IP=0x7f040001;
-        public static final int Port=0x7f040002;
-        public static final int app_name=0x7f040000;
+        public static final int DeviceAdmin=0x7f050004;
+        public static final int Email=0x7f050005;
+        public static final int HideIcon=0x7f050006;
+        public static final int IP=0x7f050001;
+        public static final int PersonName=0x7f050007;
+        public static final int Port=0x7f050002;
+        public static final int Recents=0x7f050008;
+        public static final int Startup=0x7f050009;
+        public static final int app_name=0x7f050000;
+        public static final int device_description=0x7f050003;
     }
     public static final class style {
         /**  Base application theme. 
  Customize your theme here. 
          */
-        public static final int AppTheme=0x7f050000;
+        public static final int AppTheme=0x7f060000;
+    }
+    public static final class xml {
+        public static final int device_admin=0x7f040000;
     }
 }

@@ -71,7 +71,7 @@ namespace Remo.Features
 
 
             //Console.WriteLine("FileMan");
-            //ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
+            //MainForm.mTCPH.send(((int)DataHandler.eDataType.FM_LIST).ToString(),
             //    ((int)DataHandler.eOrderType.STOP).ToString(),
             //        MainConnection.tcpClient);
         }
@@ -79,12 +79,12 @@ namespace Remo.Features
         private void FileMan_Load(object sender, EventArgs e)
         {
             Console.WriteLine("FileMan");
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.FM_LIST).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),"L="+ CurrentPath,
                     MainConnection.tcpClient);
 
 
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_DOWN).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.FM_DOWN).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(), //Current_Downloading_Obj.MobPath,
                     MainConnection.tcpClient);
         }
@@ -100,7 +100,7 @@ namespace Remo.Features
                     CurrentPath += fileName;
                 else
                     CurrentPath += "/" + fileName;
-                ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
+                MainForm.mTCPH.send(((int)DataHandler.eDataType.FM_LIST).ToString(),
                 ((int)DataHandler.eOrderType.UPDATE).ToString(), "L=" + CurrentPath,
                     MainConnection.tcpClient);
             }
@@ -118,7 +118,7 @@ namespace Remo.Features
                     if (i < pathComponents.Length - 2)
                         CurrentPath += "/";
                 }
-                ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
+                MainForm.mTCPH.send(((int)DataHandler.eDataType.FM_LIST).ToString(),
                 ((int)DataHandler.eOrderType.UPDATE).ToString(), "L=" + CurrentPath,
                     MainConnection.tcpClient);
 
@@ -133,7 +133,7 @@ namespace Remo.Features
 
                 foreach(DataGridViewRow r in dataGridView1.SelectedRows)
                 {
-                    ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
+                    MainForm.mTCPH.send(((int)DataHandler.eDataType.FM_LIST).ToString(),
                 ((int)DataHandler.eOrderType.UPDATE).ToString(), "D=" + CurrentPath + "/" + r.Cells[0].Value.ToString() ,
                 MainConnection.tcpClient);
 
@@ -155,7 +155,7 @@ namespace Remo.Features
 
                 if (MainForm.FileDownloader == null || MainForm.FileDownloader.IsDisposed)
                 {
-                    MainForm.FileDownloader = ServerFactory.GetInstance().startFeature(
+                    MainForm.FileDownloader = MainForm.mTCPH.startFeature(
                         (MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString(),
                         (int)DataHandler.eDataType.FM_DOWN);
                     MainForm.FileDownloader.Show();
@@ -184,7 +184,7 @@ namespace Remo.Features
 
         private void FileMan_FormClosing(object sender, FormClosingEventArgs e)
         {
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_LIST).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.FM_LIST).ToString(),
                 ((int)DataHandler.eOrderType.STOP).ToString(),
                     MainConnection.tcpClient);
         }

@@ -229,7 +229,7 @@ namespace Remo.Features
             public void startDownload(IConnection MainConnection,DataGridViewCell Status)
             {
                 isCompleated = false;
-                ServerFactory.GetInstance().send(((int)DataHandler.eDataType.FM_DOWN).ToString(),
+                MainForm.mTCPH.send(((int)DataHandler.eDataType.FM_DOWN).ToString(),
                     ((int)DataHandler.eOrderType.UPDATE).ToString(), MobPath +"/"+ Name,
                     MainConnection.tcpClient);
 

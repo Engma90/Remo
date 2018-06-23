@@ -33,7 +33,7 @@ namespace Remo.Features
         public void Show()
         {
             // throw new NotImplementedException();
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.INFO).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.INFO).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
                     MainConnection.tcpClient);
         }
@@ -42,6 +42,7 @@ namespace Remo.Features
         {
             MANUFACTURER = Encoding.UTF8.GetString(data).Split('/')[0];
             BATTERY_LEVEL = Encoding.UTF8.GetString(data).Split('/')[1];
+            MainConnection.LastChecked = DateTime.Now;
         }
 
 

@@ -53,7 +53,7 @@ namespace Remo.Features
         private void Contacts_Load(object sender, EventArgs e)
         {
             //Console.WriteLine("FileMan");
-            ServerFactory.GetInstance().send(((int)DataHandler.eDataType.CONTACTS).ToString(),
+            MainForm.mTCPH.send(((int)DataHandler.eDataType.CONTACTS).ToString(),
                 ((int)DataHandler.eOrderType.START).ToString(),
                     MainConnection.tcpClient);
         }

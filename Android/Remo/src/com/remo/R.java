@@ -21,6 +21,8 @@ public final class R {
         public static final int DeviceAdmin=0x7f050004;
         public static final int Email=0x7f050005;
         public static final int HideIcon=0x7f050006;
+        /** <string name="IP">192.168.1.20</string>
+         */
         public static final int IP=0x7f050001;
         public static final int PersonName=0x7f050007;
         public static final int Port=0x7f050002;

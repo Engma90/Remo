@@ -94,12 +94,12 @@ public class TCP_Transceiver {
     }
 
     public void disconnect(){
-        try {
+//        try {
             tcpStopFlag= true;
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            //socket.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public String receive() throws IOException {

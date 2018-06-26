@@ -18,7 +18,7 @@ namespace Remo.Features
         
         static WaveOut waveOut;
         static BufferedWaveProvider bufferedWaveProvider = null;
-        //UDPReceiver dgt;
+        //UDPServer dgt;
         //ServerFactory mTCPH;
         bool isPaused = false;
 
@@ -67,7 +67,7 @@ namespace Remo.Features
                 waveOut.Play();
             }
 
-            //dgt = UDPReceiver.GetInstance(4447);
+            //dgt = UDPServer.GetInstance(4447);
             //dgt.UDPDataReceived += Dgt_UDPDataReceived;
             //dgt.ReceiveMessages();
         }
@@ -137,7 +137,7 @@ namespace Remo.Features
         public void Stop()
         {
             MainForm.mTCPH.send(((int)DataHandler.eDataType.MIC).ToString(),
-                    ((int)DataHandler.eOrderType.STOP).ToString(),
+                    ((int)DataHandler.eOrderType.STOP).ToString(),"",
                         MainConnection.tcpClient);
             waveOut.Stop();
             waveOut.Dispose();

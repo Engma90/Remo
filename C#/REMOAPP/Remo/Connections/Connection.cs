@@ -15,14 +15,11 @@ namespace Remo.Connections
     {
         public IConnection MainConnection { get; set; }
         public Dictionary<int, IFeature> Features { get; set; }
-        // public Dictionary<int, IFConnection> FeatureClients { get; set; }
-        // public IFeature F { get; set; }
         public DateTime LastChecked { get; set; }
         public TcpClient tcpClient { get; set; }
 
         public string IP { get; set; }
         public string Port { get; set; }
-
         public bool isMainConnection { get; set; }
 
 

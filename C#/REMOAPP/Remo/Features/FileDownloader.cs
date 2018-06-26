@@ -216,6 +216,7 @@ namespace Remo.Features
             public bool isStarted;
             public bool isCompleated;
             public int RowIndex;
+            public string ext = "";
 
             public string[] getInfo()
             {

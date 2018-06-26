@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Remo.Connections
 {
-    public class UDPReceiver
+    public class UDPServer
     {
         private int Port;
         private Thread ListenerThread;
@@ -24,10 +24,10 @@ namespace Remo.Connections
         public event EventHandler<UDPDataEventArgs> UDPDataReceived;
         private int ackcount = 0;
         private int ackAfter = 10;
-        private static volatile UDPReceiver instance = null;
+        private static volatile UDPServer instance = null;
         private static object syncRoot = new Object();
 
-        private UDPReceiver(int por)
+        private UDPServer(int por)
         {
             this.Port = MainForm.Port;
             s = new UdpState();
@@ -43,7 +43,7 @@ namespace Remo.Connections
 
         }
 
-        public static UDPReceiver GetInstance(int Port)
+        public static UDPServer GetInstance(int Port)
         {
 
             if (instance == null)
@@ -51,7 +51,7 @@ namespace Remo.Connections
                 lock (syncRoot)
                 {
                     if (instance == null)
-                        instance = new UDPReceiver(Port);
+                        instance = new UDPServer(Port);
                 }
             }
 

@@ -18,16 +18,4 @@ namespace Remo.Connections
         Dictionary<int, IFeature> Features { get; set; }
 
     }
-
-
-    //public interface IMConnection : IConnection
-    //{
-        
-
-    //}
-
-    //public interface IFConnection : IConnection
-    //{
-    //    IFeature F { get; set; }
-    //}
 }

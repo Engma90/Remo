@@ -58,18 +58,14 @@
     <Compile Include="Connections\IServer.cs" />
     <Compile Include="Connections\DataHandler.cs" />
     <Compile Include="Connections\IConnection.cs" />
-    <Compile Include="Connections\mUDPHandler.cs" />
-    <Compile Include="Connections\AsynchronousSocketListener.cs" />
-    <Compile Include="Connections\TCPServer2.cs" />
-    <Compile Include="Connections\TCPServer1.cs" />
-    <Compile Include="Connections\TcpServer3.cs" />
+    <Compile Include="Connections\TCPServer.cs" />
     <Compile Include="Features\CamStream.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Features\CamStream.Designer.cs">
       <DependentUpon>CamStream.cs</DependentUpon>
     </Compile>
-    <Compile Include="Connections\UDPReceiver.cs" />
+    <Compile Include="Connections\UDPServer.cs" />
     <Compile Include="Connections\Connection.cs" />
     <Compile Include="Connections\IFeature.cs" />
     <Compile Include="Features\CallLog.cs">

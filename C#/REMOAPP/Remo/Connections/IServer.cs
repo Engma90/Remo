@@ -46,30 +46,18 @@ namespace Remo.Connections
     public abstract class TCP : IServer
     {
         public Dictionary<string, IConnection> MainConnectionsDict { get; } = new Dictionary<string, IConnection>();
-        //    Dictionary<string, IConnection> FeatureConnectionsMapDict { get; }//string = IFConnection ip
         public int CheckIsConnectedInterval_ms { get; set; } = 5000;
         public abstract IFeature startFeature(string MainClientIP, int Feature_type);
         public DateTime DateStarted { get; set; }
         public abstract IConnection getMainConnectionByIP(String ip);
-        // IMConnection ClientClass { get; set; }
-
-
 
         public abstract void send(string Message, string OrderType, string Parameters, object c);
         public abstract void send(string Message, string OrderType, object c);
-        //void send(string Message, object c);
 
-
-
-        //ServerFactory GetInstance();
-        //   void Server_ClientConnected(object sender, TcpClient e);
-        //  void Server_DataReceived(object sender, Message e);
-        //void send(String Message, TcpClient c);
     }
 
     public abstract class UDP : IServer
     {
-        //mUDPHandler GetInstance();
         public abstract void Server_DataReceived(object sender, object e);
     }
 }

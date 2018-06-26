@@ -46,12 +46,21 @@ public class DataHandler {
             }
 
         }else if (order_type == eOrderType.UPDATE.ordinal()) {
+            try {
+                FeaturesDict.get(order_feature_part).update(order_params);
+            }catch (Exception e){
 
-            FeaturesDict.get(order_feature_part).update(order_params);
+            }
+
 
         }else if (order_type == eOrderType.STOP.ordinal()) {
 
-            FeaturesDict.get(order_feature_part).stop();
+
+            try {
+                FeaturesDict.get(order_feature_part).stop();
+            }catch (Exception e){
+
+            }
         }
 
 

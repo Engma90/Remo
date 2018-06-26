@@ -13,37 +13,28 @@ using System.Collections;
 
 namespace Remo.Connections
 {
-    public class TCPServer2 : TCP
+    public class TCPServer : TCP
     {
         private TcpListener _server;
         private static volatile Boolean _isRunning;
         int port = 4447;
         Thread AckClientsThread;
-    //    public Dictionary<string, IConnection> MainConnectionsDict { get; }
-    //    public Dictionary<string, IConnection> FeatureConnectionsMapDict { get; }//string = IFConnection ip
         public int Port { get; set; }
-    //    public int CheckIsConnectedInterval_ms { get; set; } = 5000;
-        //    public IMConnection ClientClass { get; set; }
-       // public DateTime DateStarted { get; set; }
-        private TCPServer2()
+
+        private TCPServer()
         {
             DateStarted = DateTime.Now;
-      //      MainConnectionsDict = new Dictionary<string, IConnection>();
-       //     FeatureConnectionsMapDict = new Dictionary<string, IConnection>();
             _server = new TcpListener(IPAddress.Any, port);
             _server.Start();
 
             _isRunning = true;
             Thread t = new Thread(new ThreadStart(LoopClients));
             t.Start();
-
-
-            //LoopClients();
         }
 
 
         private static readonly object mutex = new object();
-        private static TCPServer2 instance = null;
+        private static TCPServer instance = null;
 
         public static TCP GetInstance()
         {
@@ -54,7 +45,7 @@ namespace Remo.Connections
                 {
                     if (instance == null)
                     {
-                        instance = new TCPServer2();
+                        instance = new TCPServer();
                     }
                 }
             }
@@ -75,15 +66,11 @@ namespace Remo.Connections
                 {
                     try
                     {
-                        //Broadcast(Encoding.UTF8.GetBytes("Info\n"));
                         foreach (IConnection MainConnection in MainConnectionsDict.Values.ToList())
                         {
-                            //if (MainConnection.isMainConn)
-                            //{
                             send(((int)DataHandler.eDataType.INFO).ToString(),
                                 ((int)DataHandler.eOrderType.START).ToString(),
                                 MainConnection.tcpClient);
-                            //Thread.Sleep(10);
                             if ((DateTime.Now - MainConnection.LastChecked) > TimeSpan.FromMilliseconds(CheckIsConnectedInterval_ms))
                             {
                                 MainConnectionsDict.Remove((MainConnection.tcpClient.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
@@ -97,7 +84,6 @@ namespace Remo.Connections
                                 //}
                                 MainConnection.tcpClient.Client.Disconnect(false);
                             }
-                            // }
                         }
                     }
                     catch (Exception ex) { Console.WriteLine("Broadcast Exception: " + ex.Message); }
@@ -207,27 +193,27 @@ namespace Remo.Connections
 
 
 
-        //public void clientDisconnected(TcpClient c)
-        //{
+        public void clientDisconnected(TcpClient c)
+        {
 
-        //    try
-        //    {
+            try
+            {
 
-        //        if (MainConnectionsDict.ContainsKey((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
-        //        {
-        //            foreach (IFeature fc in getMainConnectionByIP(c.Client.RemoteEndPoint.ToString()).Features.Values.ToList())
-        //            {
-                        
-        //                getMainConnectionByIP(c.Client.RemoteEndPoint.ToString()).Features.Remove(fc.DATA_TYPE);
-        //                fc.Dispose();
-        //            }
-        //            MainConnectionsDict.Remove((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
-        //            c.Client.Disconnect(false);
-        //        }
-        //    }
-        //    catch { Console.WriteLine("Disconnect Exception"); }
-        //}
-        
+                if (MainConnectionsDict.ContainsKey((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString()))
+                {
+                    foreach (IFeature fc in getMainConnectionByIP(c.Client.RemoteEndPoint.ToString()).Features.Values.ToList())
+                    {
+
+                        getMainConnectionByIP(c.Client.RemoteEndPoint.ToString()).Features.Remove(fc.DATA_TYPE);
+                        fc.Dispose();
+                    }
+                    MainConnectionsDict.Remove((c.Client.RemoteEndPoint as IPEndPoint).Address.ToString());
+                    c.Client.Disconnect(false);
+                }
+            }
+            catch { Console.WriteLine("Disconnect Exception"); }
+        }
+
         public void Server_ClientConnected(object sender, TcpClient e)
         {
             throw new NotImplementedException();
@@ -266,7 +252,7 @@ namespace Remo.Connections
 
         public override IFeature startFeature(string MainClientIP, int Feature_type)
         {
-            if (getMainConnectionByIP(MainClientIP).Features.ContainsKey(Feature_type) && !getMainConnectionByIP(MainClientIP).Features[Feature_type].IsDisposed)
+            if (getMainConnectionByIP(MainClientIP).Features.ContainsKey(Feature_type) && null != getMainConnectionByIP(MainClientIP).Features[Feature_type] && !getMainConnectionByIP(MainClientIP).Features[Feature_type].IsDisposed)
             {
                 return getMainConnectionByIP(MainClientIP).Features[Feature_type];
             }

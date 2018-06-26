@@ -134,7 +134,7 @@ namespace Remo.Features
         {
             Console.WriteLine("Cam Stop");
             MainForm.mTCPH.send(((int)DataHandler.eDataType.CAM).ToString(),
-                ((int)DataHandler.eOrderType.STOP).ToString(),
+                ((int)DataHandler.eOrderType.STOP).ToString(),"",
                     MainConnection.tcpClient);
         }
 
@@ -226,20 +226,21 @@ namespace Remo.Features
 
         private void btnRL_Click(object sender, EventArgs e)
         {
-            int temp = Math.Abs(Rotation - (90));
-            //if (temp < 0)
-            //    Rotation = 270;
-            Rotation = (Math.Abs(360 - temp)) % 360;
+            int temp = Rotation - 90;
+            if (temp < 0)
+                temp = 270;
+            Rotation = temp;// (Math.Abs(360 - temp)) % 360;
             Console.WriteLine(Rotation.ToString());
 
         }
 
         private void btnRR_Click(object sender, EventArgs e)
         {
-            int temp = Rotation += 90;
-            //if (temp >= 360)
-            //    Rotation = 0;
-            Rotation = Math.Abs(temp) % 360;
+            int temp = Rotation + 90;
+            if (temp >= 360)
+                temp = 0;
+            Rotation = temp;//Math.Abs(temp) % 360;
+            Console.WriteLine(Rotation.ToString());
 
         }
 

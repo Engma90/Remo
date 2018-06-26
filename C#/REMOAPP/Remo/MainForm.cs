@@ -158,18 +158,22 @@ namespace Remo
 
         private void RefreshClientsList()
         {
-            int saveRow = -1;
-            if (dgv1.Rows.Count > 0 && dgv1.SelectedRows[0] != null)
-                saveRow = dgv1.SelectedRows[0].Index;
-            dgv1.Rows.Clear();
-            foreach (IConnection c in mTCPH.MainConnectionsDict.Values.ToList())
+            try
             {
-                if (!c.Features.ContainsKey((int)DataHandler.eDataType.INFO))
-                    mTCPH.startFeature(c.IP, (int)DataHandler.eDataType.INFO).Show();
-                dgv1.Rows.Add(((MobInfo)c.Features[(int)DataHandler.eDataType.INFO]).getInfo());
+                int saveRow = -1;
+                if (dgv1.Rows.Count > 0 && dgv1.SelectedRows[0] != null)
+                    saveRow = dgv1.SelectedRows[0].Index;
+                dgv1.Rows.Clear();
+                foreach (IConnection c in mTCPH.MainConnectionsDict.Values.ToList())
+                {
+                    if (!c.Features.ContainsKey((int)DataHandler.eDataType.INFO))
+                        mTCPH.startFeature(c.IP, (int)DataHandler.eDataType.INFO).Show();
+                    dgv1.Rows.Add(((MobInfo)c.Features[(int)DataHandler.eDataType.INFO]).getInfo());
+                }
+                if (saveRow != -1 && saveRow < dgv1.Rows.Count)
+                    dgv1.Rows[saveRow].Selected = true;
             }
-            if (saveRow != -1 && saveRow < dgv1.Rows.Count)
-                dgv1.Rows[saveRow].Selected = true;
+            catch { }
         }
 
         private String getSelectedClientIP()

@@ -50,7 +50,7 @@ public abstract class Feature {
 
     protected void stop() {
         stopFlag = true;
-        tcp.disconnect();
+        //tcp.disconnect();
         Log.e("REMODROID", "Stopped");
     }
 

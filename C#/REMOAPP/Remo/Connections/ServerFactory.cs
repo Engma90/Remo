@@ -24,30 +24,15 @@ namespace Remo.Connections
         {
             Console.WriteLine("TCP Server Started!");
         }
-        public static TCP GetInstance(String Type)
+        public static TCP GetInstance(String Type) //IServer
         {
 
             if (Type == TYPE_TCP)
             {
-                return TCPServer2.GetInstance();
+                return TCPServer.GetInstance();
             }
             else
                 return null;
-            //else if (Type == TYPE_TCP)
-            //{
-
-            //}
-                //if (instance == null)
-                //{
-                //    lock (syncRoot)
-                //    {
-                //        if (instance == null)
-                //            instance = TCPServer2.GetInstance();
-                //    }
-                //}
-
-                //return instance;
-
         }
         
     }

@@ -84,7 +84,7 @@ public class TCP_Transceiver {
                 isConnected = true;
 
             } catch (IOException e) {
-                Log.e("REMODROID", "Connect Exception");
+                //Log.e("REMODROID", "Connect Exception");
                 isConnected = false;
 
             }

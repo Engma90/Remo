@@ -10,7 +10,7 @@ class ServerInfo {
     private int port;
 
     void init() {
-        this.ip = "192.168.1.20";//Resources.getSystem().getString(R.string.IP);
+        this.ip = "192.168.43.185";//Resources.getSystem().getString(R.string.IP);
         this.port = 4447;//Integer.parseInt(Resources.getSystem().getString(R.string.Port));
     }
 
